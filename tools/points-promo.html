@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حصاد اليوم — لوحة صدارة حيّة لفصلك</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f3ff;--card:#fff;--ink:#2a2c4e;--mut:#575a82;--line:#e4def7;
+--gold:#ffd23f;--pink:#ff5fa2;--blue:#3db5f5;--green:#5fcf80;--orange:#ffa94d;--purple:#8b7cf0;--navy:#2b2d57;
+--display:"Baloo Bhaijaan 2","Tajawal",sans-serif;--font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15162b;--card:#20224a;--ink:#f1f0ff;--mut:#b4b7e0;--line:#34376b}}
+:root[data-theme="dark"]{--bg:#15162b;--card:#20224a;--ink:#f1f0ff;--mut:#b4b7e0;--line:#34376b}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.7;overflow-x:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+#bar{position:fixed;top:0;right:0;height:4px;width:0;background:linear-gradient(90deg,var(--pink),var(--gold),var(--green),var(--blue));z-index:40}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 24px;background:rgba(43,45,87,.9);backdrop-filter:blur(10px);color:#fff}
+header b{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:.2px}
+header b span{color:var(--gold)}
+header nav{display:flex;gap:22px;margin-inline-start:auto;font-weight:600}
+header nav a{color:#e9e6ff;text-decoration:none;opacity:.9}header nav a:hover{opacity:1;color:var(--gold)}
+@media (max-width:760px){header nav{display:none}}
+.btn{position:relative;display:inline-block;background:var(--gold);color:#4a3600;font-family:var(--display);font-weight:800;text-decoration:none;border-radius:999px;padding:8px 28px;box-shadow:0 5px 0 #e0aa10;transition:transform .2s}
+.btn:hover{transform:scale(1.05)}
+.btn.big{font-size:27px;padding:12px 50px}
+.btn.big:after{content:"";position:absolute;inset:0;border-radius:inherit;border:3px solid var(--gold);animation:ring 2s ease-out infinite}
+.hero{position:relative;overflow:hidden;color:#fff;padding:60px 24px 90px;background:radial-gradient(circle at 12% 18%,rgba(255,95,162,.38),transparent 42%),radial-gradient(circle at 90% 85%,rgba(61,181,245,.34),transparent 42%),var(--navy)}
+.hero .in{position:relative;z-index:2;max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:44px;flex-wrap:wrap}
+.hero .tx{flex:1 1 430px}
+.kick{color:var(--gold);font-weight:700;font-size:20px}
+h1{margin:4px 0 14px;font-family:var(--display);font-size:clamp(66px,13vw,124px);line-height:1.1;font-weight:800;animation:up .9s both}
+h1 .hl{color:var(--gold);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 17 1 32 7 T 62 7 T 92 7 T 118 6' fill='none' stroke='%23ff5fa2' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom/100% .14em;padding-bottom:.06em}
+.lead{font-size:clamp(20px,3vw,25px);max-width:540px;margin:0 0 26px;animation:up .9s .15s both}
+.cta-row{animation:up .9s .3s both}
+.note{margin-top:16px;color:#d6d3f5}
+.vis{flex:0 1 430px;width:100%}
+#res{margin-top:16px;text-align:center;font-family:var(--display);font-size:21px;font-weight:700;min-height:34px;color:#fff}
+.demo{position:relative;background:#3d4074;border-radius:28px;border:3px solid #ff8a9a;box-shadow:0 26px 54px rgba(0,0,0,.42);overflow:hidden;padding-bottom:16px;color:#23253a}
+.demo .rib{display:flex;height:9px}.demo .rib i{flex:1}
+.demo .rib i:nth-child(1){background:#5fcf80}.demo .rib i:nth-child(2){background:#ff5fa2}.demo .rib i:nth-child(3){background:#ffd23f}.demo .rib i:nth-child(4){background:#3db5f5}
+.dm-t{text-align:center;color:#ffe9a8;font-family:var(--display);font-size:26px;font-weight:800;padding:12px 0 10px}
+.dm-list{list-style:none;margin:0 14px;padding:6px 8px;background:#fff;border-radius:20px;position:relative}
+.row{display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:2px dashed #ece6fb;background:#fff;will-change:transform}
+.row:last-child{border-bottom:0}
+.row.lead{background:linear-gradient(90deg,#fff6cf,#fff)}
+.rk{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#ece6fb;font-family:var(--display);font-weight:800;font-size:15px}
+.row.lead .rk{background:var(--gold);box-shadow:0 3px 0 #e0aa10}
+.avc{flex:none;display:flex;flex-direction:column;align-items:center}
+.av{position:relative;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:24px;border:3px solid #fff;box-shadow:0 0 0 2px #4a4e6b inset,0 2px 6px rgba(0,0,0,.18)}
+.row.lead .av:after{content:"👑";position:absolute;top:-16px;right:-6px;font-size:17px;transform:rotate(18deg);animation:bob 1.8s ease-in-out infinite}
+.md{margin-top:-9px;position:relative;z-index:2;min-width:20px;height:20px;padding:0 3px;display:grid;place-items:center;border-radius:99px;background:#fff;font-size:12px;box-shadow:0 2px 5px rgba(0,0,0,.3),0 0 0 2px var(--gl,#3db5f5)}
+.nm{flex:1;min-width:0;font-weight:700;font-size:17px;display:flex;flex-direction:column}
+.nm small{font-weight:400;font-size:14px;letter-spacing:1px;min-height:1px}
+.pm{flex:none;width:34px;height:34px;border:0;border-radius:12px;font-family:var(--display);font-size:22px;font-weight:800;line-height:1;cursor:pointer;color:#fff;transition:transform .12s}
+.pm:active{transform:translateY(3px)}
+.pm.plus{background:#5fcf80;box-shadow:0 4px 0 #3fa863}.pm.minus{background:#ff5fa2;box-shadow:0 4px 0 #e0468a}
+.pm.bg{background:#ece6fb;box-shadow:0 4px 0 #cfc4e8;font-size:17px}
+.sc{flex:none;min-width:46px;text-align:center;font-family:var(--display);font-weight:800;font-size:20px}
+.sc i{font-style:normal;color:#ffb400;margin-inline-end:2px}
+.cheer{position:absolute;inset-inline:14px;bottom:62px;z-index:5;pointer-events:none;display:flex;justify-content:center}
+.cheer span{background:#fff;color:#2a2c4e;font-weight:700;border-radius:18px;padding:8px 16px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.35);border:3px solid var(--gold);animation:pop .35s cubic-bezier(.3,1.7,.5,1) both}
+.pt{position:absolute;bottom:-20px;width:14px;height:8px;border-radius:2px;opacity:.55;animation:rise linear infinite}
+.fd{position:absolute;opacity:.9;animation:drift 9s ease-in-out infinite}
+.marq{background:var(--gold);color:#4a3600;overflow:hidden;white-space:nowrap;font-family:var(--display);font-size:22px;font-weight:800;padding:10px 0}
+.track{display:inline-block;animation:mq 30s linear infinite}
+.sec{max-width:1160px;margin:0 auto;padding:78px 24px 8px}
+.sec h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(34px,6vw,52px);line-height:1.25;font-weight:800}
+.sec p.s{margin:0 0 34px;color:var(--mut);font-size:20px}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.grid.f{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border-radius:22px;padding:26px;border:2px solid var(--line);border-top:8px solid var(--c);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:0 18px 36px rgba(43,45,87,.22)}
+.card .ic{font-size:38px;line-height:1;margin-bottom:6px}
+.card h3{margin:0;font-family:var(--display);font-size:26px;font-weight:800}
+.card p{margin:6px 0 0;color:var(--mut);font-size:18px}
+.ft{border-top:2px solid var(--line);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+.ft:hover .dot{transform:scale(1.5) rotate(90deg)}
+.dot{flex:none;width:18px;height:18px;margin-top:9px;border-radius:50%;background:var(--c);transition:transform .3s}
+.ft h3{margin:0;font-family:var(--display);font-size:22px;font-weight:800}.ft p{margin:2px 0 0;color:var(--mut);font-size:17px}
+.step b{display:block;font-family:var(--display);font-size:84px;line-height:1;font-weight:800;color:var(--c)}
+.step h3{margin:8px 0 0;font-family:var(--display);font-size:27px}.step p{margin:4px 0 0;color:var(--mut);font-size:19px}
+/* مسارات المستويات */
+.jr-t{margin:38px 0 14px;font-family:var(--display);font-size:28px;font-weight:800}
+.jr-t small{display:block;margin-top:2px;font-family:var(--font);font-size:18px;font-weight:400;color:var(--mut)}
+.jr{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px}
+.tc{flex:1 1 200px;border-radius:22px;padding:20px 18px;text-align:center;border:3px solid rgba(255,255,255,.7);box-shadow:0 10px 24px rgba(43,45,87,.16);transition:transform .25s}
+.tc:hover{transform:translateY(-6px) scale(1.02)}
+.tc .e{font-size:50px;line-height:1.1;height:58px;display:grid;place-items:center}
+.tc .e svg{width:56px;height:56px}
+.tc h4{margin:8px 0 2px;font-family:var(--display);font-size:24px;font-weight:800}
+.tc p{margin:0;font-size:16px;opacity:.88}
+.tc em{display:inline-block;margin-top:8px;font-style:normal;font-size:14px;font-weight:700;padding:2px 12px;border-radius:99px;background:rgba(255,255,255,.55)}
+.arw{flex:none;align-self:center;font-size:30px;font-weight:800;color:var(--mut)}
+@media (max-width:640px){.arw{display:none}}
+.t1{background:linear-gradient(135deg,#d9f1ff,#ece4ff);color:#0b3a5a}
+.t2{background:linear-gradient(135deg,#fff0bf,#f1e3ff);color:#4a2380}
+.t3{background:linear-gradient(135deg,#d9f5f1,#e3eaf3);color:#0f4a5a}
+.t4{background:linear-gradient(135deg,#2a2160,#5a3fa0 60%,#ff7ad9);color:#fff}
+.q1{background:linear-gradient(135deg,#ffe3e6,#fff0bf);color:#7a1626}
+.q2{background:linear-gradient(135deg,#fff0bf,#e4f4e6);color:#6b4a00}
+.q3{background:linear-gradient(135deg,#06222b,#0b6b5e 60%,#1fd6c0);color:#eafffb}
+.keep{margin-top:22px;padding:14px 20px;border-radius:18px;background:var(--card);border:2px dashed var(--line);color:var(--mut);font-size:18px}
+/* الشارات */
+.cats{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+.cat{background:var(--card);border:2px solid var(--line);border-top:8px solid var(--c);border-radius:22px;padding:18px 18px 20px}
+.cat h3{margin:0 0 12px;font-family:var(--display);font-size:22px;font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card));color:var(--ink);border-radius:99px;padding:3px 12px 3px 14px;font-weight:600;font-size:16px;cursor:pointer;transition:transform .15s}
+.chip:hover{transform:translateY(-3px) scale(1.05)}
+.chip i{font-style:normal;margin-inline-end:6px}
+.tip{margin:0 0 20px;color:var(--mut);font-size:19px}
+/* الشهادات */
+.certs{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+#cg1{grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr))}
+#cg2{grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
+.cc{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:14px 14px 18px;transition:transform .25s,box-shadow .25s}
+.cc:hover{transform:translateY(-8px);box-shadow:0 18px 36px rgba(43,45,87,.22)}
+.cc h3{margin:12px 6px 0;font-family:var(--display);font-size:23px;font-weight:800}
+.cc p{margin:2px 6px 0;color:var(--mut);font-size:17px}
+.cw{position:relative;overflow:hidden;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.2);background:#fff}
+.cs{position:absolute;top:0;right:0;width:297mm;height:209mm;padding:8mm;background:#fff;transform-origin:top right;direction:rtl;font-family:var(--font);color:#23253a}
+.cc{cursor:zoom-in;position:relative}
+.cc .zm{position:absolute;top:24px;left:24px;z-index:3;background:rgba(43,45,87,.88);color:#fff;border-radius:99px;padding:3px 14px;font-weight:700;font-size:15px;opacity:0;transform:translateY(-6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.cc:hover .zm,.cc:focus-visible .zm{opacity:1;transform:none}
+@media (hover:none){.cc .zm{opacity:1;transform:none}}
+.lb{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:rgba(21,22,43,.82);backdrop-filter:blur(6px);animation:fade .2s both}
+.lb[hidden]{display:none}
+.lb-card{position:relative;width:min(1120px,100%);max-height:100%;overflow:auto;background:var(--card);border-radius:26px;border:3px solid var(--gold);padding:18px 18px 16px;box-shadow:0 30px 70px rgba(0,0,0,.55);animation:pop .3s cubic-bezier(.3,1.5,.5,1) both}
+.lb-x{position:absolute;top:12px;left:12px;z-index:5;width:42px;height:42px;border:0;border-radius:50%;background:var(--navy);color:#fff;font-size:26px;line-height:1;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.lb-stage{margin:0 auto}
+.lb-info{text-align:center;margin-top:12px}
+.lb-info h3{margin:0;font-family:var(--display);font-size:28px;font-weight:800}
+.lb-info p{margin:2px 0 0;color:var(--mut);font-size:18px}
+.lb-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:12px}
+.lb-nav button{width:48px;height:48px;border:0;border-radius:50%;background:var(--gold);color:#4a3600;font-size:24px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #e0aa10}
+.lb-nav button:active{transform:translateY(3px)}
+.lb-nav span{font-family:var(--display);font-weight:700;font-size:19px;color:var(--mut);min-width:64px;text-align:center}
+@keyframes fade{from{opacity:0}}
+.end{margin-top:80px;color:#fff;text-align:center;padding:64px 24px 80px;overflow:hidden;background:radial-gradient(circle at 15% 85%,rgba(255,95,162,.35),transparent 40%),radial-gradient(circle at 88% 20%,rgba(61,181,245,.3),transparent 40%),var(--navy)}
+.end .ico{width:150px;height:150px;margin:0 auto;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(0,0,0,.4))}
+.end h2{margin:20px 0 10px;font-family:var(--display);font-size:clamp(34px,6vw,56px);font-weight:800}
+.end p{margin:0 0 28px;color:#d6d3f5;font-size:21px}
+footer{text-align:center;padding:24px;color:var(--mut)}
+.rv{opacity:0}.rv.in{opacity:1;animation:up .7s calc(var(--i,0)*70ms) backwards}
+.conf{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;pointer-events:none;z-index:50;animation:fall var(--d) linear forwards}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:45;max-width:min(92vw,560px);background:#fff;color:#2a2c4e;border:3px solid var(--gold);border-radius:20px;padding:10px 20px;font-weight:700;font-size:19px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:pop .35s cubic-bezier(.3,1.7,.5,1) both}
+.toast[hidden]{display:none}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-14px)}}
+@keyframes ring{to{transform:scale(1.4);opacity:0}}
+@keyframes rise{to{transform:translateY(-110vh) rotate(360deg)}}
+@keyframes drift{50%{transform:translate(18px,-26px) rotate(25deg)}}
+@keyframes mq{to{transform:translateX(50%)}}
+@keyframes fall{to{transform:translateY(105vh) rotate(var(--r))}}
+@keyframes bob{50%{transform:translateY(-3px) rotate(10deg)}}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@media (max-width:460px){.row{gap:5px;padding:8px 2px}.rk{width:24px;height:24px;font-size:13px}.av{width:38px;height:38px;font-size:21px}.pm{width:30px;height:30px;font-size:19px}.sc{min-width:34px;font-size:17px}.nm{font-size:16px}.dm-list{margin:0 10px;padding:4px 6px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1}.pt,.conf{display:none}}
+</style>
+<style id="certCss">
+.cert-in {
+  --hc: #ff5fa2; --hs: #ffd3e6; --ul: #ffa94d; --bgA: #ffe3f0; --bgB: #fff1c9; --bgC: transparent; --base: #fff;
+  --sun1: #ffd23f; --sun2: #ffa94d; --ringf: #fff; --seal1: #ffc21a; --seal2: #ffe066; --tail: #ff5fa2;
+  --tagbg: #fff1b0; --tagbd: #ffd23f; --tagfg: #7a5600; --chbg: #fff6c9; --chbd: #ffd23f; --chfg: #6b4a00;
+  --bd: #4a4e6b; --tx: #23253a; --tx2: #2f3350; --nm: #3a3d57; --fxo: .22;
+  --r1: #3db5f5; --r2: #ffd23f; --r3: #ff5fa2; --r4: #5fcf80;
+  position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden;
+  border: 2.2mm solid var(--bd); border-radius: 7mm; color: var(--tx); font-family: var(--font);
+  background: radial-gradient(circle at 10% 14%, var(--bgA) 0, transparent 40%), radial-gradient(circle at 90% 88%, var(--bgB) 0, transparent 40%), radial-gradient(circle at 50% 46%, var(--bgC) 0, transparent 58%), var(--base);
+}
+/* مستويات صدارة النقاط */
+.cert-in.cp1 {
+  --hc: #b3213a; --hs: #ffd9de; --ul: #d99a00; --bgA: #ffe3e6; --bgB: #fff0bf;
+  --sun1: #ffd23f; --sun2: #ff8a9a; --seal1: #c0283f; --seal2: #ffd6db; --tail: #ffc21a;
+  --tagbg: #ffe9ec; --tagbd: #e0536a; --tagfg: #7a1626; --chbg: #fff1f3; --chbd: #f0a3b0; --chfg: #6a1424;
+  --bd: #7a1626; --tx: #3a1520; --tx2: #4a1c28; --nm: #8a1b30;
+  --r1: #c0283f; --r2: #ffc21a; --r3: #c0283f; --r4: #ffc21a;
+}
+.cert-in.cp2 {
+  --hc: #a87400; --hs: #ffe9a8; --ul: #d99a00; --bgA: #fff0bf; --bgB: #e4f4e6;
+  --sun1: #ffd23f; --sun2: #8fcf9f; --seal1: #d99a00; --seal2: #ffe066; --tail: #3f9b5a;
+  --tagbg: #fff3c2; --tagbd: #d99a00; --tagfg: #6b4a00; --chbg: #fff8dc; --chbd: #e8c35a; --chfg: #5a4000;
+  --bd: #8a6a00; --tx: #3a2e0a; --tx2: #4a3a0e; --nm: #7a5600;
+  --r1: #ffc21a; --r2: #3f9b5a; --r3: #d99a00; --r4: #8fcf9f;
+}
+.cert-in.cp3 {
+  --base: #061a1d; --bgA: rgba(0, 214, 180, .5); --bgB: rgba(255, 205, 60, .3); --bgC: rgba(20, 120, 200, .22);
+  --hc: #ffd24a; --hs: #0b6b5e; --ul: #37e3d3; --sun1: #1fd6c0; --sun2: #ffd24a; --ringf: #08272b;
+  --seal1: #0fb5a0; --seal2: #ffd24a; --tail: #ffc21a;
+  --tagbg: #0b3a3a; --tagbd: #37e3d3; --tagfg: #ffe27a; --chbg: rgba(255, 255, 255, .08); --chbd: #37e3d3; --chfg: #d9fff8;
+  --bd: #14c4ad; --tx: #eafffb; --tx2: #d4fff6; --nm: #ffffff; --fxo: .9;
+  --r1: #0fb5a0; --r2: #ffd24a; --r3: #37e3d3; --r4: #0b8f7f;
+}
+/* 1) الشارة الألماسية: جليدي */
+.cert-in.cgem {
+  --hc: #4a56d6; --hs: #d9dcff; --ul: #3db5f5; --bgA: #d9f1ff; --bgB: #ece4ff;
+  --sun1: #8fd8ff; --sun2: #b9a8ff; --seal1: #3db5f5; --seal2: #a6e0ff; --tail: #8b7cf0;
+  --tagbg: #dff3ff; --tagbd: #3db5f5; --tagfg: #0b4f78; --chbg: #e8f8ff; --chbd: #8fd8ff; --chfg: #0b4f78;
+  --r1: #3db5f5; --r2: #8fd8ff; --r3: #8b7cf0; --r4: #3db5f5;
+}
+/* 2) التاج الماسي: ملكي (ذهبي وأرجواني) */
+.cert-in.ct2 {
+  --hc: #7a2fc0; --hs: #ead8ff; --ul: #d99a00; --bgA: #f1e3ff; --bgB: #fff0bf;
+  --sun1: #ffd23f; --sun2: #c78bff; --seal1: #ffc21a; --seal2: #ffe066; --tail: #8b3fd1;
+  --tagbg: #f3e6ff; --tagbd: #b36bff; --tagfg: #5b2a9e; --chbg: #f7eeff; --chbd: #c9a0ff; --chfg: #4a2380;
+  --bd: #5b2a9e; --tx: #2a1c46; --tx2: #35225a; --nm: #4a2380;
+  --r1: #ffc21a; --r2: #8b3fd1; --r3: #e0468a; --r4: #ffc21a;
+}
+/* 3) النخبة الماسية: فيروزي وفضي ونيلي */
+.cert-in.ct3 {
+  --hc: #0f6a85; --hs: #cdeef3; --ul: #1fb5a6; --bgA: #d9f5f1; --bgB: #e3eaf3;
+  --sun1: #53d6c8; --sun2: #b8c4d4; --seal1: #1f4e79; --seal2: #b8e8f0; --tail: #1fb5a6;
+  --tagbg: #d9f5f1; --tagbd: #1fb5a6; --tagfg: #0f4a5a; --chbg: #e8f8f6; --chbd: #7fd9cf; --chfg: #0f4a5a;
+  --bd: #1f4e79; --tx: #14283d; --tx2: #1b3550; --nm: #1f4e79;
+  --r1: #1fb5a6; --r2: #b8c4d4; --r3: #1f4e79; --r4: #53d6c8;
+}
+/* 4) المجرة: فضاء ليلي */
+.cert-in.ct4 {
+  --base: #16123a; --bgA: rgba(138, 92, 255, .55); --bgB: rgba(255, 105, 200, .38); --bgC: rgba(80, 200, 255, .18);
+  --hc: #ffe27a; --hs: #5b3fc0; --ul: #6de3ff; --sun1: #b794ff; --sun2: #6de3ff; --ringf: #1b1740;
+  --seal1: #8f7bff; --seal2: #cdbbff; --tail: #ff7ad9;
+  --tagbg: #2c2466; --tagbd: #b794ff; --tagfg: #ffe27a; --chbg: rgba(255, 255, 255, .1); --chbd: #8f7bff; --chfg: #efeaff;
+  --bd: #6d4fd6; --tx: #f1ecff; --tx2: #ece4ff; --nm: #ffffff; --fxo: .32;
+  --r1: #8f7bff; --r2: #ff7ad9; --r3: #6de3ff; --r4: #ffe27a;
+}
+.cert-in::before { content: ""; position: absolute; inset: 2.6mm; border: .6mm dashed var(--ul); border-radius: 4.5mm; opacity: .75; pointer-events: none; }
+.cert-in svg { display: block; }
+.cert-in > :not(.cert-fx):not(.cert-flags) { position: relative; z-index: 1; }
+.cert-in > .cert-fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: var(--fxo); }
+.cert-in > .cert-flags { position: absolute; left: 0; top: 7mm; width: 100%; height: 13mm; z-index: 0; }
+.cert-ribbon { display: flex; height: 7mm; flex: none; }
+.cert-ribbon.bot { height: 4mm; }
+.cert-ribbon i { flex: 1; }
+.cert-ribbon i:nth-child(1) { background: var(--r1); }
+.cert-ribbon i:nth-child(2) { background: var(--r2); }
+.cert-ribbon i:nth-child(3) { background: var(--r3); }
+.cert-ribbon i:nth-child(4) { background: var(--r4); }
+.cert-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1.8mm; padding: 7mm 16mm 4mm; }
+.cert-gemwrap { position: relative; width: 32mm; height: 31mm; flex: none; display: grid; place-items: center; }
+.cert-sun { position: absolute; left: 50%; top: 50%; width: 31mm; height: 31mm; transform: translate(-50%, -50%); }
+.k-sun1 { fill: var(--sun1); opacity: .6; }
+.k-sun2 { fill: var(--sun2); opacity: .45; }
+.k-ring { fill: var(--ringf); stroke: var(--sun2); stroke-width: 1.6; }
+.cert-gem { position: relative; font-size: 13mm; line-height: 1; }
+.cert-cup { position: relative; width: 19mm; height: 19mm; }
+.cert-h { margin: 0; font-family: var(--display); font-weight: 800; font-size: 14.5mm; line-height: 1.15; color: var(--hc); text-shadow: 0 .7mm 0 var(--hs); }
+.cert-in .cert-sub { margin: 0; font-size: 6.6mm; font-weight: 700; line-height: 1.4; color: var(--tx2); }
+.cert-nmrow { display: flex; align-items: center; justify-content: center; gap: 4mm; max-width: 100%; }
+.cert-ns { width: 8mm; height: 8mm; flex: none; }
+.cert-name { max-width: 100%; padding: 0 10mm 1mm; border-bottom: .8mm dashed var(--ul); font-family: var(--display); font-weight: 800; font-size: 12.5mm; line-height: 1.25; color: var(--nm); overflow-wrap: anywhere; }
+.cert-name.long { font-size: 9mm; }
+.cert-tag { padding: .8mm 7mm; border-radius: 99px; background: var(--tagbg); border: .6mm solid var(--tagbd); font-family: var(--display); font-weight: 800; font-size: 6.2mm; color: var(--tagfg); }
+.cert-in .cert-txt { margin: 0; max-width: 225mm; font-size: 5.9mm; font-weight: 600; line-height: 1.65; color: var(--tx); }
+.cert-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 2mm; max-width: 230mm; }
+.cert-chip { padding: .5mm 3.4mm; border-radius: 99px; background: var(--chbg); border: .5mm solid var(--chbd); font-size: 4.3mm; font-weight: 700; color: var(--chfg); }
+.cert-chips.many .cert-chip { font-size: 3.7mm; padding: .2mm 2.4mm; }
+.cert-foot { flex: none; display: flex; justify-content: space-between; align-items: flex-end; gap: 8mm; padding: 0 16mm 6mm; font-size: 5mm; font-weight: 600; color: var(--tx2); }
+.cert-sign { min-width: 66mm; padding-top: 2mm; border-top: .5mm solid var(--tx2); text-align: center; }
+.cert-date { min-width: 66mm; text-align: center; padding-bottom: .5mm; }
+.cert-seal { width: 21mm; height: 23.5mm; flex: none; }
+.k-seal1 { fill: var(--seal1); }
+.k-seal2 { fill: var(--seal2); }
+.k-tail { fill: var(--tail); }
+
+</style>
+<style>.btns{display:flex;gap:12px;flex-wrap:wrap}.ghostb{background:rgba(255,255,255,.18)!important;color:#fff!important;border:2px solid rgba(255,255,255,.7)!important;box-shadow:none!important}</style>
+</head>
+<body>
+<div id="bar"></div>
+<header><b>حصاد <span>اليوم</span></b><nav><a href="#feats">المزايا</a><a href="#levels">المستويات</a><a href="#badges">الشارات</a><a href="#certs">الشهادات</a></nav><a class="btn" href="points.html" download="points.html">تحميل</a></header>
+
+<section class="hero">
+<svg class="fd" style="top:7%;right:2%;width:54px" viewBox="0 0 24 24" aria-hidden="true"><polygon fill="#ffd23f" points="12,1 15,9 23,9 17,14 19,22 12,17 5,22 7,14 1,9 9,9"/></svg>
+<div class="fd" style="top:64%;left:4%;width:62px;height:62px;border-radius:50%;background:#5fcf80;animation-delay:-3s"></div>
+<svg class="fd" style="top:82%;right:46%;width:44px;animation-delay:-6s" viewBox="0 0 24 24" aria-hidden="true"><polygon fill="#ff5fa2" points="12,1 15,9 23,9 17,14 19,22 12,17 5,22 7,14 1,9 9,9"/></svg>
+<div class="fd" style="top:14%;left:42%;width:30px;height:30px;border-radius:8px;background:#3db5f5;animation-delay:-4s"></div>
+<div id="pts"></div>
+<div class="in">
+<div class="tx">
+<div class="kick">أداة للمعلمين والمعلمات</div>
+<h1>حصاد <span class="hl">اليوم</span></h1>
+<p class="lead">لوحة صدارة حيّة لفصلك: نقاط بنقرة، شارات تحفّز كل طالب بعبارة تحمل اسمه، ومنصة تتويج وشهادات تقدير جاهزة للطباعة.</p>
+<div class="cta-row"><div class="btns"><a class="btn big" href="#feats">✨ المزايا</a></div>
+<div class="note">مجاني، بلا تسجيل، ويعمل على الجوال والحاسوب</div></div>
+</div>
+<div class="vis">
+<div class="demo" id="demo">
+<div class="rib"><i></i><i></i><i></i><i></i></div>
+<div class="dm-t">✨ لوحة الصدارة ✨</div>
+<ol class="dm-list" id="dmList"></ol>
+<div class="cheer" id="cheer" role="status" aria-live="polite"></div>
+</div>
+<div id="res">اضغط + أو 🏅 وراقب الترتيب يتغيّر</div>
+</div>
+</div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section class="sec" id="feats"><h2 class="rv">كل ما يحتاجه الفصل في صفحة واحدة</h2><p class="s rv">من أول نقطة في الحصة حتى شهادة التقدير في آخر الأسبوع.</p><div class="grid" id="mg"></div></section>
+
+<section class="sec" id="levels"><h2 class="rv">مستويات تكبر مع الطالب</h2><p class="s rv">كل إنجاز جديد يفتح مستوى جديدًا بأيقونة وشهادة بتصميم مختلف.</p>
+<div class="jr-t rv">الشارات الماسية<small>اجمع 5 شارات لتنال شارة ماسية، وكل دورة جديدة ترتقي بها إلى مستوى أعلى.</small></div>
+<div class="jr" id="jd"></div>
+<div class="jr-t rv">صدارة النقاط<small>كل يوم مختلف تتصدّر فيه يرفعك مستوى، ويظهر رمز المستوى تحت أيقونتك في اللوحة.</small></div>
+<div class="jr" id="jp"></div>
+<div class="keep rv">المستويات تُحفظ مع الطالب عبر الأيام، وتبقى ظاهرة حتى بعد تصفير النقاط أو شارات الفائز.</div>
+</section>
+
+<section class="sec" id="badges"><h2 class="rv">٤٤ شارة، لكل واحدة أيقونة وعبارة</h2><p class="tip rv">اضغط أي شارة لترى عبارة التشجيع التي تظهر للطالب عند حصوله عليها.</p><div class="cats" id="cats"></div></section>
+
+<section class="sec" id="certs"><h2 class="rv">شهادات تقدير بتصميم لكل مستوى</h2><p class="s rv">معاينة كاملة قبل الطباعة على ورق A4 أفقي، وكلها مرسومة داخل التطبيق.</p>
+<div class="jr-t rv">شهادات الشارات الماسية</div><div class="certs" id="cg1"></div>
+<div class="jr-t rv">شهادات متصدر اليوم</div><div class="certs" id="cg2"></div></section>
+
+<section class="sec" id="more"><h2 class="rv">تفاصيل صغيرة صُمّمت لوقت الحصة</h2><p class="s rv">لا إعدادات معقدة، ولا شيء يقطع الشرح.</p><div class="grid f" id="fg"></div></section>
+<section class="sec" id="steps"><h2 class="rv">ثلاث خطوات</h2><div class="grid" id="sg" style="margin-top:28px"></div></section>
+
+<section class="end">
+<div class="ico" id="endIco"></div>
+<h2 class="rv">اجعل حصتك القادمة حصاد إنجازات</h2>
+<p class="rv">افتح التطبيق، أضف أسماء طلابك، وابدأ بمنح النقاط.</p>
+<a class="btn big" href="points.html" download="points.html">تحميل</a>
+</section>
+<footer>حصاد اليوم — نقاط وشارات وشهادات لفصل أكثر حماسًا</footer>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-labelledby="lbT">
+<div class="lb-card">
+<button class="lb-x" id="lbX" type="button" aria-label="إغلاق المعاينة">×</button>
+<div class="lb-stage" id="lbStage"></div>
+<div class="lb-info"><h3 id="lbT"></h3><p id="lbD"></p></div>
+<div class="lb-nav"><button id="lbPrev" type="button" aria-label="الشهادة السابقة">→</button><span id="lbN"></span><button id="lbNext" type="button" aria-label="الشهادة التالية">←</button></div>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s),AR=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  var BADGE_CATS = [
+    { id: "p", e: "🗣️", t: "شارات المشاركة والتفاعل", items: [
+      { k: "p1", e: "🌟", t: "نجم المشاركة", m: ["مبروك يا ", "! نجم المشاركة الذي يُضيء الحصة"] },
+      { k: "p2", e: "🙋", t: "مشارك مميز", m: ["أحسنت يا ", "! مشاركتك اليوم مميّزة"] },
+      { k: "p3", e: "💡", t: "صاحب الفكرة", m: ["فكرة رائعة يا ", "! أفكارك تُنير طريق الصف"] },
+      { k: "p4", e: "🎤", t: "صوت الصف", m: ["", "! صوتك يُعبّر عن الصف بأجمل صورة"] },
+      { k: "p5", e: "⚡", t: "متفاعل اليوم", m: ["تفاعلك رائع اليوم يا ", "! استمر بحماس"] },
+      { k: "p6", e: "🙌", t: "روح المشاركة", m: ["روحك الحماسية تُلهم الجميع يا ", "!"] },
+      { k: "p7", e: "💬", t: "بطل النقاش", m: ["حوارك ونقاشك رائعان يا ", "! أنت بطل النقاش"] }
+    ] },
+    { id: "l", e: "📚", t: "شارات التعلم والإنجاز", items: [
+      { k: "l1", e: "🧠", t: "العقل الذكي", m: ["ذكاؤك لامع يا ", "! عقلٌ يُبهر الجميع"] },
+      { k: "l2", e: "🧭", t: "المستكشف", m: ["فضولك يقودك للاكتشاف يا ", "! استمر في البحث"] },
+      { k: "l3", e: "🎓", t: "متفوق دراسيًا", m: ["تفوّقك مصدر فخر لنا يا ", "!"] },
+      { k: "l4", e: "🏆", t: "بطل التعلم", m: ["بطولة في التعلّم يا ", "! واصل التقدم"] },
+      { k: "l5", e: "🏃", t: "متقدم بسرعة", m: ["تتقدّم بسرعة مذهلة يا ", "!"] },
+      { k: "l6", e: "📖", t: "محب المعرفة", m: ["حبّك للمعرفة يُلهمنا يا ", "!"] },
+      { k: "l7", e: "🎯", t: "حقق الهدف", m: ["أصبتَ الهدف يا ", "! خطوة نحو هدف جديد"] },
+      { k: "l8", e: "🏵️", t: "إنجاز مميز", m: ["إنجازك مميّز يا ", "! فخورون بك"] }
+    ] },
+    { id: "b", e: "💞", t: "شارات السلوك والتعاون", items: [
+      { k: "b1", e: "❤️", t: "قلب متعاون", m: ["قلبك الكبير يتعاون مع الجميع يا ", "!"] },
+      { k: "b2", e: "🤗", t: "صديق الجميع", m: ["الجميع يحب صداقتك يا ", "!"] },
+      { k: "b3", e: "🌷", t: "روح جميلة", m: ["روحك جميلة يا ", "! تُضفي البهجة على الصف"] },
+      { k: "b4", e: "🤲", t: "يد المساعدة", m: ["شكرًا على مساعدتك يا ", "! يدك تصنع الفرق"] },
+      { k: "b5", e: "🦸", t: "قدوة الصف", m: ["أنت قدوة لزملائك يا ", "!"] },
+      { k: "b6", e: "🕊️", t: "سفير الاحترام", m: ["احترامك يرفع قدر الصف يا ", "!"] },
+      { k: "b7", e: "😇", t: "صاحب الأخلاق", m: ["أخلاقك الرفيعة قدوة يا ", "!"] }
+    ] },
+    { id: "c", e: "⏱️", t: "شارات الالتزام", items: [
+      { k: "c1", e: "⏰", t: "نجم الالتزام", m: ["التزامك بالوقت نجمٌ ساطع يا ", "!"] },
+      { k: "c2", e: "✅", t: "ملتزم دائمًا", m: ["التزامك دائم يا ", "! نفخر بك"] },
+      { k: "c3", e: "📋", t: "حاضر ومستعد", m: ["حضورك واستعدادك رائعان يا ", "!"] },
+      { k: "c4", e: "🎖️", t: "بطل الانضباط", m: ["انضباطك يُحتذى به يا ", "!"] },
+      { k: "c5", e: "🎒", t: "جاهز للتعلم", m: ["استعدادك للتعلّم مُلهم يا ", "!"] },
+      { k: "c6", e: "🔥", t: "همة عالية", m: ["همّتك عالية يا ", "! لا شيء يوقفك"] }
+    ] },
+    { id: "t", e: "🖥️", t: "شارات الحاسوب والبرمجة", items: [
+      { k: "t1", e: "💻", t: "مُبرمج اليوم", m: ["كودك رائع يا ", "! مبرمج اليوم بلا منازع"] },
+      { k: "t2", e: "🐞", t: "صائد الأخطاء", m: ["عينك لا تفوتها الأخطاء يا ", "! صيد ثمين"] },
+      { k: "t3", e: "🛠️", t: "مبتكر الحلول", m: ["حلولك مبتكرة يا ", "! إبداع تقني"] },
+      { k: "t4", e: "⚙️", t: "خبير التقنية", m: ["خبرتك التقنية مذهلة يا ", "!"] },
+      { k: "t5", e: "🚀", t: "مطور المستقبل", m: ["أنت مطوّر المستقبل يا ", "! ابتكر وانطلق"] },
+      { k: "t6", e: "🧩", t: "حلّال المشاكل", m: ["تحلّ كل مشكلة بذكاء يا ", "!"] },
+      { k: "t7", e: "🤖", t: "صديق الروبوت", m: ["الروبوتات تحبّك يا ", "! تفاهم تقني رائع"] },
+      { k: "t8", e: "⌨️", t: "بطل البرمجة", m: ["بطولة في البرمجة يا ", "! واصل الإبداع"] }
+    ] },
+    { id: "s", e: "🎉", t: "شارات خاصة وممتعة", items: [
+      { k: "s1", e: "💯", t: "ملك/ملكة النقاط", m: ["تاج النقاط على رأسك يا ", "!"] },
+      { k: "s2", e: "📅", t: "نجم الأسبوع", m: ["نجم هذا الأسبوع هو ", "! تألق مستمر"] },
+      { k: "s3", e: "🌠", t: "نجم الحصة", m: ["", "! نجم الحصة اليوم"] },
+      { k: "s4", e: "⭐", t: "النجم الذهبي", m: ["نجمك ذهبي يا ", "! لمعان لا ينطفئ"] },
+      { k: "s5", e: "🥇", t: "المركز الأول", m: ["المركز الأول من نصيبك يا ", "!"] },
+      { k: "s6", e: "📈", t: "صاعد بقوة", m: ["صعودك قوي يا ", "! نحو القمة"] },
+      { k: "s7", e: "🌱", t: "تقدم رائع", m: ["تقدّمك رائع يا ", "! خطوة بعد خطوة"] },
+      { k: "s8", e: "🎁", t: "مفاجأة المعلم", m: ["مفاجأة من المعلم لك يا ", "! تستحقها"] }
+    ] }
+  ];
+  var TIERS = [
+    { n: "الشارة الألماسية", fr: ["#3db5f5", "#bdeaff", "#8b7cf0", "#2a8fc4"], e: "💎", cls: "cgem", k: "t1", gl: "61,181,245", flag: "tri",     str: "#4a4e6b", pal: ["#3db5f5", "#8fd8ff", "#8b7cf0", "#5fcf80", "#ff5fa2"], line: "تقديرًا للتميّز والاجتهاد، ونيل «الشارة الألماسية»", say: "! الشارة الألماسية لك" },
+    { n: "التاج الماسي", fr: ["#ffc21a", "#8b3fd1", "#ffe066", "#e0468a"],     e: "👑", cls: "ct2",  k: "t2", gl: "255,194,26",  flag: "swallow", str: "#5b2a9e", pal: ["#ffc21a", "#8b3fd1", "#e0468a", "#ffe066", "#5b2a9e"], line: "تقديرًا للتميّز المتجدّد، ونيل «التاج الماسي»", say: "! التاج الماسي من نصيبك" },
+    { n: "النخبة الماسية", fr: ["#1fb5a6", "#dfe7f1", "#1f4e79", "#53d6c8"],   e: "💠", cls: "ct3",  k: "t3", gl: "31,181,166",  flag: "banner",  str: "#1f4e79", pal: ["#1fb5a6", "#b8c4d4", "#1f4e79", "#53d6c8", "#7e93ab"], line: "تقديرًا للتميّز المستمر، ونيل «النخبة الماسية»", say: "! أنت الآن من النخبة الماسية" },
+    { n: "المجرة", fr: ["#6d4fd6", "#ff7ad9", "#6de3ff", "#b794ff"],           e: "🌌", cls: "ct4",  k: "t4", gl: "143,123,255", flag: "star",    str: "#cdbbff", pal: ["#b794ff", "#ff7ad9", "#6de3ff", "#ffe27a", "#8f9bff"], line: "تقديرًا لتميّز يبلغ المجرّات، ونيل شارة «المجرة»", say: "! أنت نجم المجرة" }
+  ];
+  var PTIERS = [
+    { n: "التاج الملكي",   e: "👑", cls: "cp1", k: "q1", flag: "long",   str: "#7a1626", pal: ["#c0283f", "#ffc21a", "#e0536a", "#ffd86b", "#7a1626"], line: "تقديرًا للتميّز والتصدّر، ونيل «التاج الملكي» بلقب متصدر اليوم" },
+    { n: "النخبة الذهبية", e: "⚜️", cls: "cp2", k: "q2", flag: "shield", str: "#8a6a00", pal: ["#ffc21a", "#d99a00", "#3f9b5a", "#ffe066", "#8fcf9f"], line: "تقديرًا للتصدّر المتكرر، ونيل «النخبة الذهبية» بلقب متصدر اليوم" },
+    { n: "الأسطورة",       e: "🐉", cls: "cp3", k: "q3", flag: "drop",   art: "legend", str: "#6be8d9", pal: ["#1fd6c0", "#ffd24a", "#0fb5a0", "#37e3d3", "#ffb81f"], line: "تقديرًا لتصدّر أسطوري، ونيل مستوى «الأسطورة» بلقب متصدر اليوم" }
+  ];
+
+  function svgNode(html) { var d = document.createElement("div"); d.innerHTML = html; return d.firstChild; }
+  function starPts(cx, cy, R, r, n) {
+    var pts = [];
+    for (var i = 0; i < n * 2; i++) {
+      var a = Math.PI * i / n - Math.PI / 2, rad = i % 2 ? r : R;
+      pts.push((cx + rad * Math.cos(a)).toFixed(1) + "," + (cy + rad * Math.sin(a)).toFixed(1));
+    }
+    return pts.join(" ");
+  }
+  var PAL = ["#ff5fa2", "#ffd23f", "#3db5f5", "#5fcf80", "#ffa94d"];
+  var LEADER_FX = { pal: PAL, flag: "tri", str: "#4a4e6b" };
+
+  // أعلام صغيرة على طول الحافة العلوية، شكلها يختلف بحسب الشهادة
+  function flagsSvg(fx) {
+    var N = fx.flag === "star" ? 30 : 38, x0 = 3, x1 = 274, y0 = 2, cy = 6, cx = (x0 + x1) / 2, pal = fx.pal;
+    var o = '<svg class="cert-flags" viewBox="0 0 277 13" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M' + x0 + ' ' + y0 + ' Q' + cx + ' ' + cy + ' ' + x1 + ' ' + y0 + '" fill="none" stroke="' + fx.str + '" stroke-width=".4"/>';
+    for (var i = 0; i < N; i++) {
+      var t = (i + .5) / N, u = 1 - t, col = pal[i % pal.length];
+      var px = u * u * x0 + 2 * u * t * cx + t * t * x1, py = u * u * y0 + 2 * u * t * cy + t * t * y0;
+      var L = (px - 2.6).toFixed(1), R = (px + 2.6).toFixed(1), X = px.toFixed(1), Y = py.toFixed(1);
+      if (fx.flag === "swallow") {
+        o += '<polygon fill="' + col + '" points="' + L + ',' + Y + ' ' + R + ',' + Y + ' ' + R + ',' + (py + 6.4).toFixed(1) + ' ' + X + ',' + (py + 4.4).toFixed(1) + ' ' + L + ',' + (py + 6.4).toFixed(1) + '"/>';
+      } else if (fx.flag === "banner") {
+        o += '<rect fill="' + col + '" x="' + (px - 2.3).toFixed(1) + '" y="' + Y + '" width="4.6" height="5.6" rx=".3"/>' +
+             '<rect fill="#fff" opacity=".7" x="' + (px - 2.3).toFixed(1) + '" y="' + (py + 1.5).toFixed(1) + '" width="4.6" height=".8"/>';
+      } else if (fx.flag === "long") {
+        o += '<polygon fill="' + col + '" points="' + (px - 1.9).toFixed(1) + ',' + Y + ' ' + (px + 1.9).toFixed(1) + ',' + Y + ' ' + X + ',' + (py + 7.6).toFixed(1) + '"/>';
+      } else if (fx.flag === "shield") {
+        o += '<path fill="' + col + '" d="M' + (px - 2.4).toFixed(1) + ' ' + Y + 'h4.8v3.2c0 2.2-1.6 3.4-2.4 3.9c-.8-.5-2.4-1.7-2.4-3.9z"/>';
+      } else if (fx.flag === "drop") {
+        o += '<polygon fill="' + col + '" points="' + X + ',' + Y + ' ' + (px + 2.4).toFixed(1) + ',' + (py + 3.1).toFixed(1) + ' ' + X + ',' + (py + 6.2).toFixed(1) + ' ' + (px - 2.4).toFixed(1) + ',' + (py + 3.1).toFixed(1) + '"/>';
+      } else if (fx.flag === "star") {
+        o += '<path d="M' + X + ' ' + Y + 'V' + (py + 2).toFixed(1) + '" stroke="' + fx.str + '" stroke-width=".3"/>' +
+             '<polygon fill="' + col + '" points="' + starPts(px, py + 4.4, 2.6, 1.1, 5) + '"/>';
+      } else {
+        o += '<polygon fill="' + col + '" points="' + (px - 2.3).toFixed(1) + ',' + Y + ' ' + (px + 2.3).toFixed(1) + ',' + Y + ' ' + X + ',' + (py + 5.6).toFixed(1) + '"/>';
+      }
+    }
+    return o + '</svg>';
+  }
+  // قصاصات ملونة على الجانبين (شفافيتها من CSS)
+  function fxSvg(pal) {
+    var seed = 11;
+    function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+    var out = '<svg class="cert-fx" viewBox="0 0 277 189" preserveAspectRatio="none" aria-hidden="true">';
+    var n = 0, guard = 0;
+    while (n < 48 && guard++ < 800) {
+      var x = 6 + rnd() * 265, y = 10 + rnd() * 172;
+      if (x > 64 && x < 213) continue;            // وسط الشهادة يبقى نظيفًا
+      if (y < 24) continue;                       // شريط الأعلام
+      if (y > 84 && y < 148 && x > 26 && x < 251) continue; // نطاق الاسم والنص والشارات
+      if (y > 146 && x > 12 && x < 265) continue; // منطقة التاريخ والتوقيع والختم
+      var col = pal[n % pal.length], k = rnd(), sz = 1.3 + rnd() * 1.6, rot = Math.round(rnd() * 180);
+      x = +x.toFixed(1); y = +y.toFixed(1);
+      if (k < .32) out += '<circle fill="' + col + '" cx="' + x + '" cy="' + y + '" r="' + sz.toFixed(1) + '"/>';
+      else if (k < .58) out += '<rect fill="' + col + '" x="' + x + '" y="' + y + '" width="' + (sz * 2.8).toFixed(1) + '" height="' + (sz * 1.1).toFixed(1) + '" rx=".4" transform="rotate(' + rot + ' ' + x + ' ' + y + ')"/>';
+      else if (k < .86) out += '<polygon fill="' + col + '" points="' + starPts(x, y, sz * 2.3, sz, 5) + '"/>';
+      else out += '<circle fill="none" stroke="' + col + '" stroke-width=".7" cx="' + x + '" cy="' + y + '" r="' + (sz * 1.3).toFixed(1) + '"/>';
+      n++;
+    }
+    return out + '</svg>';
+  }
+
+  // خلفية الأسطورة (بدل القصاصات): أشعة ذهبية، أجنحة ريشية على الجانبين، وجمرات متصاعدة
+  function legendFxSvg() {
+    var seed = 5;
+    function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+    var o = '<svg class="cert-fx" viewBox="0 0 277 189" preserveAspectRatio="none" aria-hidden="true">';
+    for (var i = 0; i < 14; i++) {                       // أشعة صادرة من الأيقونة
+      var a = i * 2 * Math.PI / 14, w = .07;
+      o += '<polygon fill="#ffd24a" opacity=".07" points="138.5,31 ' + (138.5 + 320 * Math.cos(a - w)).toFixed(1) + ',' + (31 + 320 * Math.sin(a - w)).toFixed(1) + ' ' + (138.5 + 320 * Math.cos(a + w)).toFixed(1) + ',' + (31 + 320 * Math.sin(a + w)).toFixed(1) + '"/>';
+    }
+    [1, -1].forEach(function (sd) {                      // جناحان من ريش مروحي
+      var px = sd === 1 ? 273 : 4, py = 90;
+      for (var j = 0; j < 9; j++) {
+        var ang = -82 + j * 10.5, len = 36 + 15 * Math.sin(Math.PI * j / 8), h = (len * .5).toFixed(1);
+        o += '<path d="M0 0C7 -5 ' + h + ' -7.5 ' + len.toFixed(1) + ' 0C' + h + ' 5.5 7 4 0 0Z" fill="#1fd6c0" fill-opacity=".22" stroke="#37e3d3" stroke-opacity=".6" stroke-width=".5" transform="translate(' + px + ' ' + py + ') scale(' + (-sd) + ' 1) rotate(' + ang.toFixed(1) + ')"/>';
+      }
+    });
+    var n = 0, guard = 0;                                // جمرات ونجوم متصاعدة على الجانبين
+    while (n < 46 && guard++ < 900) {
+      var x = 6 + rnd() * 265, y = 26 + rnd() * 122;
+      if (x > 66 && x < 211) continue;
+      if (y > 84 && x > 34 && x < 243) continue;
+      var t = (y - 26) / 122, r = .7 + t * 1.5, col = n % 3 ? "#ffd24a" : "#37e3d3";
+      x = +x.toFixed(1); y = +y.toFixed(1);
+      if (n % 5 === 0) {
+        var q = (r * 2.1).toFixed(1), k = (q * .28).toFixed(2);
+        o += '<path fill="' + col + '" d="M' + x + ' ' + (y - q) + 'L' + (x + +k) + ' ' + (y - k) + 'L' + (x + +q) + ' ' + y + 'L' + (x + +k) + ' ' + (y + +k) + 'L' + x + ' ' + (y + +q) + 'L' + (x - k) + ' ' + (y + +k) + 'L' + (x - q) + ' ' + y + 'L' + (x - k) + ' ' + (y - k) + 'Z"/>';
+      } else o += '<circle fill="' + col + '" cx="' + x + '" cy="' + y + '" r="' + r.toFixed(1) + '"/>';
+      n++;
+    }
+    return o + '</svg>';
+  }
+
+  // ---- أيقونات الوسط ----
+  function cupSvg() {   // كأس ذهبي برقم 1 (متصدر اليوم)
+    var one = "51,22 62,22 62,62 50,62 50,36 40,41 36,32";
+    return '<svg class="cert-cup" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<path d="M24 22C4 20 2 52 28 58" fill="none" stroke="#e09a00" stroke-width="6" stroke-linecap="round"/>' +
+      '<path d="M76 22C96 20 98 52 72 58" fill="none" stroke="#e09a00" stroke-width="6" stroke-linecap="round"/>' +
+      '<rect x="42" y="70" width="16" height="12" fill="#e09a00"/>' +
+      '<rect x="27" y="82" width="46" height="11" rx="3" fill="#ffc21a" stroke="#e09a00" stroke-width="2.4"/>' +
+      '<path d="M20 10H80V42C80 63 66 74 50 74C34 74 20 63 20 42Z" fill="#ffc21a" stroke="#e09a00" stroke-width="2.6" stroke-linejoin="round"/>' +
+      '<path d="M27 17V42C27 54 33 62 41 67" fill="none" stroke="#fff3b0" stroke-width="2.6" stroke-linecap="round" opacity=".85"/>' +
+      '<polygon fill="#b97800" transform="translate(1.8 1.8)" points="' + one + '"/>' +
+      '<polygon fill="#fff" points="' + one + '"/></svg>';
+  }
+  function crownSvg() {   // التاج الماسي
+    return '<svg class="cert-cup" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<polygon fill="#ffc21a" stroke="#b97800" stroke-width="3" stroke-linejoin="round" points="14,70 8,30 32,50 50,16 68,50 92,30 86,70"/>' +
+      '<rect x="14" y="70" width="72" height="15" rx="3" fill="#ffc21a" stroke="#b97800" stroke-width="3"/>' +
+      '<path d="M22 66L18 42L33 56" fill="none" stroke="#fff3b0" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>' +
+      '<circle cx="8" cy="28" r="5.5" fill="#ff5fa2" stroke="#b97800" stroke-width="2"/><circle cx="50" cy="13" r="6.5" fill="#3db5f5" stroke="#b97800" stroke-width="2"/><circle cx="92" cy="28" r="5.5" fill="#ff5fa2" stroke="#b97800" stroke-width="2"/>' +
+      '<circle cx="30" cy="77.5" r="4.2" fill="#e0468a"/><circle cx="50" cy="77.5" r="5.2" fill="#3db5f5"/><circle cx="70" cy="77.5" r="4.2" fill="#e0468a"/></svg>';
+  }
+  function eliteSvg() {   // النخبة الماسية
+    return '<svg class="cert-cup" viewBox="0 0 100 100" aria-hidden="true">' +
+      '<polygon fill="#dfe7f1" stroke="#1f4e79" stroke-width="4" stroke-linejoin="round" points="50,5 90,27 90,73 50,95 10,73 10,27"/>' +
+      '<polygon fill="#1f4e79" points="50,15 80,32 80,68 50,85 20,68 20,32"/>' +
+      '<polygon fill="#53d6c8" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" points="50,28 68,44 50,74 32,44"/>' +
+      '<path d="M32 44H68M50 28L42 44L50 74L58 44Z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>' +
+      '<polygon fill="#ffe27a" points="' + starPts(26, 30, 4.2, 1.8, 5) + '"/><polygon fill="#ffe27a" points="' + starPts(74, 30, 4.2, 1.8, 5) + '"/></svg>';
+  }
+  function galaxySvg() {   // المجرة
+    var o = '<svg class="cert-cup" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#1b1740" stroke="#8f7bff" stroke-width="3"/>';
+    var cols = ["#b794ff", "#ff7ad9", "#6de3ff"];
+    for (var k = 0; k < 3; k++) {
+      var d = "";
+      for (var i = 0; i <= 26; i++) {
+        var t = i / 26, th = t * 3.3 * Math.PI + k * 2 * Math.PI / 3, r = 5 + t * 36;
+        d += (i ? "L" : "M") + (50 + r * Math.cos(th)).toFixed(1) + " " + (50 + r * Math.sin(th)).toFixed(1);
+      }
+      o += '<path d="' + d + '" fill="none" stroke="' + cols[k] + '" stroke-width="4" stroke-linecap="round" opacity=".9"/>';
+    }
+    o += '<circle cx="50" cy="50" r="8" fill="#ffe27a"/><circle cx="50" cy="50" r="3.6" fill="#fff"/>';
+    [[22, 20], [78, 26], [84, 66], [30, 82], [14, 56], [68, 84], [60, 14]].forEach(function (q) { o += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="1.6" fill="#fff"/>'; });
+    return o + '</svg>';
+  }
+  // ---- مستويات صدارة النقاط: التاج الملكي / النخبة الذهبية / الأسطورة ----
+  function royalInner() {
+    return '<path d="M24 68C19 42 34 24 50 24C66 24 81 42 76 68Z" fill="#c0283f" stroke="#7a1626" stroke-width="2.4" stroke-linejoin="round"/>' +
+      '<path d="M24 68C29 44 40 30 50 26M76 68C71 44 60 30 50 26M50 26V68" fill="none" stroke="#ffc21a" stroke-width="4" stroke-linecap="round"/>' +
+      '<circle cx="50" cy="19" r="6.5" fill="#ffc21a" stroke="#b97800" stroke-width="2"/>' +
+      '<rect x="16" y="66" width="68" height="14" rx="3.5" fill="#ffc21a" stroke="#b97800" stroke-width="2.6"/>' +
+      '<circle cx="30" cy="73" r="3.6" fill="#3db5f5"/><circle cx="50" cy="73" r="4.6" fill="#ff5fa2"/><circle cx="70" cy="73" r="3.6" fill="#3db5f5"/>' +
+      '<rect x="14" y="82" width="72" height="10" rx="5" fill="#fff" stroke="#c9c2e0" stroke-width="1.6"/>' +
+      '<path d="M30 85v4M50 85v4M70 85v4" stroke="#333" stroke-width="2" stroke-linecap="round"/>';
+  }
+  function laurelInner() {
+    var o = "", cx = 50, cy = 54, R = 40;
+    [-1, 1].forEach(function (sd) {
+      var r0 = -78 * Math.PI / 180, r1 = 78 * Math.PI / 180;
+      o += '<path d="M' + (cx + sd * R * Math.cos(r0)).toFixed(1) + ' ' + (cy + R * Math.sin(r0)).toFixed(1) + ' A' + R + ' ' + R + ' 0 0 ' + (sd === 1 ? 1 : 0) + ' ' + (cx + sd * R * Math.cos(r1)).toFixed(1) + ' ' + (cy + R * Math.sin(r1)).toFixed(1) + '" fill="none" stroke="#2d7a46" stroke-width="2.4" stroke-linecap="round"/>';
+      for (var j = 0; j < 6; j++) {
+        var th = -66 + j * 26.4, rad = th * Math.PI / 180, x = cx + sd * R * Math.cos(rad), y = cy + R * Math.sin(rad);
+        o += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" rx="3" ry="6.4" fill="#4aa564" stroke="#2d7a46" stroke-width="1" transform="rotate(' + (sd * th).toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
+      }
+    });
+    return o;
+  }
+  function goldEliteInner() {
+    return laurelInner() +
+      '<path d="M50 18L74 27V52C74 68 62 78 50 85C38 78 26 68 26 52V27Z" fill="#ffc21a" stroke="#b97800" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M50 25L68 32V52C68 64 59 72 50 77C41 72 32 64 32 52V32Z" fill="#ffe27a"/>' +
+      '<polygon fill="#d99a00" stroke="#b97800" stroke-width="1.5" stroke-linejoin="round" points="' + starPts(50, 52, 15, 6.2, 5) + '"/>' +
+      '<circle cx="50" cy="17" r="4.2" fill="#e0468a" stroke="#b97800" stroke-width="1.6"/>';
+  }
+  function legendInner() {
+    var wing = '<path d="M42 52C34 38 20 32 6 36C12 40 14 44 14 48C8 48 4 52 4 58C10 56 16 58 20 62C16 64 14 68 16 74C28 72 38 64 42 58Z" fill="#19c9b4" stroke="#06524a" stroke-width="2" stroke-linejoin="round"/>' +
+      '<path d="M14 48C24 48 34 50 42 53M20 62C28 60 36 57 42 55M16 74C26 70 34 64 40 60" fill="none" stroke="#06524a" stroke-width="1.4" opacity=".7"/>';
+    return wing + '<g transform="translate(100 0) scale(-1 1)">' + wing + '</g>' +
+      '<path d="M50 2C58 14 64 20 58 32C55 26 52 24 50 24C48 24 45 26 42 32C36 20 42 12 50 2Z" fill="#ffb81f" stroke="#7a4a00" stroke-width="1.6" stroke-linejoin="round"/>' +
+      '<path d="M50 12C55 19 56 24 53 29C52 27 50 26 50 26C50 26 48 27 47 29C44 24 45 19 50 12Z" fill="#fff3b0"/>' +
+      '<circle cx="50" cy="58" r="21" fill="#062c30" stroke="#ffd24a" stroke-width="4"/>' +
+      '<polygon fill="#ffd24a" points="' + starPts(50, 58, 14, 5.8, 5) + '"/>';
+  }
+  function pIcon(k, cls) {
+    var inner = k === "q1" ? royalInner() : (k === "q2" ? goldEliteInner() : legendInner());
+    return '<svg class="' + cls + '" viewBox="0 0 100 100" aria-hidden="true">' + inner + '</svg>';
+  }
+
+  function tierIcon(ti) {
+    if (ti === 0) return el("span", "cert-gem", "💎");
+    return svgNode([null, crownSvg, eliteSvg, galaxySvg][ti]());
+  }
+
+  // أشعة خلف الأيقونة الرئيسية
+  function sunSvg() {
+    var o = '<svg class="cert-sun" viewBox="0 0 100 100" aria-hidden="true">', n = 16;
+    for (var i = 0; i < n; i++) {
+      var a0 = i * 2 * Math.PI / n, a1 = a0 + Math.PI / n;
+      o += '<polygon class="' + (i % 2 ? 'k-sun2' : 'k-sun1') + '" points="50,50 ' +
+        (50 + 50 * Math.cos(a0)).toFixed(1) + ',' + (50 + 50 * Math.sin(a0)).toFixed(1) + ' ' +
+        (50 + 50 * Math.cos(a1)).toFixed(1) + ',' + (50 + 50 * Math.sin(a1)).toFixed(1) + '"/>';
+    }
+    return o + '<circle class="k-ring" cx="50" cy="50" r="33"/></svg>';
+  }
+  function starSvg(color) {
+    return '<svg class="cert-ns" viewBox="0 0 24 24" aria-hidden="true"><polygon fill="' + color + '" points="' + starPts(12, 12.5, 11.5, 4.8, 5) + '"/></svg>';
+  }
+  // ختم تتويج (وردة مع شريطين) بأيقونة تناسب الشهادة: "leader" أو رقم المستوى 0..3
+  function sealSvg(kind) {
+    var icon;
+    if (kind === 0) icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="50,29 71,44 50,75 29,44"/><path d="M29 44H71M50 29L41 44L50 75L59 44Z" fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>';
+    else if (kind === 1) icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="27,63 23,35 38,48 50,28 62,48 77,35 73,63"/><rect x="27" y="66" width="46" height="7" rx="2" fill="#fff"/>';
+    else if (kind === 2) icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="50,25 73,38 73,62 50,75 27,62 27,38"/><polygon fill="#fff" points="50,38 61,49 50,66 39,49"/>';
+    else if (kind === "q1") icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="27,63 23,35 38,48 50,28 62,48 77,35 73,63"/><rect x="27" y="66" width="46" height="7" rx="2" fill="#fff"/><circle cx="23" cy="34" r="3.2" fill="#fff"/><circle cx="50" cy="26" r="3.6" fill="#fff"/><circle cx="77" cy="34" r="3.2" fill="#fff"/>';
+    else if (kind === "q2") icon = '<path class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" d="M50 26L70 33V52C70 63 60 70 50 75C40 70 30 63 30 52V33Z"/><polygon fill="#fff" points="' + starPts(50, 50, 11, 4.6, 5) + '"/>';
+    else if (kind === "q3") icon = '<path fill="#fff" d="M50 22C56 33 66 40 62 54C61 50 58 48 55 46C55 52 53 58 50 63C47 58 45 52 45 46C42 48 39 50 38 54C34 40 44 33 50 22Z"/>';
+    else if (kind === 3) icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="' + starPts(50, 51, 21, 8.5, 5) + '"/><ellipse cx="50" cy="52" rx="30" ry="9" fill="none" stroke="#fff" stroke-width="2" transform="rotate(-25 50 52)"/>';
+    else icon = '<polygon class="k-seal1" stroke="#fff" stroke-width="2" stroke-linejoin="round" points="' + starPts(50, 51, 23, 9.5, 5) + '"/>';
+    return '<svg class="cert-seal" viewBox="0 0 100 112" aria-hidden="true">' +
+      '<polygon class="k-tail" points="30,76 14,108 30,100 40,110 47,80"/><polygon class="k-tail" points="70,76 53,80 60,110 70,100 86,108"/>' +
+      '<polygon class="k-seal1" points="' + starPts(50, 50, 48, 43, 20) + '"/><circle class="k-seal2" cx="50" cy="50" r="37"/>' +
+      '<circle fill="none" stroke="#fff" stroke-width="1.8" stroke-dasharray="2.5 3.5" cx="50" cy="50" r="32.5"/>' + icon + '</svg>';
+  }
+
+
+const COL=["#ff5fa2","#3db5f5","#ffc21a","#5fcf80","#ffa94d","#8b7cf0"];
+const FLAT=BADGE_CATS.reduce((a,c)=>a.concat(c.items),[]);
+const PRAISE=["أحسنت يا {n}!","رائع يا {n}، استمر!","نقطة مستحقة يا {n}!","{n} يتقدّم بقوة!","تألّق جميل يا {n}!"];
+const MODES=[["🏆","منصة الصدارة","أصحاب المراكز الثلاثة على منصة تتويج بأضواء وتاج، والترتيب يتبدّل أمامك مع كل نقطة."],["➕","نقاط بنقرة","زر + و − بجانب كل اسم، وأضف طلابك واحدًا واحدًا أو الصق قائمة الأسماء دفعة واحدة."],["🏅","شارات تحفيزية","٤٤ شارة في ست فئات، وعند منح أي منها تظهر عبارة تشجيع تحمل اسم الطالب."],["📊","صدارة الشارات","أعمدة لأكثر خمسة طلاب بالشارات، بأيقونة تحيط بها أطر وأوسمة مستوياتهم."],["💎","الشارة الماسية","خمس شارات تمنح شارة ماسية، ثم تتدرج: التاج الماسي، فالنخبة الماسية، فالمجرة."],["🖨️","شهادات جاهزة","شهادة لمتصدر اليوم وللشارات الماسية بمعاينة قبل الطباعة وبتصميم لكل مستوى."]];
+const FEATS=[["عبارات تشجيع","عبارة مختلفة لكل شارة تُعرض باسم الطالب أمام الفصل."],["أصوات خفيفة","أصوات احتفال قصيرة، ويمكنك كتمها بضغطة."],["صفوف متعددة","لكل صف قائمته، وتنتقل بينها دون أن تفقد شيئًا."],["حفظ حصاد اليوم","احفظ نتيجة اليوم في سجل، واسترجعها حين تشاء."],["لصق الأسماء","الصق قائمة كاملة؛ تُحذف الأرقام والتكرار تلقائيًا."],["إخفاء الأدوات","اطوِ الجزء العلوي ليبقى الفصل أمام اللوحة فقط."],["نقاط تُصفَّر وإنجازات تبقى","تصفير نقاط اليوم لا يمسّ الشارات ولا المستويات."],["معاينة قبل الطباعة","شهادة بحجمها الكامل، تطبعها أو تفتحها في نافذة أو تنزّلها."],["تصفير شارات الفائز","بعد طباعة شهادته، يبدأ جولة جديدة بمستوى أعلى."],["أيقونات تمثّل معناها","كل شارة أيقونتها فريدة تدل على اسمها."],["الجوال والحاسوب","تصميم متجاوب بالكامل، وكل الواجهة عربية من اليمين لليسار."],["حفظ تلقائي","أسماؤك ونقاطك وشاراتك تبقى في متصفحك عند العودة."]];
+const STEPS=[["أضف طلابك","اكتب الأسماء أو الصق القائمة كاملة."],["امنح النقاط والشارات","نقرة للنقطة، وزر الشارة لمن يستحق."],["احتفل واطبع","شهادة لمتصدر اليوم ولمن نال الشارة الماسية."]];
+const DIA=[["💎","الشارة الألماسية","أول خمس شارات تجمعها","t1","المرة الأولى"],["👑","التاج الماسي","بعد تصفير الشارات وجمع خمس جديدة","t2","المرة الثانية"],["💠","النخبة الماسية","للمرة الثالثة","t3","المرة الثالثة"],["🌌","المجرة","للمرة الرابعة وما بعدها","t4","المرة الرابعة +"]];
+const LEAD=[["q1","التاج الملكي","أول يوم تتصدّر فيه الفصل","اليوم الأول"],["q2","النخبة الذهبية","ثاني يوم تصدّر مختلف","اليوم الثاني"],["q3","الأسطورة","ثالث يوم تصدّر وما بعده","اليوم الثالث +"]];
+$("#mg").innerHTML=MODES.map((m,i)=>`<div class="card rv" style="--c:${COL[i]};--i:${i}"><div class="ic">${m[0]}</div><h3>${m[1]}</h3><p>${m[2]}</p></div>`).join("");
+$("#fg").innerHTML=FEATS.map((f,i)=>`<div class="ft card rv" style="--c:${COL[i%6]};--i:${i%4};border-top-width:2px"><span class="dot"></span><div><h3>${f[0]}</h3><p>${f[1]}</p></div></div>`).join("");
+$("#sg").innerHTML=STEPS.map((s,i)=>`<div class="step rv" style="--c:${COL[i]};--i:${i}"><b>${AR(i+1)}</b><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join("");
+$("#jd").innerHTML=DIA.map((d,i)=>`<div class="tc ${d[3]} rv" style="--i:${i}"><div class="e">${d[0]}</div><h4>${d[1]}</h4><p>${d[2]}</p><em>${d[4]}</em></div>`).join('<span class="arw" aria-hidden="true">←</span>');
+$("#jp").innerHTML=LEAD.map((d,i)=>`<div class="tc ${d[0]} rv" style="--i:${i}"><div class="e">${pIcon(d[0],"")}</div><h4>${d[1]}</h4><p>${d[2]}</p><em>${d[3]}</em></div>`).join('<span class="arw" aria-hidden="true">←</span>');
+$("#cats").innerHTML=BADGE_CATS.map((c,i)=>`<div class="cat rv" style="--c:${COL[i]};--i:${i%3}"><h3>${c.e} ${c.t}</h3><div class="chips">${c.items.map(b=>`<button class="chip" type="button" data-k="${b.k}"><i>${b.e}</i>${b.t}</button>`).join("")}</div></div>`).join("");
+const tape=["نقاط بنقرة","شارات تحفيزية","منصة الصدارة","صدارة الشارات","الشارة الماسية","التاج الملكي","شهادات جاهزة"].join(" • ")+" • ";$("#track").textContent=tape.repeat(5)+tape.repeat(5);
+$("#pts").innerHTML=Array.from({length:16},(_,i)=>`<span class="pt" style="left:${(i*6.3+3)%100}%;background:${["#ffd23f","#5fcf80","#ff5fa2","#3db5f5","#8b7cf0"][i%5]};animation-duration:${12+i%6*3}s;animation-delay:-${i*1.3}s"></span>`).join("");
+$("#endIco").innerHTML=pIcon("q1","");
+
+/* احتفال */
+function burst(){const C=["#ffd23f","#ff5fa2","#3db5f5","#5fcf80","#fff","#8b7cf0"];
+  for(let i=0;i<40;i++){const c=document.createElement("span");c.className="conf";c.style.left=Math.random()*100+"vw";c.style.background=C[i%6];
+    c.style.setProperty("--d",1.6+Math.random()*1.6+"s");c.style.setProperty("--r",Math.random()*720-360+"deg");c.style.animationDelay=Math.random()*.3+"s";
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3600)}}
+let tt;function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;e.style.animation="none";void e.offsetWidth;e.style.animation="";clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,3600)}
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const x=FLAT.find(f=>f.k===b.dataset.k);toast(x.e+" "+x.m[0]+"سارة"+x.m[1]);burst()});
+
+/* تجربة مصغّرة */
+const AVS=["#ffe3f0","#d9f1ff","#fff1b0","#d9f5e4","#ece4ff","#ffe7cf"],AVE=["🦊","🐼","🦁","🐸","🐧","🦉"];
+let S=[{id:0,n:"سارة",p:7,b:[],d:0},{id:1,n:"خالد",p:5,b:[],d:0},{id:2,n:"منى",p:4,b:[],d:0},{id:3,n:"ياسر",p:2,b:[],d:0}];
+const list=$("#dmList");let ct;
+function cheer(t){const c=$("#cheer");c.innerHTML="";const s=el("span",null,t);c.appendChild(s);clearTimeout(ct);ct=setTimeout(()=>c.innerHTML="",2400)}
+function ranked(){return S.slice().sort((a,b)=>b.p-a.p||a.id-b.id)}
+function render(){
+  const first={};list.querySelectorAll("li").forEach(li=>first[li.dataset.id]=li.getBoundingClientRect().top);
+  const ae=document.activeElement,keep=ae&&ae.dataset&&ae.dataset.act?{id:ae.dataset.id,act:ae.dataset.act}:null;
+  list.innerHTML="";const r=ranked();
+  r.forEach((s,i)=>{
+    const li=el("li","row"+(i===0&&s.p>0?" lead":""));li.dataset.id=s.id;
+    const rk=el("span","rk",i+1);
+    const avc=el("span","avc"),av=el("span","av",AVE[s.id]);av.style.background=AVS[s.id];avc.appendChild(av);
+    if(s.d>0){const T=TIERS[Math.min(s.d,4)-1],m=el("span","md",T.e);m.style.setProperty("--gl",T.gl);m.title=T.n;avc.appendChild(m)}
+    const nm=el("span","nm",s.n);const sm=el("small",null,s.b.map(k=>FLAT.find(f=>f.k===k).e).join(""));nm.appendChild(sm);
+    const mk=(cls,txt,act,label)=>{const b=el("button","pm "+cls,txt);b.type="button";b.dataset.act=act;b.dataset.id=s.id;b.setAttribute("aria-label",label+" "+s.n);return b};
+    const sc=el("span","sc");sc.append(el("i",null,"★"),document.createTextNode(s.p));
+    li.append(rk,avc,nm,mk("bg","🏅","bg","منح شارة إلى"),mk("minus","−","minus","إنقاص نقطة من"),mk("plus","+","plus","إضافة نقطة إلى"),sc);
+    list.appendChild(li);
+  });
+  list.querySelectorAll("li").forEach(li=>{const d=first[li.dataset.id]-li.getBoundingClientRect().top;if(d){li.style.transition="none";li.style.transform=`translateY(${d}px)`;requestAnimationFrame(()=>{li.style.transition="transform .45s cubic-bezier(.2,.9,.3,1)";li.style.transform=""})}});
+  if(keep){const b=list.querySelector(`button[data-id="${keep.id}"][data-act="${keep.act}"]`);if(b)b.focus({preventScroll:true})}
+}
+list.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const s=S[+b.dataset.id],lead=ranked()[0];
+  if(b.dataset.act==="plus"){s.p++;cheer(PRAISE[Math.floor(Math.random()*PRAISE.length)].replace("{n}",s.n));if(ranked()[0]===s&&lead!==s)burst()}
+  else if(b.dataset.act==="minus"){if(s.p>0)s.p--}
+  else{const pool=FLAT.filter(f=>!s.b.includes(f.k));const x=pool[Math.floor(Math.random()*pool.length)];s.b.push(x.k);
+    if(s.b.length>=5){s.d++;const T=TIERS[Math.min(s.d,4)-1];cheer(T.e+" مبروك يا "+s.n+T.say);s.b=[];burst();burst()}
+    else{cheer(x.e+" "+x.m[0]+s.n+x.m[1])}}
+  $("#res").textContent=b.dataset.act==="bg"&&!s.b.length?"خمس شارات = شارة ماسية، ويبدأ الطالب جولة جديدة":"جميل! جرّب غيرها";
+  render()});
+render();
+
+/* معرض الشهادات */
+const ORD=["","الأولى","الثانية","الثالثة","الرابعة"];
+const timesText=n=>n>1?" (للمرة "+(ORD[n]||n)+")":"";
+const NAMES=["سارة","خالد","منى","ياسر","ليان","عبدالله","جوري"];
+const SAMPLE=["p1","p3","l1","b4","s5"];
+const DATE=new Date().toLocaleDateString("ar",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+function makeCert(kind,ti,name){
+  const gem=kind==="gem",T=gem?TIERS[ti]:PTIERS[ti],n=ti+1,CL="الصف الخامس أ";
+  const inn=el("div","cert-in "+T.cls);
+  inn.appendChild(svgNode(T.art==="legend"?legendFxSvg():fxSvg(T.pal)));inn.appendChild(svgNode(flagsSvg(T)));
+  const rb=el("div","cert-ribbon");for(let i=0;i<4;i++)rb.appendChild(document.createElement("i"));inn.appendChild(rb);
+  const body=el("div","cert-body"),gw=el("div","cert-gemwrap");
+  gw.appendChild(svgNode(sunSvg()));gw.appendChild(gem?tierIcon(ti):svgNode(pIcon(T.k,"cert-cup")));body.appendChild(gw);
+  body.appendChild(el("h1","cert-h","شهادة تقدير"));body.appendChild(el("p","cert-sub","تُمنح هذه الشهادة إلى"));
+  const nr=el("div","cert-nmrow");nr.append(svgNode(starSvg(T.pal[0])),el("div","cert-name",name),svgNode(starSvg(T.pal[gem?2:1])));body.appendChild(nr);
+  body.appendChild(el("div","cert-tag",T.e+" "+T.n));
+  body.appendChild(el("p","cert-txt",gem?T.line+timesText(n)+" بعد جمع 5 شارات في «"+CL+"»":T.line+timesText(n)+" في «"+CL+"» بمجموع 12 نقطة"));
+  const ch=el("div","cert-chips");(gem?SAMPLE:SAMPLE.slice(0,3)).forEach(k=>{const b=FLAT.find(f=>f.k===k);ch.appendChild(el("span","cert-chip",b.e+" "+b.t))});body.appendChild(ch);
+  inn.appendChild(body);
+  const foot=el("div","cert-foot");foot.append(el("div","cert-date","التاريخ: "+DATE),svgNode(sealSvg(gem?ti:T.k)),el("div","cert-sign","توقيع المعلم"));inn.appendChild(foot);
+  const rb2=el("div","cert-ribbon bot");for(let j=0;j<4;j++)rb2.appendChild(document.createElement("i"));inn.appendChild(rb2);
+  const cw=el("div","cw"),cs=el("div","cs");cs.appendChild(inn);cw.appendChild(cs);return cw}
+const CD=[["gem",0,"الشارة الألماسية","أول شارة ماسية: جليدية بألوان السماء."],["gem",1,"التاج الماسي","ذهبي وأرجواني، بتاج مرصّع وأعلام بذيل مشقوق."],["gem",2,"النخبة الماسية","فيروزي وفضي ونيلي، بدرع سداسي وأعلام كلافتات."],["gem",3,"المجرة","فضاء ليلي بمجرة حلزونية ونجوم معلّقة."]];
+const CP=[["leader",0,"التاج الملكي","قرمزي وذهبي بتاج ملكي ورايات طويلة."],["leader",1,"النخبة الذهبية","ذهب مع إكليل غار وأعلام على شكل دروع."],["leader",2,"الأسطورة","تنين زمردي: أجنحة وأشعة ذهبية وجمرات متصاعدة."]];
+const ALL=CD.concat(CP),nameOf=c=>NAMES[(c[0]==="gem"?0:4)+c[1]];
+let lbI=0,lbFrom=null;
+function gallery(sel,arr){$(sel).innerHTML="";arr.forEach((c,i)=>{
+  const card=el("div","cc rv");card.style.setProperty("--i",i%4);card.tabIndex=0;card.setAttribute("role","button");card.setAttribute("aria-label","معاينة شهادة "+c[2]);card.dataset.i=ALL.indexOf(c);
+  card.appendChild(el("span","zm","🔍 معاينة"));
+  card.appendChild(makeCert(c[0],c[1],nameOf(c)));card.appendChild(el("h3",null,c[2]));card.appendChild(el("p",null,c[3]));
+  card.onclick=()=>openLb(+card.dataset.i,card);
+  card.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLb(+card.dataset.i,card)}};
+  $(sel).appendChild(card)})}
+gallery("#cg1",CD);gallery("#cg2",CP);
+function lbSize(){const st=$("#lbStage"),box=st.parentNode,w=Math.min(box.clientWidth-36,Math.max(260,(innerHeight-250)*297/209));st.style.width=w+"px";fit()}
+function showLb(i){lbI=(i+ALL.length)%ALL.length;const c=ALL[lbI],st=$("#lbStage");st.innerHTML="";st.appendChild(makeCert(c[0],c[1],nameOf(c)));
+  $("#lbT").textContent=c[2];$("#lbD").textContent=c[3];$("#lbN").textContent=AR(lbI+1)+" / "+AR(ALL.length);lbSize()}
+function openLb(i,from){lbFrom=from;$("#lb").hidden=false;document.body.style.overflow="hidden";showLb(i);$("#lbX").focus()}
+function closeLb(){$("#lb").hidden=true;document.body.style.overflow="";if(lbFrom)lbFrom.focus({preventScroll:true})}
+$("#lbX").onclick=closeLb;$("#lbPrev").onclick=()=>showLb(lbI-1);$("#lbNext").onclick=()=>showLb(lbI+1);
+$("#lb").addEventListener("click",e=>{if(e.target===$("#lb"))closeLb()});
+addEventListener("keydown",e=>{if($("#lb").hidden)return;
+  if(e.key==="Escape")closeLb();
+  else if(e.key==="ArrowLeft")showLb(lbI+1);
+  else if(e.key==="ArrowRight")showLb(lbI-1);
+  else if(e.key==="Tab"){const f=[$("#lbX"),$("#lbPrev"),$("#lbNext")],i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus()}});
+addEventListener("resize",()=>{if(!$("#lb").hidden)lbSize()});
+function fit(){document.querySelectorAll(".cw").forEach(w=>{const s=w.firstElementChild,k=w.clientWidth/s.offsetWidth;w.style.height=Math.round(s.offsetHeight*k)+"px";s.style.transform="scale("+k+")"})}
+fit();addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(document.body);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".rv").forEach(x=>io.observe(x));
+addEventListener("scroll",()=>{const h=document.documentElement;$("#bar").style.width=(scrollY/(h.scrollHeight-innerHeight||1)*100)+"%"},{passive:true});
+</script>
+<script>
+document.querySelectorAll('a[download]').forEach(function(a){a.addEventListener('click',function(e){
+ e.preventDefault();
+ fetch(a.getAttribute('href')).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+  var u=URL.createObjectURL(new Blob([b],{type:'text/html'})),l=document.createElement('a');
+  l.href=u;l.download=a.getAttribute('download');document.body.appendChild(l);l.click();l.remove();
+  setTimeout(function(){URL.revokeObjectURL(u)},4000)
+ }).catch(function(){window.open(a.getAttribute('href'),'_blank')})
+})});
+</script>
+<script>document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});</script>
+</body>
+</html>

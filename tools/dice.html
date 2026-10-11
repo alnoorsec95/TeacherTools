@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>نرد الحظ — دع الحظ يختار</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4f6fb;--card:#fff;--ink:#2b1b54;--mut:#5b4d7d;--line:#e3dcf5;--gold:#ffc93c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150d2e;--card:#221546;--ink:#f1ecff;--mut:#b7abd6;--line:#34265f}}
+:root[data-theme="dark"]{--bg:#150d2e;--card:#221546;--ink:#f1ecff;--mut:#b7abd6;--line:#34265f}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Tajawal","Segoe UI",Tahoma,sans-serif;line-height:1.6;overflow-x:hidden}
+#bar{position:fixed;top:0;right:0;height:4px;width:0;background:var(--gold);z-index:40}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;justify-content:space-between;align-items:center;padding:10px 24px;background:rgba(43,27,84,.88);backdrop-filter:blur(10px);color:#fff}
+header b{font-size:24px;font-weight:800}
+.btn{position:relative;display:inline-block;background:var(--gold);color:#2b1b54;font-weight:800;text-decoration:none;border-radius:999px;padding:10px 28px;transition:transform .2s}
+.btn:hover{transform:scale(1.06)}
+.btn.big{font-size:26px;padding:16px 48px}
+.btn.big:after{content:"";position:absolute;inset:0;border-radius:inherit;border:3px solid var(--gold);animation:ring 2s ease-out infinite}
+.hero{position:relative;overflow:hidden;background:#2b1b54;color:#fff;padding:64px 24px 88px}
+.hero .in{position:relative;z-index:2;max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:48px;flex-wrap:wrap}
+.hero .tx{flex:1 1 440px}
+.kick{color:var(--gold);font-weight:700;font-size:20px}
+h1{margin:8px 0 16px;font-size:clamp(64px,13vw,128px);line-height:1.05;font-weight:800;animation:up .9s both}
+.lead{font-size:clamp(20px,3vw,26px);max-width:540px;margin:0 0 28px;animation:up .9s .15s both}
+.cta-row{animation:up .9s .3s both}
+.note{margin-top:14px;color:#d9d0f0}
+.vis{flex:0 1 340px;text-align:center}
+.stage{--s:220px;width:var(--s);height:var(--s);margin:100px auto 0;position:relative;z-index:1;perspective:900px;cursor:pointer;animation:float 4s ease-in-out infinite;position:relative}
+.stage.sm{--s:150px;margin:80px auto 0;cursor:default}
+.vis{position:relative}.vis:before{content:"";position:absolute;left:22%;right:22%;top:440px;height:18px;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(7px)}
+.cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:spin 16s linear infinite}
+.cube.roll{animation:none;transition:transform 1.3s cubic-bezier(.2,.8,.25,1)}
+.face{position:absolute;inset:0;border-radius:7%;background:radial-gradient(circle at 30% 25%,#ff7a7a,#e11d48 65%,#9f1239);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:12%;box-shadow:inset 0 0 0 4px #ffffff40,inset 0 -10px 18px #0003;backface-visibility:hidden}
+.face:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,#ffffff59,transparent 45%)}
+.face i{place-self:center;width:62%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#ffe9ef);box-shadow:inset 0 -3px 5px #0003}
+.f1{transform:translateZ(calc(var(--s)/2))}.f6{transform:rotateY(180deg) translateZ(calc(var(--s)/2))}
+.f3{transform:rotateY(90deg) translateZ(calc(var(--s)/2))}.f4{transform:rotateY(-90deg) translateZ(calc(var(--s)/2))}
+.f2{transform:rotateX(90deg) translateZ(calc(var(--s)/2))}.f5{transform:rotateX(-90deg) translateZ(calc(var(--s)/2))}
+.core{position:absolute;inset:4px;background:#a3153a;backface-visibility:hidden}
+.c1{transform:translateZ(calc(var(--s)/2 - 4px))}.c6{transform:rotateY(180deg) translateZ(calc(var(--s)/2 - 4px))}
+.c3{transform:rotateY(90deg) translateZ(calc(var(--s)/2 - 4px))}.c4{transform:rotateY(-90deg) translateZ(calc(var(--s)/2 - 4px))}
+.c2{transform:rotateX(90deg) translateZ(calc(var(--s)/2 - 4px))}.c5{transform:rotateX(-90deg) translateZ(calc(var(--s)/2 - 4px))}
+#res{margin-top:150px;font-size:24px;font-weight:700;min-height:36px}
+.pt{position:absolute;bottom:-20px;width:14px;height:8px;border-radius:2px;opacity:.55;animation:rise linear infinite}
+.fd{position:absolute;border-radius:22%;animation:drift 9s ease-in-out infinite}
+.fd:before{content:"";position:absolute;inset:32%;border-radius:50%;background:#fff}
+.marq{background:var(--gold);color:#2b1b54;overflow:hidden;white-space:nowrap;font-size:22px;font-weight:800;padding:12px 0}
+.track{display:inline-block;animation:mq 28s linear infinite}
+.sec{max-width:1160px;margin:0 auto;padding:80px 24px 8px}
+.sec h2{margin:0 0 8px;font-size:clamp(34px,6vw,52px);font-weight:800}
+.sec p.s{margin:0 0 36px;color:var(--mut);font-size:20px}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.grid.f{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border-radius:20px;padding:26px;border:2px solid var(--line);border-top:8px solid var(--c);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:0 18px 36px rgba(43,27,84,.22)}
+.card h3{margin:0;font-size:26px;font-weight:800}
+.card p{margin:6px 0 0;color:var(--mut);font-size:18px}
+.ft{border-top:2px solid var(--line);border-radius:16px;padding:20px;display:flex;gap:14px;align-items:flex-start}
+.ft:hover .dot{transform:scale(1.5) rotate(90deg)}
+.dot{flex:none;width:18px;height:18px;margin-top:8px;border-radius:50%;background:var(--c);transition:transform .3s}
+.ft h3{margin:0;font-size:21px;font-weight:800}.ft p{margin:2px 0 0;color:var(--mut);font-size:17px}
+.step b{display:block;font-size:80px;line-height:1;font-weight:800;color:var(--c)}
+.step h3{margin:8px 0 0;font-size:26px}.step p{margin:4px 0 0;color:var(--mut);font-size:19px}
+.end{margin-top:80px;background:#2b1b54;color:#fff;text-align:center;padding:72px 24px 80px;overflow:hidden}
+.end h2{margin:120px 0 12px;font-size:clamp(34px,6vw,56px);font-weight:800}
+.end p{margin:0 0 28px;color:#d9d0f0;font-size:21px}
+footer{text-align:center;padding:24px;color:var(--mut)}
+.rv{opacity:0}.rv.in{opacity:1;animation:up .7s calc(var(--i,0)*70ms) backwards}
+.conf{position:fixed;top:-20px;width:10px;height:14px;border-radius:2px;pointer-events:none;z-index:50;animation:fall var(--d) linear forwards}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes spin{from{transform:rotateX(-20deg) rotateY(0)}to{transform:rotateX(340deg) rotateY(360deg)}}
+@keyframes float{50%{transform:translateY(-14px)}}
+@keyframes ring{to{transform:scale(1.4);opacity:0}}
+@keyframes rise{to{transform:translateY(-110vh) rotate(360deg)}}
+@keyframes drift{50%{transform:translate(18px,-26px) rotate(25deg)}}
+@keyframes mq{to{transform:translateX(50%)}}
+@keyframes fall{to{transform:translateY(105vh) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1}.pt,.conf{display:none}}
+</style>
+<style>.btns{display:flex;gap:12px;flex-wrap:wrap}.ghostb{background:rgba(255,255,255,.18)!important;color:#fff!important;border:2px solid rgba(255,255,255,.7)!important;box-shadow:none!important}</style>
+</head>
+<body>
+<div id="bar"></div>
+<header><b>نرد الحظ</b><a class="btn" href="dice-app.html" download="nard-alhaz.html">تحميل</a></header>
+
+<section class="hero">
+<div class="fd" style="top:6%;right:1.5%;width:54px;height:54px;background:#2563eb"></div>
+<div class="fd" style="top:62%;left:5%;width:70px;height:70px;background:#059669;animation-delay:-3s"></div>
+<div class="fd" style="top:80%;right:48%;width:44px;height:44px;background:#ffc93c;animation-delay:-6s"></div>
+<div id="pts"></div>
+<div class="in">
+<div class="tx">
+<div class="kick">أداة للمعلمين والمعلمات</div>
+<h1>نرد الحظ</h1>
+<p class="lead">دع الحظ يختار السؤال، أو النشاط، أو الطالب، أو ترتيب المجموعات. نرد يدور أمام الفصل، وصوت رمي حقيقي، ونتيجة لا يُشكّ فيها.</p>
+<div class="cta-row"><div class="btns"><a class="btn big" href="#modes">✨ المزايا</a></div>
+<div class="note">مجاني، بلا تسجيل، ويعمل على الجوال والحاسوب</div></div>
+</div>
+<div class="vis">
+<div class="stage" id="stage" role="button" tabindex="0" aria-label="ارمِ النرد"><div class="cube" id="cube"></div></div>
+<div id="res">اضغط على النرد وجرّب حظك</div>
+</div>
+</div>
+</section>
+
+<div class="marq" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section class="sec" id="modes"><h2 class="rv">ستة أوضاع في صفحة واحدة</h2><p class="s rv">لكل وضع لونه الخاص، فيعرف الطلاب النوع من اللون وحده.</p><div class="grid" id="mg"></div></section>
+<section class="sec" id="feats"><h2 class="rv">كل ما يحتاجه الفصل</h2><p class="s rv">تفاصيل صغيرة صُمّمت لوقت الشرح الفعلي.</p><div class="grid f" id="fg"></div></section>
+<section class="sec" id="steps"><h2 class="rv">ثلاث خطوات</h2><div class="grid" id="sg" style="margin-top:28px"></div></section>
+
+<section class="end">
+<div class="stage sm" id="stage2"><div class="cube" id="cube2"></div></div>
+<h2 class="rv">جرّب نرد الحظ في حصتك القادمة</h2>
+<p class="rv">افتحه، اكتب قائمتك، وارمِ النرد.</p>
+<a class="btn big" href="dice-app.html" download="nard-alhaz.html">تحميل</a>
+</section>
+<footer>نرد الحظ</footer>
+
+<script>
+const $=s=>document.querySelector(s),AR=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]},ROT={1:[0,0],6:[0,180],3:[0,-90],4:[0,90],2:[-90,0],5:[90,0]};
+const COL=["#e11d48","#2563eb","#059669","#ea580c","#0891b2","#9333ea"];
+const MODES=[["نرد عادي","مكعب ثلاثي الأبعاد برقم من 1 إلى 6، أو نردان معاً مع المجموع."],["الأسئلة","اكتب أسئلتك فيختار النرد السؤال. اكتب «سؤال | إجابة» لتكشف الإجابة بزر."],["الأنشطة","أنشطة من كتابتك أو جاهزة: تعاون، وحركة وتنشيط، ومراجعة."],["الطلاب","اختيار طالب عشوائياً بعدل، دون تكرار حتى يأخذ الجميع فرصتهم."],["بطاقات","حتى 12 بطاقة مقلوبة تنقلب بالنقر وتكشف سؤالها، وعلامة «تم» تثبّت إنجازها."],["المجموعات","ترتيب دور المجموعات بأسمائها، أو تقسيم الطلاب عشوائياً على عدد تحدده."]];
+const FEATS=[["نرد ثلاثي الأبعاد","يدور ويتوقف بسلاسة، والرقم الظاهر هو الرقم الحقيقي."],["صوت رمي واقعي","قرقعة في اليد ثم ارتطامات على طاولة خشبية."],["لوحة مرقّمة","رقم النرد هو رقم العنصر في لوحة من ست خانات."],["سؤال وإجابة","تكشف الإجابة بزر حين تشاء، فلا تسبق تفكير الطلاب."],["تم وتخطّي","ما لم تضغط «تم» يبقى العنصر غير مُجاب ويعود للظهور."],["بطاقات حظ مفاجئة","فرصة ثانية، أو نقاط مضاعفة، أو الاستعانة بزميل."],["عدٌّ تنازلي","٣، ٢، ١ قبل كشف النتيجة لرفع الترقّب."],["مؤقّت دائري","حلقة تتناقص من الأخضر إلى الأحمر مع تنبيه صوتي."],["وضع العرض","خط ضخم وملء الشاشة لتُقرأ النتيجة من آخر الفصل."],["نردك بشكلك","خمسة ألوان للنرد، ونقاط دوائر أو نجوم أو قلوب."],["أرقام هندية","اعرض الأرقام بالشكل المعتاد لطلابك: ٣ بدل 3."],["قوائم محفوظة","احفظ قوائمك لكل صف أو مادة وافتحها بضغطة."],["قوائم جاهزة","رياضيات، وعلوم، ولغة عربية، وEnglish، وتعارف، وأنشطة."],["حفظ تلقائي","قوائمك وإعداداتك تبقى في متصفحك عند العودة."],["احتفال وتشجيع","قصاصات ملوّنة وعبارات تشجيع تتغير كل مرة."],["للجوال والحاسوب","زر رمي ثابت أسفل شاشة الجوال، بلا تسجيل ولا تثبيت."]];
+const STEPS=[["اختر الوضع","أسئلة أو أنشطة أو طلاب أو بطاقات أو مجموعات."],["اكتب قائمتك أو اختر جاهزة","سطر لكل عنصر، وتحفظها لتعود إليها."],["ارمِ النرد","ودع الحظ يقرر، وأمام الجميع."]];
+function cubeFaces(el){for(let n=1;n<=6;n++){const k0=document.createElement("div");k0.className="core c"+n;el.appendChild(k0)}for(let n=1;n<=6;n++){const f=document.createElement("div");f.className="face f"+n;for(let c=0;c<9;c++)f.appendChild(document.createElement(PIPS[n].includes(c)?"i":"span"));el.appendChild(f)}}
+cubeFaces($("#cube"));cubeFaces($("#cube2"));
+$("#mg").innerHTML=MODES.map((m,i)=>`<div class="card rv" style="--c:${COL[i]};--i:${i}"><h3>${m[0]}</h3><p>${m[1]}</p></div>`).join("");
+$("#fg").innerHTML=FEATS.map((f,i)=>`<div class="ft card rv" style="--c:${COL[i%6]};--i:${i%4};border-top-width:2px"><span class="dot"></span><div><h3>${f[0]}</h3><p>${f[1]}</p></div></div>`).join("");
+$("#sg").innerHTML=STEPS.map((s,i)=>`<div class="step rv" style="--c:${COL[i]};--i:${i}"><b>${AR(i+1)}</b><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join("");
+const tape=MODES.map(m=>m[0]).join(" • ")+" • ";$("#track").textContent=tape.repeat(5)+tape.repeat(5);
+$("#pts").innerHTML=Array.from({length:16},(_,i)=>`<span class="pt" style="left:${(i*6.3+3)%100}%;background:${["#ffc93c","#34d399","#ec4899","#22d3ee","#a78bfa"][i%5]};animation-duration:${12+i%6*3}s;animation-delay:-${i*1.3}s"></span>`).join("");
+function burst(){const C=["#ffc93c","#ec4899","#22d3ee","#34d399","#fff","#a78bfa"];
+  for(let i=0;i<40;i++){const c=document.createElement("span");c.className="conf";c.style.left=Math.random()*100+"vw";c.style.background=C[i%6];
+    c.style.setProperty("--d",1.6+Math.random()*1.6+"s");c.style.setProperty("--r",Math.random()*720-360+"deg");c.style.animationDelay=Math.random()*.3+"s";
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3600)}}
+let k=0,busy=false;const cube=$("#cube");
+function roll(){if(busy)return;busy=true;const n=1+Math.floor(Math.random()*6),[x,y]=ROT[n];k++;
+  cube.style.transform=getComputedStyle(cube).transform;cube.classList.add("roll");void cube.offsetWidth;
+  cube.style.transform=`rotateX(${x+1080*k}deg) rotateY(${y+1440*k}deg)`;$("#res").textContent="…";
+  setTimeout(()=>{$("#res").textContent="حصلت على "+AR(n)+" — ارمِ مرة أخرى";burst();busy=false},1350)}
+$("#stage").onclick=roll;$("#stage").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();roll()}};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+addEventListener("scroll",()=>{const h=document.documentElement;$("#bar").style.width=(scrollY/(h.scrollHeight-innerHeight||1)*100)+"%"},{passive:true});
+</script>
+<script>
+document.querySelectorAll('a[download]').forEach(function(a){a.addEventListener('click',function(e){
+ e.preventDefault();
+ fetch(a.getAttribute('href')).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+  var u=URL.createObjectURL(new Blob([b],{type:'text/html'})),l=document.createElement('a');
+  l.href=u;l.download=a.getAttribute('download');document.body.appendChild(l);l.click();l.remove();
+  setTimeout(function(){URL.revokeObjectURL(u)},4000)
+ }).catch(function(){window.open(a.getAttribute('href'),'_blank')})
+})});
+document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}})});
+</script>
+</body>
+</html>
