@@ -487,5 +487,18 @@ function openWheel(){
 $('wheelBtn').onclick=openWheel;
 window.addEventListener('pagehide',()=>{try{wheelWin&&wheelWin.close()}catch(e){}});
 </script>
+<!-- credit-btn -->
+<style>
+#crBtn{position:fixed;top:10px;left:10px;z-index:70;width:26px;height:26px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.85);cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#a78bfa,#6d28d9 70%);color:#fff;font:italic 700 15px/1 Georgia,serif;box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.5);opacity:.75;transition:opacity .2s,transform .2s}
+#crBtn:hover,#crBtn:focus-visible{opacity:1;transform:scale(1.12);outline:none}
+#crTip{position:fixed;top:42px;left:10px;z-index:71;direction:ltr;background:#1e1b4b;color:#fff;border:1px solid #f0c23e;padding:7px 14px;border-radius:999px;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .3s,transform .3s}
+#crTip.on{opacity:1;transform:none}
+</style>
+<button id="crBtn" type="button" aria-label="معلومات">i</button>
+<div id="crTip" role="status">Done by: Zahra Farhood</div>
+<script>
+(function(){var b=document.getElementById('crBtn'),t=document.getElementById('crTip'),h;
+b.addEventListener('click',function(){t.classList.add('on');clearTimeout(h);h=setTimeout(function(){t.classList.remove('on')},2500)});})();
+</script>
 </body>
 </html>

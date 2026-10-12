@@ -171,6 +171,7 @@ body.present .board{display:none}
 .seg button{font:inherit;font-weight:700;padding:6px 14px;border-radius:999px;border:2px solid var(--line);background:#fff;color:#2b1b54;cursor:pointer}
 .seg button[aria-pressed=true]{background:var(--mc);color:#fff;border-color:var(--mc)}
 </style>
+<!-- *done by Zahra Farhood -->
 </head>
 <body>
 <div id="spot"></div>
@@ -203,10 +204,11 @@ body.present .board{display:none}
   </section>
 
   <section class="setup" id="setup-list" hidden>
+    <div class="row" id="prow" style="margin:0 0 12px"><span style="font-weight:700">قوائم جاهزة (تستبدل الحالية):</span><span id="pre" style="display:contents"></span></div>
     <label for="items" id="items-label"></label>
     <textarea id="items"></textarea>
     <p class="hint">رقم النرد = رقم العنصر في اللوحة المرقّمة تحت النتيجة (٦ خانات). القوائم حتى ٦ عناصر تتبع ترتيب سطورك، وما زاد عليها يُخلط ويُعرض على دفعات من ٦. ما لم تضغط «✅ تم» يبقى العنصر غير مُجاب ويعود للظهور. لإضافة إجابة اكتب «سؤال | إجابة» في السطر نفسه، مثل: ما عاصمة مصر؟ | القاهرة.</p>
-    <div class="row"><button class="ghost" id="reset">ابدأ من جديد</button><button class="ghost" id="copy">نسخ القائمة</button><select id="pre"></select><span id="left"></span></div>
+    <div class="row"><button class="ghost" id="reset">ابدأ من جديد</button><button class="ghost" id="copy">نسخ القائمة</button><span id="left"></span></div>
     <div class="row" id="lrow"><input type="text" id="lname" placeholder="اسم القائمة للحفظ" style="width:150px"><button class="ghost" id="lsave">💾 حفظ</button><select id="lsel"></select><button class="ghost" id="lopen">📂 فتح</button><button class="ghost" id="ldel" aria-label="حذف القائمة">🗑️</button></div>
   </section>
 
@@ -225,8 +227,8 @@ body.present .board{display:none}
 <script>
 const MODES={
   dice:{name:"نرد عادي"},
-  questions:{name:"الأسئلة",label:"قائمة الأسئلة (سؤال في كل سطر)",def:["ما عاصمة بلدك؟","اذكر ثلاثة أمثلة على المادة الصلبة. | الحجر، الخشب، الحديد","لخّص درس اليوم في جملة واحدة.","ما الفرق بين الفعل والاسم؟ | الفعل يدل على حدث مرتبط بزمن، والاسم لا يرتبط بزمن","احسب: ٧ × ٨ = ؟ | ٥٦","ما السؤال الذي تود طرحه على زملائك؟"]},
   activities:{name:"الأنشطة",label:"قائمة الأنشطة (نشاط في كل سطر)",def:["ناقش مع زميلك لمدة دقيقتين","ارسم الفكرة على السبورة","مثّل المفهوم بدون كلام","اكتب ثلاث كلمات مفتاحية","لعبة السؤال السريع","اشرح الدرس لزميلك"]},
+  questions:{name:"الأسئلة",label:"قائمة الأسئلة (سؤال في كل سطر)",def:["ما عاصمة بلدك؟","اذكر ثلاثة أمثلة على المادة الصلبة. | الحجر، الخشب، الحديد","لخّص درس اليوم في جملة واحدة.","ما الفرق بين الفعل والاسم؟ | الفعل يدل على حدث مرتبط بزمن، والاسم لا يرتبط بزمن","احسب: ٧ × ٨ = ؟ | ٥٦","ما السؤال الذي تود طرحه على زملائك؟"]},
   students:{name:"الطلاب",label:"أسماء الطلاب (اسم في كل سطر)",def:[]},
   cards:{name:"بطاقات",label:"محتوى البطاقات (عنصر في كل سطر، حتى 12 بطاقة)",def:[]},
   groups:{name:"المجموعات"}
@@ -447,10 +449,12 @@ const PRE={
     "تعاون":["ناقش مع زميلك لمدة دقيقتين","ارسم الفكرة على السبورة","مثّل المفهوم بدون كلام","اشرح الدرس لزميلك","اكتب ثلاث كلمات مفتاحية"],
     "حركة وتنشيط":["قف وحرّك جسمك ١٠ ثوانٍ","صفّق بعدد حروف اسمك","بدّل مكانك مع زميل","مدّ ذراعيك وتنفّس بعمق ٣ مرات","قف وأعد آخر جملة قيلت"],
     "مراجعة":["لخّص الدرس في ٣ نقاط","اكتب سؤالاً لزميلك","اذكر معلومة لم تكن تعرفها","اشرح مصطلحاً جديداً بكلماتك","ارسم خريطة ذهنية للدرس","اذكر أهم فكرة في الدرس","اذكر ثلاثة مصطلحات تعلّمتها اليوم","اذكر مثالًا من الحياة اليومية على ما تعلّمته","أكمل جملة: تعلّمت اليوم أن…"]}};
-function refPre(){const p=PRE[mode==="cards"?"questions":mode];$("pre").hidden=!p;
-  $("pre").innerHTML=p?"<option value=''>قوائم جاهزة (تستبدل الحالية)…</option>"+Object.keys(p).map(k=>`<option>${k}</option>`).join(""):""}
-$("pre").onchange=()=>{const k=$("pre").value,p=PRE[mode==="cards"?"questions":mode];if(!k||!p)return;
-  $("items").value=p[k].join("\n");store[mode].pool=null;store[mode].done=new Set();updLeft();save();$("pre").value=""};
+function refPre(){const p=PRE[mode==="cards"?"questions":mode];$("prow").hidden=!p;
+  $("pre").innerHTML=p?Object.keys(p).map(k=>`<button class="ghost" data-k="${k}">${k}</button>`).join(""):"";
+  $("pre").querySelectorAll("button").forEach(b=>b.onclick=()=>loadPre(b.dataset.k))}
+function loadPre(k){const p=PRE[mode==="cards"?"questions":mode];if(!p||!p[k])return;
+  $("items").value=p[k].join("\n");store[mode].pool=null;store[mode].done=new Set();updLeft();save();
+  msg("تم تحميل قائمة «"+k+"» ("+N(p[k].length)+" عناصر)")}
 
 // ---- saved lists ----
 let saved={questions:{},activities:{},students:{},cards:{}};
@@ -495,6 +499,19 @@ $("roll").onclick=roll;
 $("reset").onclick=()=>{store[mode].pool=null;store[mode].done=new Set();updLeft();$("result").textContent="بدأنا من جديد ✓"};
 $("items").oninput=()=>{if(store[mode])store[mode].pool=null;updLeft()};
 setMode("dice");
+</script>
+<!-- credit-btn -->
+<style>
+#crBtn{position:fixed;top:10px;left:10px;z-index:70;width:26px;height:26px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.85);cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#a78bfa,#6d28d9 70%);color:#fff;font:italic 700 15px/1 Georgia,serif;box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.5);opacity:.75;transition:opacity .2s,transform .2s}
+#crBtn:hover,#crBtn:focus-visible{opacity:1;transform:scale(1.12);outline:none}
+#crTip{position:fixed;top:42px;left:10px;z-index:71;direction:ltr;background:#1e1b4b;color:#fff;border:1px solid #f0c23e;padding:7px 14px;border-radius:999px;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .3s,transform .3s}
+#crTip.on{opacity:1;transform:none}
+</style>
+<button id="crBtn" type="button" aria-label="معلومات">i</button>
+<div id="crTip" role="status">Done by: Zahra Farhood</div>
+<script>
+(function(){var b=document.getElementById('crBtn'),t=document.getElementById('crTip'),h;
+b.addEventListener('click',function(){t.classList.add('on');clearTimeout(h);h=setTimeout(function(){t.classList.remove('on')},2500)});})();
 </script>
 </body>
 </html>
