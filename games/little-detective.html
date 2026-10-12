@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ملف القضية — لعبة المحققين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --display:"El Messiri","Segoe UI",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  /* الورق: ثابت في كل المظاهر */
+  --paper:#ebdba9; --paper-hi:#f5ebcb; --paper-lo:#d9c58a; --pen:#2a2114; --pen-2:#66573a;
+  --stamp-red:#a52a18; --stamp-green:#1b6b4c; --stamp-blue:#26407a; --red:#b8321f;
+  /* المكتب: نهاري */
+  --desk:#d3dccf; --desk-2:#bcc9b8; --ink:#10251e; --ink-2:#3f564b; --edge:rgba(16,37,30,.3);
+  --brass:#c18f2b; --brass-ink:#1e1505; --focus:#7a4d00; --lamp:.0; --vig:.14; --stripe:.0;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --desk:#0d2620; --desk-2:#071813; --ink:#efe6cc; --ink-2:#a9bdb1; --edge:rgba(239,230,204,.22);
+    --brass:#d9a940; --focus:#ffd46b; --lamp:.2; --vig:.6; --stripe:.05;
+  }
+}
+:root[data-theme="dark"]{
+  --desk:#0d2620; --desk-2:#071813; --ink:#efe6cc; --ink-2:#a9bdb1; --edge:rgba(239,230,204,.22);
+  --brass:#d9a940; --focus:#ffd46b; --lamp:.2; --vig:.6; --stripe:.05;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%}
+body{margin:0; min-height:100%; background-color:var(--desk-2); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.8; overflow-x:hidden}
+h1,h2,h3,p,ul{margin:0}
+ul{padding:0; list-style:none}
+button{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
+
+/* ===== الأجواء ===== */
+.desk{position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 0%, var(--desk) 0%, var(--desk-2) 100%)}
+.desk::after{content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(104deg, transparent 0 34px, rgba(255,232,180,var(--stripe)) 34px 64px)}
+.lamp{position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(460px circle at var(--lx,50%) var(--ly,22%), rgba(255,222,150,var(--lamp)), transparent 72%)}
+.vig{position:fixed; inset:0; z-index:50; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(0,0,0,var(--vig)) 100%)}
+.vig::after{content:""; position:absolute; inset:0; opacity:.07; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.bolt{position:fixed; inset:0; z-index:55; pointer-events:none; background:#dfeaff; opacity:0}
+.bolt.go{animation:bolt 1s ease-out}
+#fx{position:fixed; inset:0; z-index:70; pointer-events:none; overflow:hidden}
+
+.wrap{position:relative; z-index:1; max-width:860px; margin:0 auto; padding:10px 16px 56px}
+.bar{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:4px 0 12px}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:1.25rem}
+.seal{border:2px solid var(--stamp-red); color:#e8604b; border-radius:5px; padding:0 8px; font-size:.82rem; transform:rotate(-6deg); line-height:1.6}
+:root[data-theme="light"] .seal{color:var(--stamp-red)}
+.ctl{display:flex; gap:6px}
+.ic{width:44px; height:44px; border-radius:12px; border:1.5px solid var(--edge); background:transparent; cursor:pointer; font-size:1.15rem; display:grid; place-items:center}
+.ic[aria-pressed="false"]{opacity:.45}
+
+/* ===== أزرار وأوراق ===== */
+.btn{border:2px solid var(--ink); background:transparent; color:var(--ink); padding:.5em 1.2em; border-radius:10px; cursor:pointer; min-height:46px; font-weight:500; transition:transform .12s, box-shadow .12s, background .15s}
+.btn.primary{background:var(--red); border-color:#7e1d10; color:#fff; font-weight:600; box-shadow:0 4px 0 #6e1a0e}
+.btn.primary:active{transform:translateY(3px); box-shadow:0 1px 0 #6e1a0e}
+.btn.ghost{border-color:var(--edge)}
+.btn.sm{min-height:38px; padding:.2em .9em; font-size:.92rem}
+.btn.big{font-size:1.2rem; padding:.55em 1.8em; min-height:54px}
+.btn[disabled]{opacity:.4; cursor:not-allowed; box-shadow:none}
+@media (hover:hover){.btn:not(.primary):not([disabled]):hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}}
+
+.sheet{--ink:var(--pen); --ink-2:var(--pen-2); --edge:rgba(42,33,21,.3); --focus:#1b3f9b;
+  position:relative; color:var(--pen); background:linear-gradient(180deg,var(--paper-hi),var(--paper) 40%,var(--paper-lo)); border-radius:4px 4px 6px 6px; padding:22px 20px;
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset, 0 18px 30px -16px rgba(0,0,0,.7), 0 2px 5px rgba(0,0,0,.3)}
+.sheet.clip::before{content:""; position:absolute; top:-14px; inset-inline-start:22px; width:20px; height:56px; border:3px solid #8e949a; border-radius:12px; border-bottom-color:transparent; transform:rotate(4deg)}
+.sc,.mini,.note,.notebook,.sticky,.pola{--ink-2:var(--pen-2)}
+.small{font-size:.9rem; color:var(--ink-2); line-height:1.7}
+.row{display:flex; flex-wrap:wrap; gap:12px; align-items:center}
+.stack>*+*{margin-top:14px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px}
+h2{font-family:var(--display); font-size:1.7rem; line-height:1.3}
+h3{font-family:var(--display); font-size:1.2rem; line-height:1.4}
+.pill{border:1.5px solid var(--edge); border-radius:99px; padding:1px 14px; font-size:.9rem; background:rgba(255,255,255,.35)}
+
+/* ===== حركة الدخول ===== */
+.enter{animation:enter .45s cubic-bezier(.2,.8,.25,1) both}
+.soft{animation:softin .28s ease-out both}
+@keyframes enter{from{opacity:0; transform:translateY(22px) rotate(.8deg)} to{opacity:1; transform:none}}
+@keyframes softin{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+@keyframes bolt{0%{opacity:0} 6%{opacity:.55} 12%{opacity:.05} 20%{opacity:.4} 100%{opacity:0}}
+@keyframes shake{0%,100%{transform:none} 15%{transform:translate(-6px,3px)} 35%{transform:translate(5px,-4px)} 55%{transform:translate(-4px,2px)} 75%{transform:translate(3px,-2px)}}
+.shake{animation:shake .45s}
+@keyframes thump{from{opacity:0; transform:rotate(var(--rot,-6deg)) scale(2.6)} 60%{opacity:1; transform:rotate(var(--rot,-6deg)) scale(.94)} to{opacity:1; transform:rotate(var(--rot,-6deg)) scale(1)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes rise{from{opacity:1; transform:translate(-50%,-30%)} to{opacity:0; transform:translate(-50%,-190%)}}
+@keyframes develop{from{filter:grayscale(1) blur(9px) brightness(1.7); opacity:.4} to{filter:none; opacity:1}}
+@keyframes tear{0%{transform:none} 15%{transform:rotate(-3deg) translateX(-4px)} 30%{transform:rotate(3deg) translateX(4px)} 45%{transform:rotate(-2deg) translateX(-3px)} 100%{transform:translateY(-10px) scale(.92) rotate(-5deg); opacity:0}}
+@keyframes bagshake{0%,100%{transform:none} 25%{transform:translateX(5px)} 50%{transform:translateX(-5px)} 75%{transform:translateX(3px)}}
+@keyframes lowpulse{50%{opacity:.55}}
+@keyframes cross{from{stroke-dashoffset:1} to{stroke-dashoffset:0}}
+@keyframes flash{0%{opacity:0} 8%{opacity:.85} 100%{opacity:0}}
+@keyframes turnin{0%{opacity:0; transform:scale(.9)} 12%,80%{opacity:1; transform:none} 100%{opacity:0; transform:scale(1.04)}}
+@keyframes toastin{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+.typing::after{content:"▍"; color:var(--stamp-red); animation:blink .7s steps(1) infinite; margin-inline-start:2px}
+
+/* ===== الغلاف ===== */
+.cover-wrap{display:grid; justify-items:center; gap:26px; padding:18px 0 10px; perspective:1500px}
+.book{position:relative; width:min(360px,86vw); aspect-ratio:3/4; transform-style:preserve-3d}
+.under{position:absolute; inset:0; background:var(--paper-hi); border-radius:4px 14px 14px 4px; box-shadow:0 18px 30px -14px rgba(0,0,0,.8)}
+.cover{position:absolute; inset:0; transform-origin:right center; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  background:linear-gradient(150deg,#e4cf94,#cdb272); border-radius:4px 14px 14px 4px; color:var(--pen);
+  box-shadow:0 22px 34px -14px rgba(0,0,0,.8), inset 0 0 0 2px rgba(42,33,21,.35); transition:transform .85s cubic-bezier(.5,.1,.2,1); display:grid; place-items:center}
+.book.open .cover{transform:rotateY(168deg)}
+.ctab{position:absolute; top:-26px; inset-inline-end:22px; background:#e4cf94; border-radius:10px 10px 0 0; padding:2px 18px; font-family:var(--display); font-weight:700; font-size:.95rem; box-shadow:inset 0 0 0 2px rgba(42,33,21,.35)}
+.label{background:var(--paper-hi); border:2px solid rgba(42,33,21,.5); padding:20px 18px; width:78%; text-align:center; transform:rotate(-1.2deg);
+  background-image:repeating-linear-gradient(transparent 0 35px, rgba(38,64,122,.2) 35px 36px)}
+.label h1{font-family:var(--display); font-size:clamp(2rem,9vw,2.7rem); line-height:1.3}
+.label p{color:var(--pen-2); font-size:.95rem}
+.secret{position:absolute; top:18px; inset-inline-start:16px; --rot:-9deg; transform:rotate(var(--rot)); border:4px double var(--stamp-red); color:var(--stamp-red); font-family:var(--display); font-weight:700; font-size:1.5rem; padding:0 14px; border-radius:6px; opacity:.88}
+.secret.slam{animation:thump .5s cubic-bezier(.2,.9,.3,1.2) .35s both}
+
+/* ===== الرئيسية المفتوحة ===== */
+.home{margin-top:14px}
+.home h1{font-family:var(--display); font-size:clamp(2.8rem,12vw,4.8rem); line-height:1.15}
+.home .lead{max-width:34em; margin-top:10px; color:var(--pen-2); font-size:1.08rem}
+.home .secret{top:-14px; inset-inline-start:auto; inset-inline-end:18px}
+.modes{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:22px}
+.mode{display:block; text-align:start; border:2px dashed var(--pen-2); border-radius:6px; padding:16px; background:rgba(255,255,255,.3); cursor:pointer; transition:transform .15s, border-color .15s}
+.mode b{display:block; font-family:var(--display); font-size:1.3rem}
+.mode span{color:var(--pen-2); font-size:.95rem}
+@media (hover:hover){.mode:hover{transform:rotate(-.8deg) translateY(-2px); border-color:var(--stamp-red)}}
+.hints{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+
+/* ===== الإعداد ===== */
+.prow{display:grid; grid-template-columns:auto 1fr auto auto; gap:10px; align-items:center; padding:10px 0; border-top:1px dashed rgba(42,33,21,.35)}
+.prow:first-child{border-top:0}
+.prow input{font:inherit; padding:.45em .7em; border:0; border-bottom:2px solid var(--pen-2); background:rgba(255,255,255,.35); color:var(--pen); min-height:44px; width:100%; border-radius:4px 4px 0 0}
+.seg{display:inline-flex; border:1.5px solid var(--pen); border-radius:8px; overflow:hidden}
+.seg button{border:0; background:transparent; padding:.3em .9em; cursor:pointer; min-height:42px}
+.seg button[aria-pressed="true"]{background:var(--pen); color:var(--paper-hi)}
+@media (max-width:560px){.prow{grid-template-columns:auto 1fr} .prow .seg{grid-column:1/-1}}
+
+/* ===== ملفات القضايا ===== */
+.lvl{position:relative; display:flex; flex-direction:column; gap:6px; text-align:start; color:var(--pen); border:0; cursor:pointer; margin-top:18px; padding:20px 18px 16px;
+  background:linear-gradient(170deg,var(--paper-hi),var(--paper-lo)); border-radius:4px 14px 8px 8px; box-shadow:0 14px 22px -12px rgba(0,0,0,.75), inset 0 0 0 1.5px rgba(42,33,21,.25); transition:transform .18s}
+.lvl::before{content:attr(data-no); position:absolute; top:-19px; inset-inline-end:16px; background:var(--paper-hi); padding:2px 16px; border-radius:9px 9px 0 0; font-family:var(--display); font-weight:700; font-size:.92rem}
+@media (hover:hover){.lvl:not([aria-disabled="true"]):hover{transform:translateY(-4px) rotate(-.5deg)}}
+.lvl[aria-disabled="true"]{filter:grayscale(.8) brightness(.72); cursor:not-allowed}
+.lvl h3{font-size:1.4rem}
+.badge{align-self:flex-start; font-family:var(--display); font-weight:700; border:3px double currentColor; border-radius:6px; padding:0 12px; transform:rotate(-3deg)}
+.badge.e{color:var(--stamp-green)} .badge.m{color:#85570a} .badge.h{color:var(--stamp-red)}
+.meta{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:.9rem; color:var(--pen-2)}
+.strap{position:absolute; inset-inline:-6px; top:46%; background:#2a2114; color:#f5ebcb; text-align:center; font-size:.9rem; padding:2px 0; transform:rotate(-4deg); letter-spacing:.02em}
+
+/* ===== الملخص ===== */
+.victim{display:flex; gap:14px; align-items:center; margin-top:16px; padding-top:14px; border-top:1px dashed rgba(42,33,21,.4)}
+.victim .pic{font-size:2.6rem; background:linear-gradient(160deg,#9bb3a8,#5d7c70); width:70px; height:70px; display:grid; place-items:center; border:5px solid var(--paper-hi); box-shadow:0 4px 10px rgba(0,0,0,.4); transform:rotate(-3deg)}
+.sticky{background:#f4dc7a; color:#3a2f10; padding:14px 16px; transform:rotate(-.8deg); box-shadow:0 10px 16px -8px rgba(0,0,0,.6); border-radius:2px}
+.mini{display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--paper-hi); color:var(--pen); border-radius:3px; box-shadow:0 6px 12px -8px rgba(0,0,0,.7)}
+.mini .e{font-size:2rem}
+.mini small{display:block; color:var(--pen-2)}
+
+/* ===== شريط التحقيق ===== */
+.hud{position:sticky; top:env(safe-area-inset-top,0px); z-index:15; margin:0 -16px 14px; padding:8px 16px 10px; background:color-mix(in srgb,var(--desk-2) 90%,transparent); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1.5px solid var(--edge)}
+.hud-top{display:flex; justify-content:space-between; align-items:flex-end; gap:14px}
+.hud .t{font-family:var(--display); font-weight:700; font-size:1.2rem; line-height:1.3}
+.meter{min-width:42%}
+.m-top{display:flex; align-items:baseline; gap:6px; font-size:.9rem; color:var(--ink-2)}
+.m-top b{font-family:var(--display); font-size:1.5rem; color:var(--ink); line-height:1}
+.m-bar{height:12px; border-radius:99px; background:rgba(0,0,0,.28); box-shadow:inset 0 1px 3px rgba(0,0,0,.5); overflow:hidden; margin-top:4px;
+  background-image:repeating-linear-gradient(90deg,transparent 0 9px,rgba(0,0,0,.35) 9px 10px)}
+.m-bar i{display:block; height:100%; background:linear-gradient(90deg,#b98524,var(--brass)); transition:width .6s cubic-bezier(.3,.8,.3,1)}
+.meter.low .m-bar i{background:linear-gradient(90deg,#8e2414,#e0553f); animation:lowpulse 1s ease-in-out infinite}
+.turn{display:flex; align-items:center; gap:8px; margin-top:8px; font-size:.92rem}
+.pips{display:inline-flex; gap:4px}
+.pips i{width:10px; height:10px; border-radius:50%; background:var(--brass)}
+.pips i.off{background:transparent; box-shadow:inset 0 0 0 2px var(--edge)}
+.alert{background:var(--red); color:#fff; border-radius:10px; padding:10px 14px; margin-bottom:14px}
+
+.dock-in{display:grid; grid-template-columns:repeat(4,1fr) 1.15fr; gap:5px; margin-top:10px}
+.dk{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; min-height:58px; border-radius:12px; border:2px solid var(--edge); background:rgba(255,255,255,.06); color:var(--ink); font-size:.84rem; font-weight:600; line-height:1.3; cursor:pointer; transition:background .15s, transform .12s}
+.dk .e{font-size:1.45rem; line-height:1.2}
+.dk:active{transform:translateY(2px)}
+.dk[aria-current="page"]{background:var(--brass); border-color:var(--brass); color:var(--brass-ink); box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.dk.acc{background:var(--red); border-color:#7e1d10; color:#fff; box-shadow:0 3px 0 #6e1a0e}
+
+/* ===== الأدلة ===== */
+.bag{position:relative; display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; width:100%; min-height:138px; padding:30px 12px 14px; color:var(--ink); cursor:pointer; overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.03)); border:1.5px solid var(--edge); border-radius:6px 6px 16px 16px; transition:transform .15s}
+.bag::before{content:""; position:absolute; top:0; inset-inline:0; height:14px; background:repeating-linear-gradient(135deg,#e2bf3d 0 9px,#2a2114 9px 18px)}
+.bag .bi{font-size:2rem; line-height:1.2}
+.bag b{font-family:var(--display); font-size:1.1rem; line-height:1.4}
+.bag .act{font-size:.85rem; color:var(--ink-2); display:flex; align-items:center; gap:6px}
+.cost{display:inline-grid; place-items:center; min-width:26px; height:22px; border-radius:99px; background:var(--brass); color:var(--brass-ink); font-weight:600; font-size:.82rem; padding:0 6px}
+.bag[aria-disabled="true"]{opacity:.5}
+.bag.tearing{animation:tear .36s ease-in forwards}
+.bag.nope{animation:bagshake .3s}
+@media (hover:hover){.bag:not([aria-disabled="true"]):hover{transform:translateY(-3px) rotate(-.6deg)}}
+
+.note{position:relative; color:var(--pen); background:linear-gradient(180deg,var(--paper-hi),var(--paper)); padding:22px 16px 14px; border-radius:2px; transform:rotate(var(--r,0deg)); box-shadow:0 12px 18px -10px rgba(0,0,0,.7)}
+.note::before{content:""; position:absolute; top:-9px; inset-inline-start:22px; width:64px; height:18px; background:rgba(255,246,180,.75); transform:rotate(-4deg); box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.note.unfold{animation:softin .5s cubic-bezier(.2,.9,.3,1.15) both}
+.note .nh{display:flex; align-items:center; gap:8px; margin-bottom:4px}
+.note .ico{font-size:1.6rem}
+.note .by{display:block; margin-top:8px; color:var(--pen-2); font-size:.85rem}
+.note p{line-height:1.85}
+
+/* ===== الاستجواب ===== */
+.sus-list{display:flex; gap:14px; overflow-x:auto; padding:18px 6px 16px; scroll-snap-type:x proximity}
+.pola{position:relative; flex:0 0 120px; scroll-snap-align:center; padding:8px 8px 10px; border:0; text-align:center; cursor:pointer; background:var(--paper-hi); color:var(--pen); border-radius:3px; box-shadow:0 8px 16px -8px rgba(0,0,0,.7); transform:rotate(var(--r,0deg)); transition:transform .2s, box-shadow .2s, opacity .2s}
+.pola .img{position:relative; display:grid; place-items:center; height:92px; font-size:3rem; background:linear-gradient(160deg,#9bb3a8,#5d7c70); border-radius:2px; overflow:hidden}
+.pola b{display:block; font-family:var(--display); font-size:.98rem; line-height:1.3; margin-top:7px}
+.pola small{display:block; color:var(--pen-2); font-size:.76rem; line-height:1.35}
+.pola[aria-pressed="true"]{transform:translateY(-8px) rotate(0deg); box-shadow:0 18px 24px -10px rgba(0,0,0,.8), 0 0 0 3px var(--brass)}
+.pola[aria-pressed="true"]::before{content:""; position:absolute; top:-8px; inset-inline-start:50%; width:14px; height:14px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#ff8c78,#a52a18); transform:translateX(50%); box-shadow:0 3px 4px rgba(0,0,0,.5)}
+.pmark{position:absolute; inset-inline:4px; top:38%; text-align:center; transform:rotate(-10deg); border:3px double; padding:0 4px; font-family:var(--display); font-weight:700; font-size:1.05rem; background:rgba(245,235,203,.88)}
+.pmark.s{color:var(--stamp-red)} .pmark.i{color:var(--stamp-green)}
+.pmark.new{animation:thump .3s cubic-bezier(.2,.9,.3,1.2) both; --rot:-10deg}
+@media (hover:hover){.pola:hover{transform:translateY(-5px) rotate(0deg)}}
+
+.room{background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.1)); border:1.5px solid var(--edge); border-radius:14px; padding:16px; box-shadow:inset 0 0 40px rgba(0,0,0,.25)}
+.room .who{font-family:var(--display); font-size:1.25rem; font-weight:700}
+.bubble{border-radius:4px 14px 14px 14px; padding:10px 14px; max-width:92%; line-height:1.85}
+.bubble.q{background:var(--paper); color:var(--pen); box-shadow:0 6px 10px -6px rgba(0,0,0,.6); transform:rotate(-.4deg)}
+.bubble.a{margin-inline-start:auto; border-radius:14px 4px 14px 14px; background:color-mix(in srgb,var(--ink) 11%,transparent); border:1.5px solid var(--edge)}
+.bubble .who2{display:block; margin-top:6px; font-size:.82rem; color:var(--ink-2)}
+.qbtn{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; text-align:start; padding:.6em 1em; border:2px dashed var(--edge); border-radius:10px; background:transparent; cursor:pointer; min-height:46px; transition:border-color .15s, background .15s}
+.qbtn[aria-disabled="true"]{opacity:.45}
+@media (hover:hover){.qbtn:not([aria-disabled="true"]):hover{border-color:var(--brass); background:rgba(255,255,255,.05)}}
+
+/* ===== الدفتر ===== */
+.notebook{position:relative; color:var(--pen); padding:18px 18px 18px 14px; padding-inline-end:56px; border-radius:3px;
+  background:repeating-linear-gradient(transparent 0 31px, rgba(38,64,122,.22) 31px 32px), var(--paper-hi);
+  box-shadow:0 14px 24px -12px rgba(0,0,0,.7)}
+.notebook::before{content:""; position:absolute; top:0; bottom:0; inset-inline-end:40px; width:2px; background:rgba(190,60,45,.55)}
+.notebook h3{line-height:32px; margin-top:0; color:var(--stamp-blue)}
+.notebook li{line-height:32px; margin-bottom:0}
+.notebook ul{margin-bottom:32px}
+.notebook .qq{color:var(--pen-2); font-size:.88rem; display:block}
+.notebook .who{line-height:32px; font-weight:600}
+
+/* ===== الاتهام ===== */
+.hand{text-align:center; padding:44px 16px; background:linear-gradient(180deg,rgba(0,0,0,.4),rgba(0,0,0,.2)); border:1.5px solid var(--edge); border-radius:16px}
+.hand .big{font-size:4.2rem; line-height:1.2}
+.step{display:inline-grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--ink); color:var(--desk-2); font-size:.95rem; margin-inline-end:8px}
+.pickgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr)); gap:16px; padding:6px}
+.pickgrid.has .pola[aria-pressed="false"]{opacity:.55}
+.opt{display:flex; align-items:center; gap:12px; width:100%; text-align:start; padding:.55em 1em; border:1.5px solid var(--edge); background:rgba(255,255,255,.05); border-radius:8px; cursor:pointer; min-height:48px; transition:background .15s, border-color .15s}
+.opt+.opt{margin-top:8px}
+.opt svg{flex:0 0 26px; width:26px; height:26px}
+.opt .bx{fill:none; stroke:currentColor; stroke-width:2}
+.opt .x{fill:none; stroke:var(--brass); stroke-width:3; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1}
+.opt[aria-pressed="true"]{border-color:var(--brass); background:color-mix(in srgb,var(--brass) 16%,transparent)}
+.opt[aria-pressed="true"] .x{animation:cross .28s ease-out forwards}
+@media (hover:hover){.opt:hover{border-color:var(--brass)}}
+
+/* ===== النتيجة ===== */
+.verdict{text-align:center; padding:16px 0 4px}
+.stamp{display:inline-block; --rot:-5deg; transform:rotate(var(--rot)); font-family:var(--display); font-weight:700; font-size:clamp(1.9rem,8vw,3.1rem); line-height:1.3; border:6px double var(--stamp-red); color:#e8604b; background:rgba(0,0,0,.18); padding:.1em .7em; border-radius:10px; animation:thump .45s cubic-bezier(.2,.9,.3,1.25) .65s both}
+.stamp.ok{color:#5ed3a8; border-color:#3ba583}
+:root[data-theme="light"] .stamp{color:var(--stamp-red); background:rgba(255,255,255,.35)}
+:root[data-theme="light"] .stamp.ok{color:var(--stamp-green); border-color:var(--stamp-green)}
+.killer{display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:center}
+.killer .pola{flex:none; width:120px; cursor:default; --r:-3deg; animation:develop 2s ease-out .25s both}
+.late{animation:softin .6s ease-out 1.3s both}
+.late2{animation:softin .6s ease-out 1.5s both}
+.sc{display:grid; grid-template-columns:1fr auto; gap:6px 12px; padding:14px; background:var(--paper-hi); color:var(--pen); border-radius:3px; box-shadow:0 8px 14px -10px rgba(0,0,0,.7)}
+.sc.win{box-shadow:0 0 0 3px var(--brass), 0 8px 14px -10px rgba(0,0,0,.7)}
+.sc .sco{font-family:var(--display); font-weight:700; font-size:1.9rem; line-height:1; text-align:end}
+.sc .ck{display:flex; gap:12px; flex-wrap:wrap; font-size:.9rem; color:var(--pen-2); grid-column:1/-1}
+.ck .y{color:var(--stamp-green); font-weight:600} .ck .n{color:var(--stamp-red)}
+.sol{line-height:1.95}
+
+.float{position:absolute; transform:translate(-50%,-50%); font-family:var(--display); font-weight:700; font-size:1.7rem; color:var(--brass); text-shadow:0 2px 6px rgba(0,0,0,.6); animation:rise 1s ease-out forwards}
+.float.bad{color:#ff7d68}
+.turnflash{position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.55); animation:turnin 1.5s ease both}
+.turnflash div{text-align:center; font-family:var(--display); font-weight:700; font-size:2rem; color:#f0e7cc}
+.turnflash span{display:block; font-size:4rem}
+.flashfx{position:absolute; inset:0; background:#fff; animation:flash .7s ease-out both}
+.toast{position:fixed; inset-inline:12px; bottom:calc(20px + env(safe-area-inset-bottom,0px)); max-width:520px; margin-inline:auto; z-index:60; text-align:center; background:var(--paper-hi); color:var(--pen); padding:12px 16px; border-radius:6px; box-shadow:0 12px 24px -8px rgba(0,0,0,.8); border-inline-start:6px solid var(--stamp-red)}
+.toast:not([hidden]){animation:toastin .25s ease-out}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body data-screen="home">
+<div class="desk" aria-hidden="true"></div>
+<div class="lamp" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="bar">
+    <div class="brand"><span class="seal">سرّي</span><span>ملفّ القضيّة</span></div>
+    <div class="ctl">
+      <button class="ic" data-act="sfx" aria-pressed="true" aria-label="المؤثرات الصوتية">🔊</button>
+      <button class="ic" data-act="amb" aria-pressed="true" aria-label="أجواء المطر والليل">🌧️</button>
+      <button class="ic" data-act="theme" aria-label="تبديل المظهر بين الليل والنهار">🌓</button>
+    </div>
+  </header>
+  <main id="app"></main>
+</div>
+<nav id="dock" class="dock" aria-label="أقسام التحقيق" hidden></nav>
+<div class="vig" aria-hidden="true"></div>
+<div id="bolt" class="bolt" aria-hidden="true"></div>
+<div id="fx" aria-hidden="true"></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const CASES=[
+{
+ id:"c1", lv:"سهل", cls:"e", title:"سمٌّ في فنجان القهوة", place:"فيلا آل المنصوري", budget:18,
+ intro:"في التاسعة والنصف مساءً عُثر على رجل الأعمال فيصل المنصوري ميتاً في مكتبه، وأمامه فنجان قهوة نصف فارغ. كان في الفيلا أربعة أشخاص وقت الحادثة، وأحدهم قاتل.",
+ victim:{e:"🧓", n:"فيصل المنصوري", d:"رجل أعمال في الثانية والستين، وُجد في مكتبه وساعته متوقفة."},
+ scene:[
+  {icon:"🍵", t:"فنجان القهوة", x:"تفوح من الفنجان رائحة لوز مرّ خفيفة، وعلى حافته بقايا بودرة بيضاء."},
+  {icon:"📁", t:"الملف المالي", x:"ملف حسابات الشركة مفتوح على المكتب وصفحته الأخيرة ممزقة. في الصفحة المتبقية تحويلات متكررة إلى حساب مجهول."},
+  {icon:"⌚", t:"ساعة الضحية", x:"الساعة متوقفة عند التاسعة والربع وزجاجها مشقوق، كأنها سقطت مع صاحبها."},
+  {icon:"🔘", t:"زر كمّ قميص", x:"زر كمّ ذهبي منقوش بالحرفين «ع.م» وُجد تحت الكرسي، وكمّه الآخر ليس معه."},
+  {icon:"🚪", t:"الباب الجانبي", x:"باب المكتب الجانبي المؤدي إلى الحديقة غير مقفل، وعلى السجاد آثار أحذية رجالية قرب المكتب."}
+ ],
+ suspects:[
+  {id:"layla", n:"ليلى المنصوري", role:"ابنة أخ الضحية", g:"f", e:"👩‍🦰", bio:"تسكن الفيلا منذ سنتين، وتُذكر في الوصية.",
+   qs:[["أين كنتِ وقت الجريمة؟","كنتُ في الحديقة أتحدث مع صديقتي بالهاتف منذ التاسعة تقريباً، ولم أدخل المبنى حتى سمعتُ الصراخ."],
+       ["ما علاقتك بالعم فيصل؟","كان بمثابة أبي. صحيح أنه كتب اسمي في الوصية، لكنني كنتُ أتمنى أن يعيش مئة سنة."],
+       ["هل رأيتِ شيئاً مريباً؟","من الحديقة رأيتُ السيد عمر يخرج من باب المكتب الجانبي ويسرع إلى سيارته وهو يمسح يديه بمنديل."]]},
+  {id:"khaled", n:"خالد الشامي", role:"الطاهي", g:"m", e:"👨‍🍳", bio:"يعمل في الفيلا منذ عشر سنوات، وتشاجر مع الضحية الأسبوع الماضي.",
+   qs:[["أين كنتَ وقت الجريمة؟","كنتُ في المطبخ. جهّزتُ القهوة وتركتُ الصينية على طاولة الممر قرابة التاسعة، فالسيد فيصل لا يحب أن يدخل أحد مكتبه."],
+       ["ما علاقتك بالضحية؟","تشاجرنا على راتبي فعلاً، لكنني لا أقتل من أجل المال. أنا أطبخ ولا أسمّم!"],
+       ["هل رأيتَ شيئاً مريباً؟","رأيتُ السيد عمر واقفاً قرب صينية القهوة في الممر قبل أن يدخل المكتب. ظننتُه يحملها لصديقه."]]},
+  {id:"huda", n:"د. هدى النجار", role:"الطبيبة الخاصة", g:"f", e:"👩‍⚕️", bio:"ترعى صحة الضحية، ولديها مفتاح خزانة الأدوية.",
+   qs:[["أين كنتِ وقت الجريمة؟","كنتُ في غرفتي أراجع ملفات المرضى منذ الثامنة والنصف."],
+       ["ما علاقتك بالضحية؟","أنا طبيبته منذ خمس سنوات. أعطيته دواء الضغط الساعة الثامنة والنصف كعادتي."],
+       ["هل رأيتِ شيئاً مريباً؟","قبل أيام سمعتُ فيصل يصرخ في الهاتف عن أرقام لا تتطابق في الحسابات، ولم أعرف مع من كان يتكلم."]]},
+  {id:"omar", n:"عمر المهدي", role:"شريك الضحية", g:"m", e:"👨‍💼", bio:"شريك فيصل في الشركة منذ عشرين عاماً.",
+   qs:[["أين كنتَ وقت الجريمة؟","غادرتُ الفيلا في الثامنة وخمس وأربعين دقيقة إلى عشاء عمل، ولم أكن هنا."],
+       ["ما علاقتك بالضحية؟","شريكي وصديقي منذ عشرين سنة. بيننا خلافات عمل عادية لا أكثر."],
+       ["هل رأيتَ شيئاً مريباً؟","لا. كنتُ بعيداً تماماً عن المكان."]]}
+ ],
+ lab:[
+  {icon:"🧪", t:"تحليل الفنجان", x:"سيانيد سريع المفعول مذاب في القهوة. مقدار صغير منه يكفي ليقتل خلال دقائق."},
+  {icon:"🖐️", t:"البصمات", x:"على الفنجان بصمات فيصل، وبصمة إبهام جزئية تطابق عمر المهدي."},
+  {icon:"🚗", t:"سجل بوابة الفيلا", x:"سيارة عمر المهدي سُجّل خروجها الساعة 9:32 مساءً، لا 8:45."},
+  {icon:"📞", t:"سجل مكالمات ليلى", x:"مكالمة ليلى استمرت من 9:00 إلى 9:35 من الحديقة بحسب برج الاتصالات، وهذا يثبت روايتها."},
+  {icon:"💰", t:"تدقيق الحسابات", x:"الصفحة الممزقة تخص تحويلات بقيمة مليوني دينار إلى شركة وهمية يملكها عمر. وكان فيصل سيبلّغ الشرطة صباح الاثنين."}
+ ],
+ motives:["الإرث الذي كتبه في الوصية","إخفاء اختلاس مالي قبل أن يُكشف","الانتقام بسبب خلاف على الراتب","إسكات طبيب يعرف سراً عن مريضه"],
+ weapons:["سيانيد في القهوة","حقنة دواء الضغط","سكين المطبخ","حبل للخنق"],
+ killer:"omar", motive:1, weapon:0,
+ solution:"القاتل عمر المهدي. اختلس مليوني دينار عبر شركة وهمية، وعلم أن فيصل سيبلّغ الشرطة صباح الاثنين، فأضاف السيانيد إلى القهوة وهي على طاولة الممر. ادّعى أنه غادر الساعة 8:45 لكن سجل البوابة يُظهر خروجه 9:32، وبصمته على الفنجان وزرّ كمّه المفقود يربطانه بالمكتب. ليلى كانت على الهاتف، وخالد في المطبخ، والطبيبة هدى لم يكن لها دافع."
+},
+{
+ id:"c2", lv:"متوسط", cls:"m", title:"الصقر البرونزي", place:"معرض الأمير للفنون", budget:18,
+ intro:"بعد انتهاء حفل افتتاح المعرض وإغلاقه الساعة العاشرة، عُثر على مالك المعرض عادل الراشد ميتاً في غرفة التخزين بضربة قوية على الرأس. بقي في المبنى خمسة أشخاص بعد الإغلاق، وأكثرهم يخفي شيئاً.",
+ victim:{e:"🎨", n:"عادل الراشد", d:"مالك المعرض، وُجد في المخزن الساعة 11:15 مساءً."},
+ scene:[
+  {icon:"🦅", t:"تمثال الصقر", x:"تمثال الصقر البرونزي اختفى من قاعدته في صالة العرض، وعُثر عليه مبللاً في نافورة الحديقة وعليه أثر دم. لا بصمات، فقد مُسح بقماش."},
+  {icon:"🌸", t:"رائحة المخزن", x:"رائحة ياسمين قوية تعلق في هواء غرفة التخزين رغم المروحة."},
+  {icon:"📓", t:"مفكرة عادل", x:"آخر سطر في المفكرة: «ن. — الشهادة المزوّرة — خمسون ألفاً — الاثنين أبلّغ»."},
+  {icon:"🧵", t:"خيط حرير", x:"خيط حريري أخضر زمردي عالق في الزاوية المكسورة من قاعدة التمثال."},
+  {icon:"🎥", t:"لوحة الكاميرات", x:"كاميرات المراقبة توقفت الساعة 10:40 مساءً، ولا تعمل منذ ذلك الحين."}
+ ],
+ suspects:[
+  {id:"sara", n:"سارة القاسم", role:"مرمّمة اللوحات", g:"f", e:"👩‍🎨", bio:"فصلها عادل من العمل صباح اليوم بعد خلاف على أجرها.",
+   qs:[["أين كنتِ وقت الجريمة؟","كنتُ في مختبر الترميم أعمل على لوحة قديمة حتى الحادية عشرة تقريباً."],
+       ["ما علاقتك بعادل؟","فصلني اليوم، نعم، وكنتُ غاضبة جداً. لكنني بقيتُ أعمل لأنني أحب عملي أكثر مما أكره قراره."],
+       ["هل رأيتِ أو سمعتِ شيئاً؟","قرابة العاشرة وخمسين سمعتُ ارتطاماً ثقيلاً من جهة المخزن وظننته صندوقاً سقط. بعدها شممتُ رائحة ياسمين قوية في الممر."]]},
+  {id:"yousef", n:"يوسف العلي", role:"حارس الأمن", g:"m", e:"💂‍♂️", bio:"يعمل ليلاً في المعرض منذ ثلاث سنوات.",
+   qs:[["أين كنتَ وقت الجريمة؟","كنتُ في غرفة المراقبة أتابع الشاشات طوال الليل."],
+       ["ما علاقتك بعادل؟","رجل صارم لكنه منصف معي. أحترمه."],
+       ["هل رأيتَ شيئاً؟","الكاميرات توقفت الساعة 10:40 بسبب انقطاع الكهرباء، ولم أرَ أحداً يدخل بعد العاشرة."]]},
+  {id:"nadia", n:"نادية الفهد", role:"ناقدة فنية", g:"f", e:"👩‍💼", bio:"ناقدة معروفة كتبت عن أغلب لوحات المعرض.",
+   qs:[["أين كنتِ وقت الجريمة؟","غادرتُ المعرض الساعة العاشرة بعد انتهاء الحفل وعدتُ إلى بيتي مباشرة."],
+       ["ما علاقتك بعادل؟","صديق قديم نعمل معاً منذ سنوات. كتبتُ عن معظم معارضه."],
+       ["هل رأيتِ شيئاً مريباً؟","لا شيء. كان الحفل ناجحاً والجميع سعداء. سمعتُ فقط أن ماجد غاضب بسبب لوحة اشتراها."]]},
+  {id:"maged", n:"ماجد الصالح", role:"جامع لوحات", g:"m", e:"🧔", bio:"اشترى لوحة بثمن باهظ من المعرض الشهر الماضي.",
+   qs:[["أين كنتَ وقت الجريمة؟","كنتُ في صالة كبار الزوار أجري مكالمة مهمة مع شريك في الخارج منذ العاشرة والنصف تقريباً."],
+       ["ما علاقتك بعادل؟","باعني لوحة بمبلغ كبير، ثم شككتُ في أصلها. كنتُ سأطالبه بالتفسير غداً."],
+       ["هل رأيتَ شيئاً؟","وأنا أتمشى قبل المكالمة لمحتُ امرأة بوشاح أخضر حريري تتجه نحو ممر المخازن."]]},
+  {id:"rana", n:"رنا الحسن", role:"مساعدة المالك", g:"f", e:"👩‍💻", bio:"تدير الأعمال اليومية للمعرض وتعرف الرموز الداخلية.",
+   qs:[["أين كنتِ وقت الجريمة؟","غادرتُ الساعة العاشرة والنصف بعد إغلاق الحسابات."],
+       ["ما علاقتك بعادل؟","مديري وصديقي. أنظّم جدوله، وأعرف أنه كان قلقاً من أمر يخص شهادة أصالة لوحة."],
+       ["هل رأيتِ شيئاً؟","كانت نادية ترتدي وشاحاً حريرياً أخضر الليلة، وتضع عطر ياسمين مميزاً لا تغيّره أبداً."]]}
+ ],
+ lab:[
+  {icon:"🅿️", t:"سجل موقف السيارات", x:"سيارة نادية الفهد غادرت موقف المعرض الساعة 11:20 مساءً، لا العاشرة كما قالت."},
+  {icon:"🔬", t:"تحليل الخيط", x:"الخيط حرير طبيعي أخضر زمردي يطابق وشاح نادية الذي صُودر من حقيبتها، وفيه آثار دم."},
+  {icon:"📞", t:"سجل مكالمة ماجد", x:"مكالمة ماجد الدولية استمرت من 10:20 إلى 11:10 من صالة كبار الزوار، فهو بعيد عن المخزن."},
+  {icon:"⚡", t:"سجل الكهرباء والحارس", x:"لا انقطاع في الكهرباء. الكاميرات أُطفئت يدوياً بالرمز العام للموظفين. وجهاز تتبّع يوسف يُظهر أنه غفا في مناوبته بين 10:30 و11:00، فكذب ليغطي إهماله."},
+  {icon:"📜", t:"فحص الشهادة", x:"شهادة أصالة اللوحة التي اشتراها ماجد وقّعتها نادية الفهد مقابل خمسين ألفاً، واللوحة مزوّرة."}
+ ],
+ motives:["سرقة أغلى لوحة في المعرض","إخفاء فضيحة شهادة مزوّرة","الانتقام من الفصل من العمل","خلاف على ثمن لوحة مباعة"],
+ weapons:["تمثال الصقر البرونزي","سكين فتح الصناديق","سمّ في كأس عصير","مسدس كاتم للصوت"],
+ killer:"nadia", motive:1, weapon:0,
+ solution:"القاتلة نادية الفهد. وقّعت شهادة أصالة للوحة مزوّرة مقابل خمسين ألفاً، وكان عادل سيفضحها يوم الاثنين. ضربته بتمثال الصقر في المخزن، ثم مسحته بوشاحها الحريري ورمته في النافورة. ادّعت أنها غادرت في العاشرة بينما سجّل الموقف خروجها 11:20، ورائحة الياسمين والخيط الأخضر دلّا عليها. ماجد كان على الهاتف، ويوسف كان نائماً فكذب، وسارة ورنا بريئتان."
+},
+{
+ id:"c3", lv:"صعب", cls:"h", title:"اليخت الأخير", place:"اليخت «النجمة» وسط البحر", budget:16,
+ intro:"على متن اليخت «النجمة» وُجد التاجر منصور الغانم ميتاً في الصباح داخل مقصورته المقفلة من الداخل. ستة أشخاص على متن اليخت، والقاتل أحدهم، ولا مفرّ لأحد قبل الوصول إلى الميناء.",
+ victim:{e:"🧔‍♂️", n:"منصور الغانم", d:"تاجر ثري في الستين، وُجد في مقصورته الساعة السابعة صباحاً."},
+ scene:[
+  {icon:"🚪", t:"باب المقصورة", x:"الباب مقفل من الداخل بمزلاج، ولا أثر لكسر أو خلع في الخشب أو القفل."},
+  {icon:"💉", t:"جسد الضحية", x:"علامة وخز صغيرة في الرقبة. الوفاة حدثت بين الحادية عشرة والنصف ومنتصف الليل تقريباً."},
+  {icon:"📱", t:"هاتف منصور", x:"رسالة غير مرسلة: «سأبلّغ خفر السواحل عن الشحنة المهرّبة على اليخت فور وصولنا»."},
+  {icon:"🥃", t:"كأس الماء", x:"كأس عليه أثر أحمر شفاه، وبقايا منوّم عادي بجرعة طبية."},
+  {icon:"🪢", t:"خيط شفاف", x:"شعرة نايلون رفيعة عالقة بالمزلاج من الداخل، وطرفها يمتد نحو ثقب المفتاح."}
+ ],
+ suspects:[
+  {id:"jamila", n:"جميلة الغانم", role:"زوجة الضحية", g:"f", e:"👩", bio:"تزوجته قبل عامين، وتخاصما مساء الأمس.",
+   qs:[["أين كنتِ ليلة الجريمة؟","تخاصمنا قرابة العاشرة ثم نمتُ على أريكة الصالة وحدي حتى الصباح."],
+       ["ما علاقتك بمنصور؟","لم يكن زواجنا سعيداً، وأعترف أننا تخاصمنا على بنود عقد الزواج. لكنني لم أؤذه."],
+       ["هل لاحظتِ شيئاً؟","كنتُ نائمة، لكنني استيقظتُ مرة وظننتُ أنني سمعتُ خطوات ثقيلة على السلّم."]]},
+  {id:"fahad", n:"فهد الغانم", role:"ابن الضحية", g:"m", e:"👨‍🦱", bio:"ابن منصور من زواج سابق، ويرث ثلث الثروة.",
+   qs:[["أين كنتَ ليلة الجريمة؟","كنتُ مع ريم في قاعة السينما الصغيرة نشاهد فيلماً حتى منتصف الليل تقريباً."],
+       ["ما علاقتك بأبيك؟","علاقتنا متوترة. رفض تمويل مشروعي، لكنني لا أقتل من أجل ذلك."],
+       ["هل لاحظتَ شيئاً؟","كنتُ منشغلاً بالفيلم، لكن ريم خرجت مرة لإحضار الماء."]]},
+  {id:"reem", n:"ريم الحمدان", role:"السكرتيرة", g:"f", e:"👩‍💼", bio:"تدير مواعيد منصور ومراسلاته منذ أربع سنوات.",
+   qs:[["أين كنتِ ليلة الجريمة؟","كنتُ مع فهد في السينما حتى منتصف الليل، وخرجتُ لإحضار الماء قرابة الحادية عشرة وخمسين دقيقة."],
+       ["ما علاقتك بمنصور؟","مديري ومرجعي. كان يثق بي في كل شيء، حتى ملفاته السرية."],
+       ["هل رأيتِ شيئاً؟","حين خرجتُ لإحضار الماء رأيتُ القبطان بدر في الممر العلوي قرب مقصورة منصور. سألته فقال إنه يتفقد اليخت."]]},
+  {id:"tariq", n:"د. طارق الزين", role:"الطبيب المرافق", g:"m", e:"👨‍⚕️", bio:"طبيب العائلة المرافق في الرحلة.",
+   qs:[["أين كنتَ ليلة الجريمة؟","زرتُ منصوراً عند العاشرة والنصف لأعطيه حبة منوّم، ثم عدتُ إلى مقصورتي وقرأتُ حتى نمت."],
+       ["ما علاقتك بمنصور؟","عالجتُه سنوات. كان مصاباً بالأرق وأصف له المنوّم المعتاد."],
+       ["هل لاحظتَ شيئاً؟","وجدتُه قلقاً من رسالة كان يكتبها لخفر السواحل، لكنه رفض أن يخبرني عنها."]]},
+  {id:"amal", n:"أمل السالم", role:"مغنية ضيفة", g:"f", e:"👩‍🎤", bio:"دُعيت لتحيي حفل العشاء ولا تعرف أحداً جيداً.",
+   qs:[["أين كنتِ ليلة الجريمة؟","غنيتُ على سطح اليخت وتدربتُ حتى منتصف الليل، ثم نمت."],
+       ["ما علاقتك بمنصور؟","التقيتُه لأول مرة هذا الأسبوع. دفع لي أجري وانتهى الأمر."],
+       ["هل رأيتِ شيئاً؟","من السطح رأيتُ ضوءاً في غرفة المحرك قبل الحادية عشرة بقليل، وظننته عاملاً."]]},
+  {id:"bader", n:"بدر العتيبي", role:"قبطان اليخت", g:"m", e:"👨‍✈️", bio:"يقود اليخت منذ عشر سنوات ويعرف كل زاوية فيه.",
+   qs:[["أين كنتَ ليلة الجريمة؟","نمتُ في مقصورة القيادة منذ العاشرة ولم أغادرها حتى السابعة صباحاً."],
+       ["ما علاقتك بمنصور؟","أعمل لديه منذ عشر سنوات. كان صاحب عمل محترماً."],
+       ["كيف اكتشفتَ الجثة؟","في الصباح وجدتُ باب مقصورته مقفلاً من الداخل، فكسرتُه بكتفي ودخلتُ فوجدته ميتاً."]]}
+ ],
+ lab:[
+  {icon:"🧪", t:"تحليل السم", x:"سمّ صناعي قوي مستخلص من مذيب يُستعمل في صيانة المحرك، وليس من أدوية الطبيب."},
+  {icon:"📒", t:"دفتر خزانة الكيماويات", x:"سجل الدخول إلى خزانة الكيماويات في غرفة المحرك: بدر العتيبي، الساعة 10:45 مساءً، بمفتاحه الخاص."},
+  {icon:"🎣", t:"تحليل الخيط", x:"النايلون من نوع خيط الصيد الغليظ نفسه الموجود في عدّة صيد القبطان بدر العتيبي."},
+  {icon:"📹", t:"كاميرا الصالة", x:"جميلة نائمة على الأريكة من 10:30 مساءً حتى 6:00 صباحاً دون انقطاع."},
+  {icon:"🎬", t:"سجلات السينما والسطح", x:"فهد وريم شاهدا الفيلم حتى 12:10، وتسجيل أمل الصوتي على السطح مستمر حتى 12:00."},
+  {icon:"💊", t:"سجل الطبيب", x:"جرعة المنوّم عند 10:30 تطابق سجل المستودع وهي طبية ولا تقتل. وبطاقة طارق سجّلت دخوله مقصورته 10:40."}
+ ],
+ motives:["وراثة الثروة","إسكاته قبل أن يبلّغ عن التهريب","غيرة زوجية","ديون مالية على الطبيب"],
+ weapons:["حقنة بسمّ صناعي","جرعة زائدة من المنوّم","الخنق بوسادة","الإغراق"],
+ killer:"bader", motive:1, weapon:0,
+ solution:"القاتل القبطان بدر العتيبي. علم أن منصور سيبلّغ خفر السواحل عن شحنة التهريب، فأخذ السمّ من خزانة الكيماويات الساعة 10:45، وحقنه بعد أن نام بتأثير المنوّم، ثم أقفل المزلاج من الخارج بحيلة خيط الصيد. ادّعى أنه كسر الباب لكن القفل سليم، ورآه ريم في الممر العلوي ليلاً وهو ينكر أنه غادر مقصورته. جميلة وفهد وريم وأمل وطارق لديهم حجج مثبتة."
+}
+];
+
+/* ============ التفضيلات ============ */
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let prefs={sfx:true,amb:true,theme:"dark"};
+try{const s=localStorage.getItem("mm_prefs"); if(s) prefs=Object.assign(prefs,JSON.parse(s));}catch(e){}
+function savePrefs(){try{localStorage.setItem("mm_prefs",JSON.stringify(prefs));}catch(e){}}
+document.documentElement.dataset.theme=prefs.theme;
+
+/* ============ الصوت (مولَّد بالكامل عبر WebAudio) ============ */
+const Snd=(()=>{
+  let ctx=null, master=null, nbuf=null, amb=null, thunderT=null;
+  function ensure(){
+    if(ctx) return true;
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return false;
+    ctx=new AC(); master=ctx.createGain(); master.gain.value=.9;
+    const comp=ctx.createDynamicsCompressor(); master.connect(comp); comp.connect(ctx.destination);
+    const n=ctx.sampleRate*2; nbuf=ctx.createBuffer(1,n,ctx.sampleRate); const d=nbuf.getChannelData(0);
+    for(let i=0;i<n;i++) d[i]=Math.random()*2-1;
+    return true;
+  }
+  function env(g,t0,a,d,v){g.gain.setValueAtTime(.0001,t0); g.gain.exponentialRampToValueAtTime(v,t0+a); g.gain.exponentialRampToValueAtTime(.0001,t0+a+d);}
+  function on(o){return o.amb?prefs.amb:prefs.sfx;}
+  function tone(o){
+    if(!ctx||!on(o)) return; const t0=ctx.currentTime+(o.at||0), a=o.a||.005;
+    const osc=ctx.createOscillator(), g=ctx.createGain(); osc.type=o.type||"sine";
+    osc.frequency.setValueAtTime(o.f,t0); if(o.f2) osc.frequency.exponentialRampToValueAtTime(o.f2,t0+a+o.d);
+    env(g,t0,a,o.d,o.v||.2); osc.connect(g); g.connect(master); osc.start(t0); osc.stop(t0+a+o.d+.05);
+  }
+  function noise(o){
+    if(!ctx||!on(o)) return; const t0=ctx.currentTime+(o.at||0), a=o.a||.004;
+    const s=ctx.createBufferSource(); s.buffer=nbuf; s.loop=true;
+    const f=ctx.createBiquadFilter(); f.type=o.ft||"bandpass"; f.frequency.setValueAtTime(o.f||1500,t0); f.Q.value=o.q||1;
+    if(o.f2) f.frequency.exponentialRampToValueAtTime(o.f2,t0+a+o.d);
+    const g=ctx.createGain(); env(g,t0,a,o.d,o.v||.2); s.connect(f); f.connect(g); g.connect(master);
+    s.start(t0,Math.random()*1.4); s.stop(t0+a+o.d+.05);
+  }
+  const api={
+    onBolt:null,
+    unlock(){ if(!ensure()) return; if(ctx.state==="suspended") ctx.resume(); if(prefs.amb) api.startAmb(); },
+    vis(hidden){ if(!ctx) return; if(hidden) ctx.suspend(); else ctx.resume(); },
+    click(){ tone({f:900,f2:600,d:.05,type:"triangle",v:.12}); noise({d:.02,f:3000,ft:"highpass",v:.05}); },
+    tick(){ noise({d:.014,f:2500+Math.random()*1500,q:.8,v:.07}); tone({f:1800+Math.random()*400,d:.012,type:"square",v:.012}); },
+    blip(){ tone({f:240+Math.random()*200,d:.035,type:"square",v:.022}); },
+    paper(){ noise({d:.22,a:.01,f:2500,f2:5500,q:.7,v:.16}); noise({at:.09,d:.16,a:.01,f:3500,f2:1800,q:.9,v:.1}); },
+    tear(){ for(let i=0;i<7;i++) noise({at:i*.035,d:.05,ft:"highpass",f:1800+i*350,v:.12}); noise({d:.3,f:900,f2:2500,q:.5,v:.06}); },
+    reveal(){ tone({f:523.25,d:.45,v:.09}); tone({at:.07,f:783.99,d:.55,v:.07}); tone({at:.14,f:1046.5,d:.7,v:.05}); },
+    stamp(big){ const v=big===false?.55:1; tone({f:150,f2:42,d:.28,v:.7*v}); noise({d:.12,f:420,ft:"lowpass",v:.35*v}); noise({d:.03,a:.002,f:2200,ft:"highpass",v:.12*v}); },
+    err(){ tone({f:170,f2:120,d:.16,type:"square",v:.07}); tone({at:.17,f:150,f2:100,d:.2,type:"square",v:.07}); },
+    pin(){ tone({f:1500,f2:700,d:.06,type:"triangle",v:.1}); noise({d:.03,f:2500,v:.06}); },
+    pen(){ for(let i=0;i<3;i++) noise({at:i*.045,d:.04,f:3600+i*500,q:2,v:.05}); },
+    tab(){ noise({d:.14,a:.02,f:700,f2:2200,q:.6,v:.08}); },
+    knock(){ [0,.16,.32].forEach(a=>{tone({at:a,f:110,f2:55,d:.12,v:.5}); noise({at:a,d:.05,ft:"lowpass",f:600,v:.25});}); },
+    shutter(){ noise({d:.03,a:.002,f:3000,q:1.2,v:.25}); noise({at:.07,d:.04,a:.002,f:2200,q:1.2,v:.22}); tone({d:.18,f:2800,f2:900,v:.04}); },
+    win(){ [196,261.6,329.6,392,523.3].forEach((f,i)=>tone({at:i*.11,f,d:.9,type:"triangle",v:.09})); },
+    lose(){ tone({f:110,f2:92,d:1.3,type:"sawtooth",v:.07}); tone({f:116.5,f2:98,d:1.3,type:"sawtooth",v:.05}); noise({d:1,f:200,ft:"lowpass",v:.1}); },
+    alarm(){ [0,1,2].forEach(i=>tone({at:i*.22,f:i===1?520:620,d:.18,type:"square",v:.05})); },
+    heart(){ [0,.22].forEach(a=>{tone({at:a,f:70,f2:40,d:.16,v:.45});}); },
+    count(){ tone({f:1200+Math.random()*200,d:.02,type:"triangle",v:.03}); },
+    thunder(){ noise({amb:true,d:3.2,a:.5,f:140,f2:60,ft:"lowpass",q:.7,v:.5}); },
+    startAmb(){
+      if(!ctx||amb||!prefs.amb) return;
+      const g=ctx.createGain(); g.gain.value=.0001; g.connect(master);
+      const rs=ctx.createBufferSource(); rs.buffer=nbuf; rs.loop=true;
+      const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=900;
+      const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=3200; bp.Q.value=.35;
+      const rg=ctx.createGain(); rg.gain.value=.5; rs.connect(hp); hp.connect(bp); bp.connect(rg); rg.connect(g); rs.start();
+      const o1=ctx.createOscillator(), o2=ctx.createOscillator(); o1.frequency.value=55; o2.type="triangle"; o2.frequency.value=82.5;
+      const dg=ctx.createGain(); dg.gain.value=.22; const lfo=ctx.createOscillator(); lfo.frequency.value=.07;
+      const lg=ctx.createGain(); lg.gain.value=.12; lfo.connect(lg); lg.connect(dg.gain);
+      o1.connect(dg); o2.connect(dg); dg.connect(g); o1.start(); o2.start(); lfo.start();
+      g.gain.setTargetAtTime(.075,ctx.currentTime,1.2);
+      amb={g,nodes:[rs,o1,o2,lfo]}; api.sched();
+    },
+    stopAmb(){
+      if(!amb) return; const a=amb; amb=null; clearTimeout(thunderT);
+      a.g.gain.setTargetAtTime(.0001,ctx.currentTime,.4);
+      setTimeout(()=>a.nodes.forEach(n=>{try{n.stop();}catch(e){}}),1800);
+    },
+    sched(){
+      clearTimeout(thunderT);
+      thunderT=setTimeout(()=>{
+        if(!amb) return;
+        if(api.onBolt) api.onBolt();
+        setTimeout(()=>{ if(amb) api.thunder(); },700+Math.random()*900);
+        api.sched();
+      },25000+Math.random()*35000);
+    }
+  };
+  return api;
+})();
+document.addEventListener("visibilitychange",()=>Snd.vis(document.hidden));
+
+/* ============ مؤثرات بصرية ============ */
+const root=document.documentElement, fxLayer=document.getElementById("fx"), boltEl=document.getElementById("bolt");
+Snd.onBolt=()=>{ if(REDUCED) return; boltEl.classList.remove("go"); void boltEl.offsetWidth; boltEl.classList.add("go"); };
+function buzz(ms){ try{ navigator.vibrate&&navigator.vibrate(ms); }catch(e){} }
+function shake(el){ if(REDUCED||!el) return; el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setTimeout(()=>el.classList.remove("shake"),500); }
+function floatText(txt,x,y,cls){
+  if(REDUCED) return; const s=document.createElement("span"); s.className="float "+(cls||""); s.textContent=txt;
+  s.style.left=x+"px"; s.style.top=y+"px"; fxLayer.appendChild(s); setTimeout(()=>s.remove(),1000);
+}
+function flashFx(){ if(REDUCED) return; const f=document.createElement("div"); f.className="flashfx"; fxLayer.appendChild(f); setTimeout(()=>f.remove(),800); }
+
+/* المصباح يتبع المؤشر */
+let tx=innerWidth/2, ty=innerHeight*.25, cx=tx, cy=ty, lampRun=false;
+function lampLoop(){
+  cx+=(tx-cx)*.14; cy+=(ty-cy)*.14;
+  root.style.setProperty("--lx",cx.toFixed(1)+"px"); root.style.setProperty("--ly",cy.toFixed(1)+"px");
+  if(Math.abs(tx-cx)+Math.abs(ty-cy)>.6) requestAnimationFrame(lampLoop); else lampRun=false;
+}
+function lampTo(x,y){ tx=x; ty=y; if(REDUCED){root.style.setProperty("--lx",x+"px"); root.style.setProperty("--ly",y+"px"); return;} if(!lampRun){lampRun=true; requestAnimationFrame(lampLoop);} }
+addEventListener("pointermove",e=>lampTo(e.clientX,e.clientY),{passive:true});
+addEventListener("pointerdown",e=>lampTo(e.clientX,e.clientY),{passive:true});
+lampTo(tx,ty);
+
+/* الكتابة حرفاً حرفاً */
+function typeInto(el,o){
+  o=o||{}; if(REDUCED||!el) return; const full=el.textContent; if(!full) return;
+  el.textContent=""; el.classList.add("typing");
+  const dur=Math.min(o.max||1700,full.length*(o.cps||24)), t0=performance.now(); let shown=0, last=0;
+  (function step(now){
+    if(!el.isConnected) return;
+    const k=Math.min(1,(now-t0)/dur), n=Math.floor(full.length*k);
+    if(n!==shown){ shown=n; el.textContent=full.slice(0,n); if(now-last>(o.gap||40)){ Snd[o.snd||"tick"](); last=now; } }
+    if(k<1) requestAnimationFrame(step); else { el.textContent=full; el.classList.remove("typing"); }
+  })(t0);
+}
+function countUp(delay){
+  app.querySelectorAll("[data-count]").forEach(el=>{
+    const to=+el.dataset.count; if(REDUCED||!to){ el.textContent=to; return; }
+    el.textContent="0";
+    setTimeout(()=>{ const t0=performance.now(); let last=0;
+      (function s(now){ if(!el.isConnected) return; const k=Math.min(1,(now-t0)/900);
+        el.textContent=Math.round(to*(1-Math.pow(1-k,3))); if(k<1&&now-last>70){Snd.count(); last=now;}
+        if(k<1) requestAnimationFrame(s); })(t0); },delay);
+  });
+}
+
+/* ============ الحالة ============ */
+let store={solved:[],best:{}};
+try{const s=localStorage.getItem("mm_progress"); if(s) store=Object.assign(store,JSON.parse(s));}catch(e){}
+function saveStore(){try{localStorage.setItem("mm_progress",JSON.stringify(store));}catch(e){}}
+
+let G={screen:"home", players:[{name:"",gender:"m"}], caseIdx:0, homeOpen:false, mode:"solo"};
+let P=null, FRESH=null, FRESH_MARK=null;
+const app=document.getElementById("app"), dock=document.getElementById("dock");
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const roleW=p=>p.gender==="f"?"المحققة":"المحقق";
+const emoP=p=>p.gender==="f"?"🕵️‍♀️":"🕵️‍♂️";
+const grp=()=>G.players.length>1;
+function pname(i){const p=G.players[i]; const n=p.name.trim(); if(n) return n; return grp()? roleW(p)+" "+(i+1) : roleW(p);}
+const susById=id=>P.c.suspects.find(s=>s.id===id);
+const isUnlocked=i=>i===0||store.solved.includes(CASES[i-1].id);
+const rot=i=>(((i*37)%5)-2)*.7;
+
+let toastT;
+function toast(msg){const t=document.getElementById("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},3400);}
+function go(screen){G.screen=screen; render("enter"); window.scrollTo(0,0);}
+
+/* ============ الشاشات ============ */
+function vHome(){
+  if(!G.homeOpen) return `
+  <section class="cover-wrap">
+    <div class="book" id="book"><div class="under"></div>
+      <div class="cover"><span class="ctab">قضية مفتوحة</span>
+        <div class="label"><h1>ملفّ القضيّة</h1><p>ثلاث قضايا لم تُحَلّ بعد</p></div>
+        <span class="secret">سرّي</span></div></div>
+    <button class="btn primary big" data-act="open">افتح الملف</button>
+  </section>`;
+  return `
+  <section class="sheet clip home">
+    <span class="secret ${G.justOpened?"slam":""}">سرّي</span>
+    <h1>من القاتل؟</h1>
+    <p class="lead">ثلاث قضايا بمستويات متدرجة، ومشتبهون من الرجال والنساء، وكلٌّ منهم يخفي شيئاً. اجمع الأدلة واستجوب واختبر في المختبر، ثم سمِّ القاتل ودافعه وأداته.</p>
+    <div class="modes">
+      <button class="mode" data-act="solo"><b>🕵️ لعب فردي</b><span>أنت المحقق الوحيد، وجهدك محدود.</span></button>
+      <button class="mode" data-act="group"><b>👥 لعب جماعي</b><span>من 2 إلى 6 لاعبين يتناوبون على الأدلة ثم يتهم كلٌّ منهم سراً.</span></button>
+    </div>
+    <div class="hints"><span class="pill">سهل: أربعة مشتبهين</span><span class="pill">متوسط: خمسة</span><span class="pill">صعب: ستة وأدلة مضلِّلة</span></div>
+  </section>`;
+}
+
+function vSetup(){
+  const solo=G.mode==="solo";
+  const rows=G.players.map((p,i)=>`
+   <div class="prow">
+     <span style="font-size:1.9rem">${emoP(p)}</span>
+     <input type="text" maxlength="18" placeholder="${solo?"اسمك":"اسم اللاعب "+(i+1)}" value="${esc(p.name)}" data-name="${i}" aria-label="اسم اللاعب ${i+1}">
+     <div class="seg" role="group" aria-label="اللقب">
+       <button data-act="gender" data-i="${i}" data-g="m" aria-pressed="${p.gender==="m"}">محقق</button>
+       <button data-act="gender" data-i="${i}" data-g="f" aria-pressed="${p.gender==="f"}">محققة</button>
+     </div>
+     ${!solo&&G.players.length>2?`<button class="btn sm ghost" data-act="delp" data-i="${i}" aria-label="حذف اللاعب">حذف</button>`:""}
+   </div>`).join("");
+  return `
+  <section class="stack">
+    <h2>${solo?"من أنت؟":"من المحققون؟"}</h2>
+    <div class="sheet">${rows}</div>
+    ${!solo&&G.players.length<6?`<button class="btn" data-act="addp">+ إضافة لاعب</button>`:""}
+    ${!solo?`<p class="small">في الجماعي: كل لاعب يكشف دليلين في دوره والأدلة تظهر للجميع. في النهاية يتهم كل لاعب سراً، ويفوز صاحب أعلى نقاط.</p>`:""}
+    <div class="row"><button class="btn primary" data-act="tolevels">اختيار القضية</button><button class="btn ghost" data-act="home">رجوع</button></div>
+  </section>`;
+}
+
+function vLevels(){
+  const cards=CASES.map((c,i)=>{
+    const open=isUnlocked(i), done=store.solved.includes(c.id);
+    return `<button class="lvl" data-act="pick" data-i="${i}" data-no="قضية ${i+1}" aria-disabled="${!open}">
+      <span class="badge ${c.cls}">${c.lv}</span>
+      <h3>${c.title}</h3>
+      <p class="small">${c.place}</p>
+      <div class="meta"><span>${c.suspects.length} مشتبهين</span><span>جهد ${c.budget}</span>${done?`<span>✔ تم حلّها</span>`:""}${store.best[c.id]?`<span>أفضل نتيجة ${store.best[c.id]}</span>`:""}</div>
+      ${open?"":`<span class="strap">🔒 تُفتح بحل القضية السابقة</span>`}
+    </button>`}).join("");
+  return `<section class="stack"><h2>اختر القضية</h2><div class="grid">${cards}</div><button class="btn ghost" data-act="setup">رجوع</button></section>`;
+}
+
+function vBrief(){
+  const c=CASES[G.caseIdx], n=G.players.length, total=c.budget+(n-1)*3;
+  return `
+  <section class="stack">
+    <div class="row"><span class="badge ${c.cls}">${c.lv}</span><h2>${c.title}</h2></div>
+    <div class="sheet clip" ${FRESH==="brief"?"data-fresh":""}>
+      <p class="typ">${c.intro}</p>
+      <div class="victim"><div class="pic">${c.victim.e}</div><div><b>الضحية: ${c.victim.n}</b><div class="small">${c.victim.d}</div></div></div>
+    </div>
+    <h3>المشتبهون</h3>
+    <div class="grid">${c.suspects.map(s=>`<div class="mini"><span class="e">${s.e}</span><div><b>${s.n}</b><small>${s.g==="f"?"مشتبهة":"مشتبه"}، ${s.role}</small></div></div>`).join("")}</div>
+    <div class="sticky"><b>قواعد التحقيق</b>
+      <p style="font-size:.95rem">لديكم ${total} نقطة جهد. فحص دليل أو طرح سؤال يكلّف نقطة، وطلب تقرير مختبر يكلّف نقطتين. لن تكفيكم النقاط لكشف كل شيء، فاختاروا بحكمة.</p>
+      <p style="font-size:.95rem">في النهاية تحددون القاتل والدافع والأداة. الصحيح يمنح 100 و50 و50 نقطة، والجهد المتبقي يضيف مكافأة إذا أصبتم القاتل.</p></div>
+    <div class="row"><button class="btn primary" data-act="begin">ابدأ التحقيق</button><button class="btn ghost" data-act="tolevels">رجوع</button></div>
+  </section>`;
+}
+
+function hud(){
+  const c=P.c, pct=P.pool/P.total*100, from=P.prevPct==null?pct:P.prevPct;
+  const pips=`<span class="pips" aria-hidden="true"><i class="${P.moves>=1?"":"off"}"></i><i class="${P.moves>=2?"":"off"}"></i></span>`;
+  return `<div class="hud">
+    <div class="hud-top">
+      <div><div class="small">${c.place}</div><div class="t">${c.title}</div></div>
+      <div class="meter ${pct<=25?"low":""}"><div class="m-top"><span>الجهد</span><b>${P.pool}</b><span>من ${P.total}</span></div>
+        <div class="m-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${P.total}" aria-valuenow="${P.pool}" aria-label="الجهد المتبقي"><i style="width:${from}%" data-to="${pct}"></i></div></div>
+    </div>
+    ${grp()?`<div class="turn">${emoP(G.players[P.turn])} <b>الدور: ${esc(pname(P.turn))}</b> ${pips} <span class="small">متبقٍّ ${P.moves===1?"حركة واحدة":"حركتان"}</span></div>`:""}
+    ${dockHTML()}
+  </div>`;
+}
+
+function dockHTML(){
+  const tabs=[["scene","🔍","المسرح"],["talk","🗣️","الاستجواب"],["lab","🔬","المختبر"],["notes","📓","الدفتر"]];
+  return `<nav class="dock-in" aria-label="أقسام التحقيق">${tabs.map(([k,e,l])=>`<button class="dk" data-act="tab" data-t="${k}" ${P.tab===k?'aria-current="page"':""}><span class="e">${e}</span>${l}</button>`).join("")}
+    <button class="dk acc" data-act="toacc"><span class="e">⚖️</span>اتهام</button></nav>`;
+}
+
+function vGame(){
+  let pane="";
+  if(P.tab==="scene")pane=vScene(); else if(P.tab==="talk")pane=vTalk(); else if(P.tab==="lab")pane=vLab(); else pane=vNotes();
+  return `<section>
+    ${hud()}
+    ${P.pool<=0?`<div class="alert">نفد الجهد. حان وقت الاتهام.</div>`:""}
+    <div class="pane">${pane}</div>
+  </section>`;
+}
+
+function noteCard(x,by,key,i){
+  const fresh=FRESH===key;
+  return `<article class="note ${fresh?"unfold":""}" style="--r:${rot(i)}deg" ${fresh?"data-fresh":""}><div class="nh"><span class="ico">${x.icon}</span><h3>${x.t}</h3></div><p class="typ">${x.x}</p>${grp()&&by?`<span class="by">كشفه: ${esc(by)}</span>`:""}</article>`;
+}
+function bagCard(x,type,i,cost){
+  return `<button class="bag" data-act="rev" data-type="${type}" data-key="${i}" aria-disabled="${P.pool<cost}"><span class="bi">${x.icon}</span><b>${x.t}</b><span class="act">${type==="l"?"اطلب التقرير":"افحص"} <span class="cost" dir="ltr">−${cost}</span></span></button>`;
+}
+function vScene(){ return `<div class="grid">${P.c.scene.map((x,i)=>P.rev.s[i]?noteCard(x,P.rev.s[i],"s:"+i,i):bagCard(x,"s",i,1)).join("")}</div>`; }
+function vLab(){ return `<p class="small" style="margin-bottom:14px">تقارير المختبر أدق من الشهادات، لكنها تكلّف نقطتين.</p><div class="grid">${P.c.lab.map((x,i)=>P.rev.l[i]?noteCard(x,P.rev.l[i],"l:"+i,i):bagCard(x,"l",i,2)).join("")}</div>`; }
+
+function markLabel(s,m){ if(m===1)return s.g==="f"?"مشتبهة":"مشتبه"; if(m===2)return s.g==="f"?"بريئة":"بريء"; return ""; }
+function mkSpan(s){const m=P.marks[s.id]||0; return m?`<span class="pmark ${m===1?"s":"i"} ${FRESH_MARK===s.id?"new":""}">${markLabel(s,m)}</span>`:"";}
+function polaroid(s,i,act,pressed,extra){
+  return `<button class="pola ${extra||""}" style="--r:${rot(i)}deg" data-act="${act}" data-id="${s.id}" aria-pressed="${pressed}"><span class="img"><span>${s.e}</span>${mkSpan(s)}</span><b>${s.n}</b><small>${s.role}</small></button>`;
+}
+
+function vTalk(){
+  const c=P.c, s=susById(P.sus);
+  const chips=c.suspects.map((x,i)=>polaroid(x,i,"sus",x.id===P.sus)).join("");
+  const qs=s.qs.map((qa,i)=>{
+    const key=s.id+"_"+i, by=P.rev.q[key], fresh=FRESH==="q:"+key;
+    if(by) return `<div class="bubble q">${qa[0]}</div><div class="bubble a" ${fresh?"data-fresh":""}><span class="typ">${qa[1]}</span>${grp()?`<span class="who2">سأله: ${esc(by)}</span>`:""}</div>`;
+    return `<button class="qbtn" data-act="rev" data-type="q" data-key="${key}" aria-disabled="${P.pool<1}"><span>❓ ${qa[0]}</span><span class="cost" dir="ltr">−1</span></button>`;
+  }).join("");
+  const m=P.marks[s.id]||0;
+  return `<div class="sus-list">${chips}</div>
+  <div class="room stack">
+    <div class="row" style="justify-content:space-between"><div><div class="who">${s.e} ${s.n}</div><div class="small">${s.g==="f"?"مشتبهة":"مشتبه"}، ${s.role}</div></div>
+    <button class="btn sm ghost" data-act="mark" data-id="${s.id}">تقييمي: ${m?markLabel(s,m):"بلا حكم بعد"}</button></div>
+    <p class="small">${s.bio}</p>
+    <div class="stack">${qs}</div>
+  </div>`;
+}
+
+function vNotes(){
+  const c=P.c; let out="";
+  const sc=c.scene.map((x,i)=>P.rev.s[i]?`<li>${x.icon} <b>${x.t}:</b> ${x.x}</li>`:"").join("");
+  const lb=c.lab.map((x,i)=>P.rev.l[i]?`<li>${x.icon} <b>${x.t}:</b> ${x.x}</li>`:"").join("");
+  const st=c.suspects.map(s=>{
+    const a=s.qs.map((qa,i)=>P.rev.q[s.id+"_"+i]?`<li><span class="qq">${qa[0]}</span>${qa[1]}</li>`:"").join("");
+    return a?`<div class="who">${s.e} ${s.n}</div><ul>${a}</ul>`:"";
+  }).join("");
+  if(sc) out+=`<h3>مسرح الجريمة</h3><ul>${sc}</ul>`;
+  if(st) out+=`<h3>الأقوال</h3>${st}`;
+  if(lb) out+=`<h3>المختبر</h3><ul>${lb}</ul>`;
+  return `<div class="notebook">${out||`<p>لم تكشفوا شيئاً بعد. ابدأوا بمسرح الجريمة.</p>`}</div>`;
+}
+
+function optBtn(act,i,txt,pressed){
+  return `<button class="opt" data-act="${act}" data-i="${i}" aria-pressed="${pressed}"><svg viewBox="0 0 26 26" aria-hidden="true"><rect class="bx" x="3" y="3" width="20" height="20" rx="3"/><path class="x" pathLength="1" d="M7 7 L19 19 M19 7 L7 19"/></svg><span>${txt}</span></button>`;
+}
+function vAcc(){
+  const c=P.c, i=P.accIdx, p=G.players[i];
+  if(P.hand) return `<section class="hand stack"><div class="big">${emoP(p)}</div><h2>سلّموا الجهاز إلى ${esc(pname(i))}</h2><p class="small">يتهم كل محقق بسرية. ابتعد الآخرون عن الشاشة.</p><button class="btn primary big" data-act="ready">أنا جاهز${p.gender==="f"?"ة":""}</button></section>`;
+  const pk=P.pick;
+  const sus=c.suspects.map((s,k)=>polaroid(s,k,"pk",pk.k===s.id)).join("");
+  const ready=pk.k!==undefined&&pk.m!==undefined&&pk.w!==undefined;
+  return `<section class="stack">
+    <h2>${emoP(p)} ${esc(pname(i))}، من القاتل؟</h2>
+    <h3><span class="step">1</span>المتهم</h3><div class="pickgrid ${pk.k!==undefined?"has":""}">${sus}</div>
+    <h3><span class="step">2</span>الدافع</h3><div>${c.motives.map((m,k)=>optBtn("pm",k,m,pk.m===k)).join("")}</div>
+    <h3><span class="step">3</span>الأداة</h3><div>${c.weapons.map((m,k)=>optBtn("pw",k,m,pk.w===k)).join("")}</div>
+    <div class="row"><button class="btn primary" data-act="confirm" ${ready?"":"disabled"}>تأكيد الاتهام</button>${i===0?`<button class="btn ghost" data-act="back">العودة للتحقيق</button>`:""}</div>
+    ${ready?"":`<p class="small">اختر المتهم والدافع والأداة لتفعيل التأكيد.</p>`}
+  </section>`;
+}
+
+function calc(){
+  const c=P.c;
+  return P.accs.map((a,i)=>{const k=a.k===c.killer,m=a.m===c.motive,w=a.w===c.weapon; const sc=(k?100:0)+(m?50:0)+(w?50:0)+(k?P.pool*3:0); return {i,a,k,m,w,sc};});
+}
+function finalize(){
+  const c=P.c; P.rows=calc(); P.win=P.rows.some(r=>r.k); P.top=Math.max(...P.rows.map(r=>r.sc));
+  if(P.win&&!store.solved.includes(c.id)) store.solved.push(c.id);
+  store.best[c.id]=Math.max(store.best[c.id]||0,P.top); saveStore();
+}
+function vResults(){
+  const c=P.c, killer=susById(c.killer), next=CASES[G.caseIdx+1];
+  const ck=(ok,l)=>`<span class="${ok?"y":"n"}">${ok?"✔":"✘"} ${l}</span>`;
+  const cards=P.rows.map(r=>{
+    const win=grp()&&r.sc===P.top&&P.top>0;
+    return `<div class="sc ${win?"win":""}"><div><b>${emoP(G.players[r.i])} ${esc(pname(r.i))}${win?" 👑":""}</b><div class="small">اتهم: ${susById(r.a.k).n}</div></div>
+      <div class="sco" data-count="${r.sc}">${r.sc}</div>
+      <div class="ck">${ck(r.k,"القاتل")}${ck(r.m,"الدافع")}${ck(r.w,"الأداة")}</div></div>`}).join("");
+  return `<section class="stack">
+    <div class="verdict"><span class="stamp ${P.win?"ok":""}">${P.win?"أُغلقت القضية":"القاتل ما زال حرّاً"}</span></div>
+    <div class="sheet killer">
+      <button class="pola" tabindex="-1" aria-hidden="true"><span class="img"><span>${killer.e}</span></span><b>${killer.n}</b><small>${killer.role}</small></button>
+      <div><h3>القاتل${killer.g==="f"?"ة":""}: ${killer.n}</h3><p class="small" style="color:var(--pen-2)">الدافع: ${c.motives[c.motive]}<br>الأداة: ${c.weapons[c.weapon]}</p></div>
+    </div>
+    <div class="stack late">${cards}</div>
+    <div class="sheet late2"><h3 style="margin-bottom:6px">القصة كاملة</h3><p class="sol typ">${c.solution}</p></div>
+    <div class="row late2">
+      ${P.win&&next?`<button class="btn primary" data-act="nextcase">القضية التالية: ${next.title}</button>`:""}
+      <button class="btn" data-act="again">إعادة القضية</button>
+      <button class="btn ghost" data-act="tolevels">كل القضايا</button>
+      <button class="btn ghost" data-act="home">الرئيسية</button>
+    </div>
+  </section>`;
+}
+
+/* ============ العرض ============ */
+function focusSel(){
+  const a=document.activeElement; if(!a||!a.dataset||!a.dataset.act) return null;
+  const d=a.dataset; let s=`[data-act="${d.act}"]`;
+  ["id","i","key","t"].forEach(k=>{ if(d[k]!==undefined) s+=`[data-${k}="${d[k]}"]`; });
+  return s;
+}
+function render(kind){
+  const sy=window.scrollY, fs=kind==="enter"?null:focusSel();
+  document.body.dataset.screen=G.screen;
+  let h="";
+  switch(G.screen){
+    case "home":h=vHome();break; case "setup":h=vSetup();break; case "levels":h=vLevels();break;
+    case "brief":h=vBrief();break; case "game":h=vGame();break; case "acc":h=vAcc();break; case "results":h=vResults();break;
+  }
+  app.innerHTML=h;
+  const first=app.firstElementChild;
+  if(kind==="enter"&&first) first.classList.add("enter");
+  if(kind==="pane"){const pn=app.querySelector(".pane"); if(pn) pn.classList.add("soft");}
+  dock.hidden=true;
+  if(kind!=="enter") window.scrollTo(0,sy);
+  if(fs){ const n=document.querySelector(fs); if(n) n.focus({preventScroll:true}); }
+  afterRender();
+}
+function afterRender(){
+  const f=app.querySelector("[data-fresh] .typ");
+  if(f){ const bub=f.closest(".bubble"); typeInto(f,bub?{snd:"blip",gap:55}:{snd:"tick",gap:38,max:G.screen==="brief"?2600:1700}); }
+  FRESH=null; FRESH_MARK=null;
+  const mb=app.querySelector(".m-bar i[data-to]");
+  if(mb){ const to=+mb.dataset.to; requestAnimationFrame(()=>requestAnimationFrame(()=>{mb.style.width=to+"%";})); P.prevPct=to; }
+  if(G.justOpened){ G.justOpened=false; setTimeout(()=>{Snd.stamp(true); shake(app);},REDUCED?0:600); }
+  if(G.screen==="results"&&P&&!P.fx){ P.fx=true; verdictFx(); }
+  if(G.screen==="acc"&&P&&P.hand&&P.knockPending){ P.knockPending=false; Snd.knock(); }
+}
+function verdictFx(){
+  const sol=app.querySelector(".sol");
+  if(REDUCED){ P.win?Snd.win():Snd.lose(); return; }
+  flashFx(); Snd.shutter(); buzz(20);
+  setTimeout(()=>{ Snd.stamp(true); shake(app); buzz(60); setTimeout(()=>{ P.win?Snd.win():Snd.lose(); },P.win?250:100); },650);
+  countUp(1500);
+  setTimeout(()=>typeInto(sol,{max:3600,gap:45}),1500);
+}
+function turnFlash(){
+  const d=document.createElement("div"); d.className="turnflash";
+  d.innerHTML=`<div><span>${emoP(G.players[P.turn])}</span>دور ${esc(pname(P.turn))}</div>`;
+  fxLayer.appendChild(d); Snd.knock(); setTimeout(()=>d.remove(),REDUCED?1200:1500);
+}
+
+/* ============ منطق اللعب ============ */
+function startPlay(){
+  const c=CASES[G.caseIdx], n=G.players.length, total=c.budget+(n-1)*3;
+  P={c,total,pool:total,moves:2,turn:0,tab:"scene",sus:c.suspects[0].id,rev:{s:{},q:{},l:{}},marks:{},accIdx:0,hand:false,pick:{},accs:[],fx:false,prevPct:100};
+  go("game");
+}
+function reveal(type,key,btn,ev){
+  const cost=type==="l"?2:1, map=P.rev[type];
+  if(map[key]||(btn&&btn.dataset.busy)) return;
+  if(P.pool<cost){
+    Snd.err(); buzz(40); toast("الجهد المتبقي لا يكفي. جرّبوا بنداً أقل كلفة أو وجّهوا الاتهام.");
+    if(btn&&!REDUCED){btn.classList.remove("nope"); void btn.offsetWidth; btn.classList.add("nope");}
+    return;
+  }
+  const x=ev?ev.clientX:innerWidth/2, y=ev?ev.clientY:innerHeight/2;
+  const doIt=()=>{
+    const before=P.pool/P.total*100;
+    P.pool-=cost; map[key]=pname(P.turn); FRESH=(type==="q"?"q:":type+":")+key;
+    let turned=false;
+    if(grp()){P.moves--; if(P.moves<=0&&P.pool>0){P.turn=(P.turn+1)%G.players.length; P.moves=2; turned=true;}}
+    render(); Snd.reveal(); floatText("−"+cost,x,y);
+    const after=P.pool/P.total*100;
+    if(P.pool<=0) setTimeout(Snd.alarm,500);
+    else if(before>25&&after<=25) setTimeout(Snd.heart,500);
+    if(turned) setTimeout(turnFlash,REDUCED?0:900);
+  };
+  if(type==="q"){ doIt(); return; }
+  btn.dataset.busy="1"; btn.classList.add("tearing"); Snd.tear(); buzz(15);
+  setTimeout(doIt,REDUCED?0:360);
+}
+
+/* ============ الأحداث ============ */
+const OWN=new Set(["rev","tab","pk","pm","pw","sus","mark","confirm","open","toacc","ready","pick","begin","tolevels","nextcase","again","sfx","amb","theme"]);
+let unlocked=false;
+document.addEventListener("pointerdown",()=>{ if(!unlocked){unlocked=true; Snd.unlock();} });
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b||b.disabled) return;
+  const d=b.dataset, a=d.act;
+  if(!unlocked){unlocked=true; Snd.unlock();}
+  if(!OWN.has(a)) Snd.click();
+  switch(a){
+    case "home": G.screen="home"; render("enter"); window.scrollTo(0,0); break;
+    case "open": {
+      const bk=document.getElementById("book"); if(!bk||bk.classList.contains("open")) break;
+      Snd.paper(); bk.classList.add("open"); b.disabled=true;
+      setTimeout(()=>{G.homeOpen=true; G.justOpened=true; render("enter");},REDUCED?0:850); break; }
+    case "solo": G.mode="solo"; G.players=[{name:G.players[0]?G.players[0].name:"",gender:G.players[0]?G.players[0].gender:"m"}]; go("setup"); break;
+    case "group": G.mode="group"; while(G.players.length<2) G.players.push({name:"",gender:G.players.length%2?"f":"m"}); go("setup"); break;
+    case "setup": go("setup"); break;
+    case "gender": G.players[+d.i].gender=d.g; render(); break;
+    case "addp": if(G.players.length<6){G.players.push({name:"",gender:G.players.length%2?"f":"m"}); render();} break;
+    case "delp": if(G.players.length>2){G.players.splice(+d.i,1); render();} break;
+    case "tolevels": Snd.paper(); go("levels"); break;
+    case "pick":
+      if(!isUnlocked(+d.i)){ Snd.err(); buzz(40); toast("🔒 هذه القضية تُفتح بحل القضية السابقة."); break; }
+      Snd.paper(); G.caseIdx=+d.i; FRESH="brief"; go("brief"); break;
+    case "begin": Snd.paper(); startPlay(); break;
+    case "tab": if(P.tab!==d.t){ Snd.tab(); P.tab=d.t; render("pane"); window.scrollTo(0,0);} break;
+    case "rev": reveal(d.type,d.key,b,e); break;
+    case "sus": if(P.sus!==d.id){ Snd.pin(); P.sus=d.id; render("pane"); } break;
+    case "mark": { const n=((P.marks[d.id]||0)+1)%3; P.marks[d.id]=n; FRESH_MARK=n?d.id:null; if(n) {Snd.stamp(false); buzz(20);} else Snd.click(); render(); break; }
+    case "toacc": Snd.paper(); P.accIdx=0; P.accs=[]; P.pick={}; P.hand=grp(); P.knockPending=P.hand; go("acc"); break;
+    case "back": Snd.click(); go("game"); break;
+    case "ready": Snd.paper(); P.hand=false; render("enter"); window.scrollTo(0,0); break;
+    case "pk": Snd.pin(); P.pick.k=d.id; render(); break;
+    case "pm": Snd.pen(); P.pick.m=+d.i; render(); break;
+    case "pw": Snd.pen(); P.pick.w=+d.i; render(); break;
+    case "confirm":
+      Snd.stamp(false); buzz(30);
+      P.accs.push({k:P.pick.k,m:P.pick.m,w:P.pick.w}); P.accIdx++; P.pick={};
+      if(P.accIdx>=G.players.length){ finalize(); go("results"); } else { P.hand=true; P.knockPending=true; go("acc"); }
+      break;
+    case "nextcase": Snd.paper(); G.caseIdx++; FRESH="brief"; go("brief"); break;
+    case "again": Snd.paper(); FRESH="brief"; go("brief"); break;
+    case "sfx": prefs.sfx=!prefs.sfx; savePrefs(); syncCtl(); if(prefs.sfx) Snd.click(); break;
+    case "amb": prefs.amb=!prefs.amb; savePrefs(); syncCtl(); if(prefs.amb) Snd.startAmb(); else Snd.stopAmb(); break;
+    case "theme": prefs.theme=prefs.theme==="dark"?"light":"dark"; document.documentElement.dataset.theme=prefs.theme; savePrefs(); Snd.click(); break;
+  }
+});
+app.addEventListener("input",e=>{ if(e.target.dataset.name!==undefined){G.players[+e.target.dataset.name].name=e.target.value;} });
+function syncCtl(){
+  const s=document.querySelector("[data-act=sfx]"), m=document.querySelector("[data-act=amb]");
+  s.setAttribute("aria-pressed",prefs.sfx); s.textContent=prefs.sfx?"🔊":"🔇"; m.setAttribute("aria-pressed",prefs.amb);
+}
+syncCtl();
+render("enter");
+</script>
+</body>
+</html>
