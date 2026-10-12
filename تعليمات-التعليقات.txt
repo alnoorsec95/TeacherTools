@@ -28,3 +28,7 @@
 ملاحظات:
 - عند تعديل كود Code.gs لاحقاً يجب عمل Deploy ← Manage deployments ← Edit ← New version.
 - إن تركتَ COMMENTS_API فارغاً يعمل الموقع بوضع تجريبي (تعليقات على جهازك فقط، وكلمة مرور المشرف admin).
+
+إعجابات الأدوات (زر ♥ في كل بطاقة):
+- بعد تحديث Code.gs: الصق الكود الجديد، ثم Deploy ← Manage deployments ← Edit ← New version ← Deploy.
+- تُحفظ الأعداد تلقائياً في ورقة ToolLikes داخل نفس الشيت (تُنشأ وحدها).

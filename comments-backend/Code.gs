@@ -15,6 +15,13 @@ function sh_() {
   }
   return s;
 }
+var LSHEET = 'ToolLikes';
+function lsh_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var s = ss.getSheetByName(LSHEET);
+  if (!s) { s = ss.insertSheet(LSHEET); s.appendRow(['tool', 'likes']); }
+  return s;
+}
 function out_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -31,6 +38,11 @@ function rows_() {
 function doGet(e) {
   var a = (e.parameter && e.parameter.action) || 'list';
   var rows = rows_();
+  if (a === 'tlikes') {
+    var lk = {};
+    lsh_().getDataRange().getValues().slice(1).forEach(function (r) { lk[r[0]] = Number(r[1]) || 0; });
+    return out_({ likes: lk });
+  }
   if (a === 'counts') {
     var c = {};
     rows.forEach(function (r) { c[r[1]] = (c[r[1]] || 0) + 1; });
@@ -61,6 +73,22 @@ function doPost(e) {
       if (!text) return out_({ ok: false, error: 'empty' });
       sh_().appendRow([Utilities.getUuid(), tool, name, text, new Date().toISOString(), 0]);
       return out_({ ok: true });
+    }
+
+    if (a === 'tlike') {
+      var tl = String(d.tool || '');
+      if (!/^[a-z0-9_-]{1,30}$/.test(tl)) return out_({ ok: false, error: 'bad_tool' });
+      var ls = lsh_(), lv = ls.getDataRange().getValues();
+      var dl = Number(d.delta) > 0 ? 1 : -1;
+      for (var q = 1; q < lv.length; q++) {
+        if (lv[q][0] === tl) {
+          var nn = Math.max(0, (Number(lv[q][1]) || 0) + dl);
+          ls.getRange(q + 1, 2).setValue(nn);
+          return out_({ ok: true, likes: nn });
+        }
+      }
+      ls.appendRow([tl, Math.max(0, dl)]);
+      return out_({ ok: true, likes: Math.max(0, dl) });
     }
 
     if (a === 'like') {

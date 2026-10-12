@@ -331,6 +331,21 @@ footer{border-top:1px solid var(--line);padding-block:26px}
   html{scroll-behavior:auto}
 }
 
+
+/* tool likes */
+.btn-lk{position:relative;color:#e11d48;overflow:visible}
+.btn-lk svg{transition:transform .2s}
+.btn-lk:hover{background:#e11d48;color:#fff}
+.btn-lk.on svg{fill:currentColor}
+.btn-lk.on{background:#ffe4ea}
+.btn-lk.on:hover{background:#e11d48}
+.btn-lk.pop svg{animation:lkPop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes lkPop{0%{transform:scale(1)}40%{transform:scale(1.6)}100%{transform:scale(1)}}
+.lk-n{position:absolute;top:-7px;left:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:#e11d48;color:#fff;font-size:11.5px;font-weight:700;display:none;line-height:20px;text-align:center;box-shadow:0 3px 8px rgba(225,29,72,.4)}
+.lk-n.has{display:block}
+.lk-fx{position:fixed;z-index:95;pointer-events:none;font-size:18px;animation:lkFly .9s ease-out forwards}
+@keyframes lkFly{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),-70px) scale(1.3)}}
+@media(prefers-reduced-motion:reduce){.btn-lk.pop svg,.lk-fx{animation:none}}
 /* ===== comments ===== */
 .btn-cm{position:relative;color:#7c3aed;overflow:visible}
 .btn-cm:hover{background:#7c3aed;color:#fff}
@@ -734,6 +749,7 @@ try{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){on();o.disc
       h+='<a class="btn btn-ico btn-dl" href="'+(t.live||t.href)+'" target="_blank" rel="noopener" data-tip="جرب الآن" aria-label="جرب الآن: '+t.n+'"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></a>';
     }
     h+='<button type="button" class="btn btn-ico btn-cm" data-cm="'+t.id+'" aria-label="تعليقات '+t.n+'" title="التعليقات"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg><b class="cm-n" data-n="'+t.id+'"></b></button>';
+    h+='<button type="button" class="btn btn-ico btn-lk" data-lk="'+t.id+'" aria-pressed="false" aria-label="إعجاب '+t.n+'" title="أعجبني"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.8 6.5 4.8c2 0 3.5 1 4.5 2.6l1 1.4 1-1.4c1-1.600 2.500-2.600 4.500-2.600 3.500 0 5.600 3.500 4.100 6.900C19.500 16.400 12 21 12 21z"/></svg><b class="lk-n" data-ln="'+t.id+'"></b></button>';
     h+='</div>';
     el.innerHTML=h;
     el._t=t;
@@ -811,7 +827,7 @@ try{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){on();o.disc
   }
 
   /* ----- comments ----- */
-  var COMMENTS_API=''; /* ← ضع هنا رابط تطبيق Google Apps Script (الخطوات في ملف تعليمات-التعليقات.txt). فارغ = وضع تجريبي على هذا الجهاز فقط */
+  var COMMENTS_API='https://script.google.com/macros/s/AKfycbzewP646MNHqqatuDDB6oFPFOc5Ch9LO4_P3da4sREhlg9rum18Y5PE08fgW-7oAPrt/exec'; /* ← ضع هنا رابط تطبيق Google Apps Script (الخطوات في ملف تعليمات-التعليقات.txt). فارغ = وضع تجريبي على هذا الجهاز فقط */
   var CM={counts:{},enabled:true,admin:false,pw:'',tool:null};
   try{CM.pw=sessionStorage.getItem('rk_admin')||''}catch(e){}
   var LK='rk_cm_local';
@@ -880,7 +896,6 @@ try{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){on();o.disc
     CM.enabled=r.enabled!==false;paintCm();
     var note=$('#cmNote');
     var msgs=[];
-    if(!COMMENTS_API)msgs.push('⚠️ وضع تجريبي: التعليقات تُحفظ على هذا الجهاز فقط حتى يُربط الموقع بالخادم.');
     if(!CM.enabled)msgs.push('🚫 خاصية التعليقات متوقفة من المشرف.');
     note.style.display=msgs.length?'block':'none';note.textContent=msgs.join(' ');
     $('#cmForm').style.display=CM.enabled?'flex':'none';
@@ -953,7 +968,7 @@ try{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){on();o.disc
   function setAdmin(pw,ok){CM.admin=ok;CM.pw=ok?pw:'';try{ok?sessionStorage.setItem('rk_admin',pw):sessionStorage.removeItem('rk_admin')}catch(e){}paintCm()}
   $('#admBtn').addEventListener('click',function(){
     if(CM.admin){setAdmin('',false);toast('تم تسجيل خروج المشرف');return}
-    var n=$('#adNote');n.style.display=COMMENTS_API?'none':'block';n.textContent='وضع تجريبي: كلمة المرور هي admin';
+    var n=$('#adNote');n.style.display='none';
     $('#adOv').classList.add('on');setTimeout(function(){$('#adPw').focus()},50);
   });
   $('#adOv').addEventListener('click',function(e){if(e.target.id==='adOv'||e.target.closest('[data-ad-close]'))$('#adOv').classList.remove('on')});
@@ -966,6 +981,43 @@ try{new IntersectionObserver(function(es,o){if(es[0].isIntersecting){on();o.disc
   });
   if(CM.pw)CMAPI.check(CM.pw).then(function(r){setAdmin(CM.pw,!!(r&&r.admin))}).catch(function(){});
   loadCounts();
+  /* ===== tool likes ===== */
+  var TL={counts:{},mine:{}};
+  try{TL.mine=JSON.parse(localStorage.getItem('rk_tool_liked')||'{}')}catch(e){}
+  var TLK='rk_tool_likes_local';
+  function tlLocal(){try{return JSON.parse(localStorage.getItem(TLK))||{}}catch(e){return{}}}
+  function paintLk(){
+    [].forEach.call(document.querySelectorAll('.btn-lk'),function(b){
+      var id=b.getAttribute('data-lk'),on=!!TL.mine[id],n=TL.counts[id]||0;
+      b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');
+      var s=b.querySelector('.lk-n');s.textContent=AR(n);s.classList.toggle('has',n>0);
+    });
+  }
+  function loadLikes(){
+    if(COMMENTS_API){fetch(COMMENTS_API+'?action=tlikes').then(function(r){return r.json()}).then(function(r){if(r&&r.likes){TL.counts=r.likes;paintLk()}}).catch(function(){})}
+    else{TL.counts=tlLocal();paintLk()}
+  }
+  function fxHeart(b){
+    try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return}catch(e){}
+    var r=b.getBoundingClientRect();
+    for(var i=0;i<6;i++){var s=document.createElement('span');s.className='lk-fx';s.textContent=i%2?'❤':'💖';
+      s.style.left=(r.left+r.width/2-9)+'px';s.style.top=(r.top+4)+'px';s.style.setProperty('--dx',((i-2.5)*14)+'px');s.style.animationDelay=(i*40)+'ms';
+      document.body.appendChild(s);setTimeout(function(x){x.remove()},1200,s)}
+  }
+  grid.addEventListener('click',function(e){
+    var b=e.target.closest('.btn-lk');if(!b)return;
+    var id=b.getAttribute('data-lk'),was=!!TL.mine[id],d=was?-1:1;
+    if(was)delete TL.mine[id];else TL.mine[id]=1;
+    TL.counts[id]=Math.max(0,(TL.counts[id]||0)+d);
+    try{localStorage.setItem('rk_tool_liked',JSON.stringify(TL.mine))}catch(x){}
+    if(!COMMENTS_API){try{localStorage.setItem(TLK,JSON.stringify(TL.counts))}catch(x){}}
+    else{post({action:'tlike',tool:id,delta:d}).then(function(r){if(r&&r.ok&&typeof r.likes==='number'){TL.counts[id]=r.likes;paintLk()}}).catch(function(){})}
+    paintLk();
+    if(!was){b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');fxHeart(b)}
+  });
+  try{new MutationObserver(paintLk).observe(grid,{childList:true})}catch(e){}
+  loadLikes();
+
   grid.addEventListener('click',function(e){
     var cp=e.target.closest('[data-copy]');
     if(cp){
