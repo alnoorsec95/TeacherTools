@@ -1,0 +1,209 @@
+{
+ "categories": [
+  {
+   "k": "national",
+   "t": "وطنية",
+   "i": "🏛️"
+  },
+  {
+   "k": "puzzle",
+   "t": "ألغاز وبازل",
+   "i": "🧩"
+  },
+  {
+   "k": "adventure",
+   "t": "مغامرات",
+   "i": "🏃"
+  },
+  {
+   "k": "arcade",
+   "t": "أركيد وسرعة",
+   "i": "⚡"
+  },
+  {
+   "k": "quiz",
+   "t": "معلومات ومسابقات",
+   "i": "🧠"
+  }
+ ],
+ "games": [
+  {
+   "id": "pearls-of-bahrain",
+   "title": "Pearls of Bahrain",
+   "by": "سارة التيتون",
+   "url": "games/pearls-of-bahrain.html",
+   "img": "assets/pearls-of-bahrain.jpg",
+   "tags": [
+    "national",
+    "arcade"
+   ],
+   "theme": "pearl",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "horizon-paths",
+   "title": "دروب الأفق",
+   "by": "جمان حسين محمد",
+   "url": "games/horizon-paths.html",
+   "img": "assets/horizon-paths.jpg",
+   "tags": [
+    "adventure"
+   ],
+   "theme": "race",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "escape-the-fort",
+   "title": "الهروب من القلعة",
+   "by": "فاطمة سعيد جعفر",
+   "url": "games/escape-the-fort.html",
+   "img": "assets/escape-the-fort.jpg",
+   "tags": [
+    "puzzle"
+   ],
+   "theme": "fort",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "pearl-sudoku",
+   "title": "سودوكو اللؤلؤ",
+   "by": "زهراء علي المختار · رقية حسين الحايكي",
+   "url": "games/pearl-sudoku.html",
+   "img": "assets/pearl-sudoku.jpg",
+   "tags": [
+    "puzzle"
+   ],
+   "theme": "space",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "who-wants-to-be-a-millionaire",
+   "title": "من سيربح المليون؟ – النسخة البحرينية",
+   "by": "أطياب منصور",
+   "url": "games/who-wants-to-be-a-millionaire.html",
+   "img": "assets/who-wants-to-be-a-millionaire.jpg",
+   "tags": [
+    "quiz",
+    "national"
+   ],
+   "theme": "maze",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "little-detective",
+   "title": "المحقق الصغير",
+   "by": "زهراء علي المختار · رقية حسين الحايكي",
+   "url": "games/little-detective.html",
+   "img": "assets/little-detective.jpg",
+   "tags": [
+    "puzzle"
+   ],
+   "theme": "tree",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "fox-lightning",
+   "title": "برق الثعلب",
+   "by": "طالبة 3فيز1",
+   "url": "games/fox-lightning.html",
+   "img": "assets/fox-lightning.jpg",
+   "tags": [
+    "adventure",
+    "arcade"
+   ],
+   "theme": "falcon",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "sparks-adventure",
+   "title": "Spark's Adventure",
+   "by": "",
+   "url": "",
+   "img": "assets/sparks-adventure.jpg",
+   "tags": [
+    "adventure"
+   ],
+   "theme": "quiz",
+   "soon": true,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "dilmun-land",
+   "title": "أرض دلمون",
+   "by": "زينب",
+   "url": "games/dilmun-land.html",
+   "img": "assets/dilmun-land.jpg",
+   "tags": [
+    "national",
+    "adventure"
+   ],
+   "theme": "pearl",
+   "soon": false,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "dilmun-ship",
+   "title": "سفينة دلمون",
+   "by": "",
+   "url": "",
+   "img": "",
+   "tags": [
+    "national"
+   ],
+   "theme": "ship",
+   "soon": true,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  },
+  {
+   "id": "garden-of-light",
+   "title": "حديقة النور",
+   "by": "",
+   "url": "",
+   "img": "",
+   "tags": [],
+   "theme": "garden",
+   "soon": true,
+   "added": "",
+   "updated": "",
+   "rev": "",
+   "note": ""
+  }
+ ]
+}

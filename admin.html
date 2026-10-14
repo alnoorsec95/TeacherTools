@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة المشرف — Al Noor Gaming Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#CE1126; --deep:#7E0A19; --gold:#F5B800; --teal:#0B6F8A;
+  --bg:#FFF8F2; --card:#FFFFFF; --ink:#2B0A10; --sub:#7A4A52; --line:rgba(126,10,25,.16); --soft:rgba(206,17,38,.07);
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme:dark){:root{--bg:#1A0C10; --card:#2A141B; --ink:#FBEFF1; --sub:#D9A9B1; --line:rgba(255,255,255,.16); --soft:rgba(255,255,255,.06)}}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:'Cairo',system-ui,sans-serif; min-height:100vh; padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+button,input,textarea{font:inherit; color:inherit}
+.top{background:linear-gradient(135deg,var(--red),var(--deep)); color:#fff; padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px}
+.top .in{max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.top h1{margin:0; font-size:1.25rem; font-weight:900; flex:1; min-width:180px}
+.top .chip2{background:rgba(255,255,255,.18); border-radius:999px; padding:5px 14px; font-weight:700; font-size:.88rem}
+.wrap{max-width:1100px; margin:0 auto; padding:26px 20px}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1.5px solid transparent; border-radius:12px; padding:10px 18px; font-weight:800; cursor:pointer; transition:.16s; white-space:nowrap}
+a.btn{text-decoration:none}
+.btn:disabled{opacity:.55; cursor:default}
+.btn.primary{background:linear-gradient(135deg,#E8283D,var(--red) 55%,var(--deep)); color:#fff; box-shadow:0 10px 20px -12px var(--red)}
+.btn.primary:not(:disabled):hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent; border-color:var(--line); color:var(--ink)}
+.btn.ghost:not(:disabled):hover{border-color:var(--red); background:var(--soft)}
+.btn.light{background:rgba(255,255,255,.18); color:#fff}
+.btn.light:hover{background:rgba(255,255,255,.3)}
+.btn.sm{padding:7px 14px; font-size:.9rem}
+.ib{display:inline-grid; place-items:center; width:38px; height:38px; border-radius:10px; border:1.5px solid var(--line); background:transparent; cursor:pointer; font-size:1.05rem; transition:.16s}
+.ib:hover{border-color:var(--red); background:var(--soft)}
+.ib.danger:hover{background:var(--red); color:#fff; border-color:var(--red)}
+.ib:disabled{opacity:.4; cursor:default}
+.field{display:grid; gap:6px; margin-bottom:16px}
+.field>label{font-weight:800; font-size:.95rem}
+.field small,.hint{color:var(--sub); font-weight:500; font-size:.85rem; line-height:1.7}
+.inp{width:100%; border:1.5px solid var(--line); border-radius:12px; padding:11px 14px; background:var(--card); outline:0; transition:.15s}
+.inp:focus{border-color:var(--red); box-shadow:0 0 0 3px rgba(206,17,38,.16)}
+textarea.inp{resize:vertical; min-height:68px}
+/* login */
+.login{max-width:520px; margin:42px auto 0; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:28px; box-shadow:0 20px 50px -26px rgba(126,10,25,.55)}
+.login h2{margin:0 0 6px; font-size:1.5rem; font-weight:900}
+.login p.lead{margin:0 0 22px; color:var(--sub); line-height:1.8}
+.row2{display:grid; grid-template-columns:2fr 1fr; gap:12px}
+.chk{display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:700}
+.chk input{width:18px; height:18px; accent-color:var(--red)}
+details.help{margin-top:18px; border-top:1px dashed var(--line); padding-top:14px}
+details.help summary{cursor:pointer; font-weight:800; color:var(--red)}
+details.help ol{margin:12px 0 0; padding-inline-start:22px; line-height:2; color:var(--sub)}
+.demo{display:block; margin:16px auto 0; background:none; border:0; color:var(--sub); text-decoration:underline; cursor:pointer; font-weight:700}
+.err{color:#C0182B; font-weight:700; font-size:.92rem; min-height:1.4em; margin:6px 0 0}
+/* dashboard */
+.bar{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:18px}
+.bar .grow{flex:1; min-width:200px}
+.pub{display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:14px; background:rgba(34,160,90,.12); border:1px solid rgba(34,160,90,.4); font-weight:700; margin-bottom:18px}
+.pub[hidden]{display:none}
+.pub .sp{flex:1}
+.demobar{padding:10px 16px; border-radius:14px; background:rgba(245,184,0,.2); border:1px solid rgba(245,184,0,.6); font-weight:700; margin-bottom:18px; line-height:1.7}
+.agrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px}
+.ac{background:var(--card); border:1px solid var(--line); border-radius:20px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 14px 30px -22px rgba(126,10,25,.6)}
+.th{position:relative; aspect-ratio:16/10; background:linear-gradient(135deg,var(--deep),var(--red)); overflow:hidden}
+.th img{width:100%; height:100%; object-fit:cover; display:block}
+.th .ph{position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.85); font-size:2.6rem; font-weight:900}
+.th .st{position:absolute; top:10px; inset-inline-end:10px; display:flex; gap:6px; flex-wrap:wrap}
+.tag{display:inline-flex; align-items:center; gap:4px; padding:3px 11px; border-radius:999px; font-size:.8rem; font-weight:900; background:rgba(0,0,0,.55); color:#fff}
+.tag.new{background:linear-gradient(135deg,#FFD84D,#F59E0B); color:#4A2600}
+.tag.upd{background:linear-gradient(135deg,#1FB5CC,#0B6F8A)}
+.tag.soon{background:rgba(206,17,38,.9)}
+.ab{padding:16px 18px 18px; display:flex; flex-direction:column; gap:10px; flex:1}
+.ab h3{margin:0; font-size:1.12rem; font-weight:900; line-height:1.5}
+.ab .by{margin:0; color:var(--sub); font-size:.92rem; min-height:1.4em}
+.tg{display:flex; gap:6px; flex-wrap:wrap; min-height:1.8em}
+.tg span{background:var(--soft); border-radius:999px; padding:2px 11px; font-size:.82rem; font-weight:700}
+.ax{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:auto; padding-top:6px}
+.th .tools{position:absolute; bottom:10px; inset-inline-start:10px; display:flex; gap:6px}
+.th .tools .ib{width:34px; height:34px; background:rgba(20,5,8,.62); border-color:transparent; color:#fff; backdrop-filter:blur(4px)}
+.th .tools .ib:hover:not(:disabled){background:var(--red)}
+.empty{text-align:center; padding:60px 20px; color:var(--sub); font-weight:700; line-height:2}
+/* modal */
+.ov{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(20,5,8,.62)}
+.ov.open{display:flex}
+.sheet{width:min(720px,100%); max-height:min(92vh,900px); display:flex; flex-direction:column; background:var(--card); border-radius:22px; overflow:hidden; box-shadow:0 34px 80px rgba(0,0,0,.5)}
+.sh-head{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 22px; border-bottom:1px solid var(--line)}
+.sh-head h2{margin:0; font-size:1.2rem; font-weight:900}
+.sh-body{overflow:auto; padding:8px 22px 6px}
+.sh-body section{padding:16px 0 4px; border-bottom:1px dashed var(--line)}
+.sh-body section:last-child{border-bottom:0}
+.sh-body h3{margin:0 0 14px; font-size:1.02rem; font-weight:900; display:flex; align-items:center; gap:10px}
+.sh-body h3 .n{display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--red); color:#fff; font-size:.85rem}
+.sh-body h3 small{color:var(--sub); font-weight:600; font-size:.82rem}
+.sh-foot{padding:14px 22px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); display:grid; gap:10px}
+.sh-foot .acts{display:flex; gap:10px; justify-content:flex-start}
+.sh-foot .err{min-height:0; margin:0}
+.chips{display:flex; gap:8px; flex-wrap:wrap}
+.cc{display:inline-flex; align-items:center; gap:6px; padding:7px 15px; border-radius:999px; border:1.5px solid var(--line); background:transparent; cursor:pointer; font-weight:800; font-size:.92rem; transition:.15s}
+.cc:hover{border-color:var(--red)}
+.cc[aria-pressed="true"]{background:linear-gradient(135deg,var(--red),var(--deep)); color:#fff; border-color:transparent}
+.addcat{display:flex; gap:8px; margin-top:10px}
+.addcat .inp{padding:8px 12px}
+.dz{border:2px dashed var(--line); border-radius:16px; padding:20px; text-align:center; transition:.15s; background:var(--soft)}
+.dz.over{border-color:var(--red); background:rgba(206,17,38,.12)}
+.dz .big{font-size:2rem; line-height:1}
+.dz p{margin:8px 0 14px; color:var(--sub); font-weight:700}
+.dz .btns{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+.fsum{display:flex; align-items:center; gap:12px; margin-top:12px; padding:12px 14px; border-radius:14px; border:1.5px solid rgba(34,160,90,.5); background:rgba(34,160,90,.1); font-weight:700}
+.fsum[hidden]{display:none}
+.fsum .t{flex:1; line-height:1.7}
+.fsum .t small{display:block; color:var(--sub); font-weight:600}
+.cvr{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.cvp{width:200px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; background:linear-gradient(135deg,var(--deep),var(--red)); display:grid; place-items:center; color:rgba(255,255,255,.7); font-weight:800; flex:none}
+.cvp img{width:100%; height:100%; object-fit:cover}
+.sw{position:relative; width:46px; height:26px; flex:none}
+.sw input{position:absolute; inset:0; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; z-index:2}
+.sw i{position:absolute; inset:0; border-radius:999px; background:rgba(128,128,128,.4); transition:.18s}
+.sw i::after{content:""; position:absolute; top:3px; inset-inline-start:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition:.18s}
+.sw input:checked+i{background:var(--red)}
+.sw input:checked+i::after{inset-inline-start:23px}
+.opt{display:flex; align-items:center; gap:12px; padding:6px 0 14px; font-weight:800}
+.opt small{display:block; color:var(--sub); font-weight:500}
+.disabled-sec{opacity:.45; pointer-events:none}
+.prog{display:grid; gap:6px}
+.prog[hidden]{display:none}
+.prog .tx{font-weight:700; font-size:.92rem}
+.prog .tr{height:8px; border-radius:99px; background:var(--soft); overflow:hidden}
+.prog .tr i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--red)); transition:width .25s}
+.cd{width:min(440px,100%); background:var(--card); border-radius:20px; padding:24px; box-shadow:0 34px 80px rgba(0,0,0,.5)}
+.cd h3{margin:0 0 8px; font-size:1.2rem}
+.cd p{margin:0 0 18px; color:var(--sub); line-height:1.8}
+.cd .acts{display:flex; gap:10px}
+.btn.red{background:var(--red); color:#fff}
+#toast{position:fixed; bottom:calc(24px + env(safe-area-inset-bottom,0px)); left:50%; transform:translate(-50%,30px); background:#2B0A10; color:#fff; padding:12px 22px; border-radius:14px; font-weight:800; opacity:0; pointer-events:none; transition:.25s; z-index:80; max-width:92vw; text-align:center}
+#toast.show{opacity:1; transform:translate(-50%,0)}
+@media(max-width:560px){.row2{grid-template-columns:1fr}.wrap{padding:18px 14px}.sh-body,.sh-head,.sh-foot{padding-inline:16px}.cvp{width:100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <h1>⚙️ لوحة المشرف</h1>
+  <span class="chip2" id="repoChip" hidden></span>
+  <a class="btn light sm" href="index.html" id="siteLink">عرض الموقع</a>
+  <button class="btn light sm" id="logout" type="button" hidden>خروج</button>
+</div></header>
+<main class="wrap" id="app"></main>
+
+<div class="ov" id="ed"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="edT">
+  <div class="sh-head"><h2 id="edT">إضافة لعبة جديدة</h2><button class="ib" id="edX" type="button" aria-label="إغلاق">✕</button></div>
+  <div class="sh-body">
+    <section>
+      <h3><span class="n">1</span>معلومات اللعبة</h3>
+      <div class="field"><label for="fTitle">اسم اللعبة</label><input class="inp" id="fTitle" maxlength="80" placeholder="مثال: متاهة اللؤلؤ" autocomplete="off"></div>
+      <div class="field"><label for="fBy">إعداد الطالبات</label><input class="inp" id="fBy" maxlength="120" placeholder="مثال: سارة التيتون · فاطمة سعيد" autocomplete="off"><small>افصلي بين الأسماء بنقطة وسط (·) أو فاصلة (،)</small></div>
+      <div class="field"><label>نوع اللعبة <small>(يمكن اختيار أكثر من نوع)</small></label>
+        <div class="chips" id="catSel"></div>
+        <div class="addcat"><input class="inp" id="newCat" maxlength="24" placeholder="نوع جديد…" autocomplete="off"><button class="btn ghost sm" id="addCatBtn" type="button">＋ إضافة نوع</button></div>
+      </div>
+    </section>
+    <section id="secFiles">
+      <h3><span class="n">2</span>ملفات اللعبة <small id="filesHint"></small></h3>
+      <div class="dz" id="dz">
+        <div class="big">📦</div>
+        <p>اسحبي ملف اللعبة هنا، أو اختاري من الأزرار</p>
+        <div class="btns">
+          <button class="btn ghost sm" id="bHtml" type="button">📄 ملف HTML</button>
+          <button class="btn ghost sm" id="bDir" type="button">📁 مجلد اللعبة</button>
+          <button class="btn ghost sm" id="bZip" type="button">🗜️ ملف ZIP</button>
+        </div>
+      </div>
+      <div class="fsum" id="fSum" hidden><span aria-hidden="true">✅</span><div class="t" id="fSumT"></div><button class="ib" id="fClr" type="button" aria-label="إزالة الملفات">✕</button></div>
+      <p class="err" id="fErr"></p>
+      <input type="file" id="inHtml" accept=".html,.htm" hidden>
+      <input type="file" id="inDir" webkitdirectory multiple hidden>
+      <input type="file" id="inZip" accept=".zip,application/zip" hidden>
+    </section>
+    <section>
+      <h3><span class="n">3</span>صورة الغلاف <small>اختياري</small></h3>
+      <div class="cvr">
+        <div class="cvp" id="cvp"><span>بدون غلاف</span></div>
+        <div style="display:grid;gap:8px">
+          <button class="btn ghost sm" id="bCover" type="button">🖼️ اختيار صورة</button>
+          <button class="btn ghost sm" id="bCoverX" type="button" hidden>إزالة الصورة الجديدة</button>
+          <small class="hint">تُقصّ تلقائياً بنسبة 16:10. أنسب لقطة شاشة من داخل اللعبة.</small>
+        </div>
+      </div>
+      <input type="file" id="inCover" accept="image/*" hidden>
+    </section>
+    <section>
+      <h3><span class="n">4</span>خيارات</h3>
+      <label class="opt"><span class="sw"><input type="checkbox" id="oSoon"><i></i></span><span>قريباً<small>تظهر البطاقة بختم «قريباً» دون زر لعب</small></span></label>
+      <label class="opt" id="oBadgeRow"><span class="sw"><input type="checkbox" id="oBadge" checked><i></i></span><span>إظهار شارة «تحديث»<small>تظهر على البطاقة لمدة 14 يوماً بعد التحديث</small></span></label>
+      <div class="field"><label for="fNote">ملاحظة التحديث <small>(اختياري — تظهر عند مرور المؤشر على الشارة)</small></label><input class="inp" id="fNote" maxlength="80" placeholder="مثال: أضفنا مرحلة جديدة" autocomplete="off"></div>
+    </section>
+  </div>
+  <div class="sh-foot">
+    <div class="prog" id="prog" hidden><div class="tx" id="progT"></div><div class="tr"><i id="progB"></i></div></div>
+    <p class="err" id="edErr"></p>
+    <div class="acts"><button class="btn primary" id="edS" type="button">حفظ ونشر</button><button class="btn ghost" id="edC" type="button">إلغاء</button></div>
+  </div>
+</div></div>
+
+<div class="ov" id="cf"><div class="cd" role="alertdialog" aria-modal="true" aria-labelledby="cfT">
+  <h3 id="cfT"></h3><p id="cfP"></p>
+  <div class="acts"><button class="btn red" id="cfOk" type="button">حذف نهائي</button><button class="btn ghost" id="cfNo" type="button">تراجع</button></div>
+</div></div>
+<div id="toast" role="status"></div>
+
+<script src="vendor/jszip.min.js"></script>
+<script>
+"use strict";
+(()=>{
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const API=window.__API_BASE||"https://api.github.com";
+const SAMPLE=window.__SAMPLE_GAMES||null;
+const BADGE_DAYS=14, MAX_TOTAL=80*1024*1024;
+const THEME_OF={national:"pearl",puzzle:"maze",adventure:"tree",arcade:"race",quiz:"quiz"};
+const DEFAULT_CATS=[{k:"national",t:"وطنية",i:"🏛️"},{k:"puzzle",t:"ألغاز وبازل",i:"🧩"},{k:"adventure",t:"مغامرات",i:"🏃"},{k:"arcade",t:"أركيد وسرعة",i:"⚡"},{k:"quiz",t:"معلومات ومسابقات",i:"🧠"}];
+const JUNK=/(^|\/)(\.[^/]*|__MACOSX|Thumbs\.db|node_modules)(\/|$)/i;
+
+/* ---------- utils ---------- */
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),3200);};
+const fmtSize=n=>n>=1048576?(n/1048576).toFixed(1)+" MB":Math.max(1,Math.round(n/1024))+" KB";
+const toB64=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s);};
+const fromB64=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\s/g,"")),c=>c.charCodeAt(0)));
+const slugify=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+const rnd=()=>Math.random().toString(36).slice(2,6);
+const revId=()=>Date.now().toString(36);
+const nowIso=()=>new Date().toISOString();
+const encPath=p=>p.split("/").map(encodeURIComponent).join("/");
+const pathOfUrl=u=>{try{return decodeURI(String(u||"").split("?")[0])}catch(e){return String(u||"").split("?")[0]}};
+const uniqueId=(base,games)=>{let id=base||("game-"+rnd()),n=2;while(games.some(g=>g.id===id))id=(base||"game")+"-"+(n++);return id;};
+const badgeKind=g=>{if(g.soon)return"";const a=Date.parse(g.added)||0,u=Date.parse(g.updated)||0,t=Math.max(a,u);if(!t||Date.now()-t>BADGE_DAYS*864e5)return"";return u&&(!a||u-a>864e5)?"upd":"new";};
+const errMsg=e=>{
+  if(e&&e.status===401)return"رمز GitHub غير صالح أو منتهي الصلاحية.";
+  if(e&&e.status===403)return"لا تملك صلاحية الكتابة على المستودع. تأكدي أن الرمز يملك صلاحية Contents: Read and write.";
+  if(e&&e.status===404)return"المستودع أو الفرع غير موجود، أو أن الرمز لا يشمل هذا المستودع.";
+  if(e&&(e.status===409||e.status===422))return"حدث تعارض أثناء الحفظ، أعيدي المحاولة بعد لحظات.";
+  if(e instanceof TypeError)return"تعذّر الاتصال بالإنترنت.";
+  return (e&&e.message)||"حدث خطأ غير متوقع.";
+};
+
+/* ---------- storage of login ---------- */
+const saved=()=>{try{return JSON.parse(localStorage.getItem("alnoor_admin")||sessionStorage.getItem("alnoor_admin")||"null")}catch(e){return null}};
+const persist=(o,remember)=>{try{localStorage.removeItem("alnoor_admin");sessionStorage.removeItem("alnoor_admin");(remember?localStorage:sessionStorage).setItem("alnoor_admin",JSON.stringify(o))}catch(e){}};
+const forget=()=>{try{localStorage.removeItem("alnoor_admin");sessionStorage.removeItem("alnoor_admin")}catch(e){}};
+const guessRepo=()=>{const m=location.hostname.match(/^([^.]+)\.github\.io$/);if(!m)return"";const seg=location.pathname.split("/").filter(Boolean)[0];return seg&&!/\.html?$/i.test(seg)?m[1]+"/"+seg:m[1]+"/"+m[1]+".github.io";};
+
+/* ---------- backends ---------- */
+class GH{
+  constructor(repo,branch,token){this.repo=repo;this.branch=branch;this.token=token;this.br=branch.split("/").map(encodeURIComponent).join("/");}
+  async api(path,o={}){
+    const r=await fetch(API+path,{method:o.method||"GET",cache:"no-store",
+      headers:{Authorization:"Bearer "+this.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(o.body?{"Content-Type":"application/json"}:{})},
+      body:o.body?JSON.stringify(o.body):undefined});
+    if(!r.ok){let m="";try{m=(await r.json()).message}catch(e){}const e=new Error(m||r.statusText);e.status=r.status;throw e;}
+    return r.status===204?null:r.json();
+  }
+  async verify(){const d=await this.api(`/repos/${this.repo}`);if(!(d.permissions&&d.permissions.push)){const e=new Error("no push");e.status=403;throw e;}return d;}
+  async getText(path){try{const d=await this.api(`/repos/${this.repo}/contents/${encodeURI(path)}?ref=${encodeURIComponent(this.branch)}`);return d&&d.content?fromB64(d.content):null;}catch(e){if(e.status===404)return null;throw e;}}
+  async commit({upserts,deletePaths=[],deletePrefixes=[],message},progress=()=>{}){
+    const total=upserts.length,blobs=[],queue=upserts.map((u,i)=>[i,u]);let done=0;
+    const worker=async()=>{for(;;){const n=queue.shift();if(!n)return;const [i,u]=n;
+      const bytes=typeof u.data==="string"?new TextEncoder().encode(u.data):u.data;
+      const r=await this.api(`/repos/${this.repo}/git/blobs`,{method:"POST",body:{content:toB64(bytes),encoding:"base64"}});
+      blobs[i]={path:u.path,sha:r.sha};done++;progress(`رفع الملفات ${done} / ${total}`,.08+.72*done/total);}};
+    await Promise.all([worker(),worker(),worker()]);
+    for(let attempt=0;;attempt++){
+      try{
+        progress("إنشاء النسخة الجديدة على GitHub…",.86);
+        const ref=await this.api(`/repos/${this.repo}/git/ref/heads/${this.br}`);
+        const head=ref.object.sha,cm=await this.api(`/repos/${this.repo}/git/commits/${head}`),base=cm.tree.sha;
+        let dels=[];
+        if(deletePaths.length||deletePrefixes.length){
+          const t=await this.api(`/repos/${this.repo}/git/trees/${base}?recursive=1`),keep=new Set(upserts.map(u=>u.path));
+          dels=t.tree.filter(e=>e.type==="blob"&&!keep.has(e.path)&&(deletePaths.includes(e.path)||deletePrefixes.some(p=>e.path.startsWith(p))))
+            .map(e=>({path:e.path,mode:"100644",type:"blob",sha:null}));
+        }
+        const tree=await this.api(`/repos/${this.repo}/git/trees`,{method:"POST",body:{base_tree:base,tree:[...blobs.map(b=>({path:b.path,mode:"100644",type:"blob",sha:b.sha})),...dels]}});
+        const nc=await this.api(`/repos/${this.repo}/git/commits`,{method:"POST",body:{message,tree:tree.sha,parents:[head]}});
+        await this.api(`/repos/${this.repo}/git/refs/heads/${this.br}`,{method:"PATCH",body:{sha:nc.sha,force:false}});
+        progress("تم الرفع ✔",1);return;
+      }catch(e){if((e.status===422||e.status===409)&&attempt<2)continue;throw e;}
+    }
+  }
+}
+class Demo{
+  constructor(games){this.files=new Map([["games.json",games]]);this.demo=true;}
+  async verify(){return{};}
+  async getText(p){const v=this.files.get(p);return typeof v==="string"?v:null;}
+  async commit({upserts,deletePaths=[],deletePrefixes=[],message},progress=()=>{}){
+    for(let i=0;i<upserts.length;i++){progress(`رفع الملفات ${i+1} / ${upserts.length}`,.08+.8*(i+1)/upserts.length);await new Promise(r=>setTimeout(r,40));}
+    const keep=new Set(upserts.map(u=>u.path));
+    for(const p of [...this.files.keys()])if(!keep.has(p)&&(deletePaths.includes(p)||deletePrefixes.some(x=>p.startsWith(x))))this.files.delete(p);
+    upserts.forEach(u=>this.files.set(u.path,u.data));progress("تم الرفع ✔",1);
+  }
+}
+
+/* ---------- state ---------- */
+let B=null,DATA={categories:[],games:[]},CFG=null;const localPrev={};
+const catName=k=>{const c=DATA.categories.find(x=>x.k===k);return c?`${c.i||""} ${c.t}`.trim():k;};
+const app=$("#app");
+
+async function publish(message,build,progress){
+  progress("قراءة آخر نسخة من القائمة…",.03);
+  const t=await B.getText("games.json");let data;
+  try{data=t?JSON.parse(t):{}}catch(e){throw new Error("ملف games.json تالف في المستودع.");}
+  data.categories=Array.isArray(data.categories)&&data.categories.length?data.categories:JSON.parse(JSON.stringify(DEFAULT_CATS));
+  data.games=Array.isArray(data.games)?data.games:[];
+  const plan=(await build(data))||{};
+  const upserts=[...(plan.upserts||[]),{path:"games.json",data:JSON.stringify(data,null,1)}];
+  await B.commit({upserts,deletePaths:plan.deletePaths||[],deletePrefixes:plan.deletePrefixes||[],message},progress);
+  DATA=data;renderDash();showPublished();
+}
+function showPublished(){const p=$("#pub");if(!p)return;p.hidden=false;p.querySelector(".msg").textContent=B.demo?"تمت العملية في الوضع التجريبي (لم يُرسل شيء إلى GitHub).":"تم النشر على GitHub ✔ — سيظهر التغيير على الموقع خلال دقيقة إلى دقيقتين.";}
+
+/* ---------- login ---------- */
+function renderLogin(msg){
+  $("#repoChip").hidden=true;$("#logout").hidden=true;
+  const s=saved()||{};
+  app.innerHTML=`<div class="login">
+    <h2>تسجيل دخول المشرف</h2>
+    <p class="lead">أدخلي بيانات مستودع GitHub الخاص بالموقع ورمز الوصول. لا يُرسَل الرمز إلا إلى GitHub مباشرة من متصفحك.</p>
+    <div class="row2">
+      <div class="field"><label for="lRepo">المستودع</label><input class="inp" id="lRepo" dir="ltr" placeholder="username/repository" value="${esc(s.repo||guessRepo())}" autocomplete="off"></div>
+      <div class="field"><label for="lBr">الفرع</label><input class="inp" id="lBr" dir="ltr" value="${esc(s.branch||"main")}" autocomplete="off"></div>
+    </div>
+    <div class="field"><label for="lTok">رمز الوصول (Token)</label><input class="inp" id="lTok" type="password" dir="ltr" placeholder="github_pat_…" value="${esc(s.token||"")}" autocomplete="off"></div>
+    <label class="chk"><input type="checkbox" id="lRem" ${s.remember?"checked":""}> تذكّر هذا الجهاز <span class="hint">(لا تفعّليها على جهاز مشترك)</span></label>
+    <p class="err" id="lErr">${esc(msg||"")}</p>
+    <button class="btn primary" id="lGo" type="button" style="width:100%">دخول</button>
+    <button class="demo" id="lDemo" type="button">جرّبي الوضع التجريبي دون ربط GitHub</button>
+    <details class="help"><summary>كيف أحصل على رمز الوصول؟</summary>
+      <ol>
+        <li>في GitHub: الصورة الشخصية ← <b>Settings</b> ← <b>Developer settings</b> ← <b>Personal access tokens</b> ← <b>Fine-grained tokens</b> ← <b>Generate new token</b>.</li>
+        <li><b>Repository access</b>: اختاري <b>Only select repositories</b> ثم مستودع الموقع فقط.</li>
+        <li><b>Permissions ← Repository permissions ← Contents</b>: اختاري <b>Read and write</b>.</li>
+        <li>اختاري مدة قصيرة للصلاحية (مثلاً 30 يوماً)، ثم أنشئي الرمز وانسخيه والصقيه هنا.</li>
+      </ol></details>
+  </div>`;
+  $("#lGo").onclick=login;
+  $("#lTok").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+  $("#lDemo").onclick=startDemo;
+}
+async function login(){
+  const repo=$("#lRepo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$/,"").replace(/\/$/,""),branch=$("#lBr").value.trim()||"main",token=$("#lTok").value.trim(),rem=$("#lRem").checked;
+  const err=$("#lErr");err.textContent="";
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo))return err.textContent="اكتبي اسم المستودع بصيغة username/repository";
+  if(!token)return err.textContent="الصقي رمز الوصول.";
+  const btn=$("#lGo");btn.disabled=true;btn.textContent="جارٍ التحقق…";
+  try{
+    const gh=new GH(repo,branch,token);await gh.verify();B=gh;CFG={repo,branch,token,remember:rem};persist(CFG,rem);
+    await loadData();renderDash();
+  }catch(e){err.textContent=errMsg(e);btn.disabled=false;btn.textContent="دخول";}
+}
+async function startDemo(){
+  let seed=null;
+  try{const r=await fetch("games.json",{cache:"no-store"});if(r.ok)seed=await r.text();}catch(e){}
+  if(!seed&&SAMPLE)seed=JSON.stringify(SAMPLE);
+  if(!seed)seed=JSON.stringify({categories:DEFAULT_CATS,games:[]});
+  B=new Demo(seed);CFG={repo:"demo/al-noor-gaming-studio",demo:true};await loadData();renderDash();
+}
+async function loadData(){
+  const t=await B.getText("games.json");let d={};try{d=t?JSON.parse(t):{}}catch(e){}
+  DATA={categories:Array.isArray(d.categories)&&d.categories.length?d.categories:JSON.parse(JSON.stringify(DEFAULT_CATS)),games:Array.isArray(d.games)?d.games:[]};
+}
+$("#logout").onclick=()=>{forget();B=null;renderLogin();};
+
+/* ---------- dashboard ---------- */
+let QUERY="";
+function thumb(g){
+  const src=localPrev[pathOfUrl(g.img)]||(g.img?g.img+(g.rev?"?v="+encodeURIComponent(g.rev):""):"");
+  const ch=esc(Array.from(g.title||"؟")[0]);
+  return src?`<img src="${esc(src)}" alt="" loading="lazy" data-ph="${ch}">`:`<div class="ph">${ch}</div>`;
+}
+function renderDash(){
+  $("#repoChip").hidden=false;$("#repoChip").textContent=CFG.repo;$("#logout").hidden=false;
+  const list=DATA.games.map((g,i)=>({g,i})).filter(x=>!QUERY||(x.g.title+" "+x.g.by).toLowerCase().includes(QUERY));
+  const keep=$("#pub")?!$("#pub").hidden:false;
+  app.innerHTML=`
+    ${B.demo?`<div class="demobar">🧪 الوضع التجريبي: جرّبي الإضافة والتعديل والحذف بحرية، فلا يُحفظ أي شيء على GitHub.</div>`:""}
+    <div class="pub" id="pub" ${keep?"":"hidden"}><span>✅</span><span class="msg"></span><span class="sp"></span><a class="btn ghost sm" href="index.html" target="_blank" rel="noopener">فتح الموقع</a></div>
+    <div class="bar">
+      <input class="inp grow" id="q" type="search" placeholder="🔎 ابحثي عن لعبة أو طالبة…" value="${esc(QUERY)}" aria-label="بحث">
+      <button class="btn primary" id="addBtn" type="button">＋ إضافة لعبة جديدة</button>
+    </div>
+    ${list.length?`<div class="agrid">${list.map(({g,i})=>card(g,i)).join("")}</div>`:`<div class="empty">${DATA.games.length?"لا توجد نتائج مطابقة.":"لا توجد ألعاب بعد.<br>اضغطي «إضافة لعبة جديدة» لتبدأي."}</div>`}`;
+  if(keep)showPublished();
+  $$(".th img").forEach(im=>im.addEventListener("error",()=>{const d=document.createElement("div");d.className="ph";d.textContent=im.dataset.ph;im.replaceWith(d);},{once:true}));
+  $("#addBtn").onclick=()=>openEditor("add");
+  $("#q").oninput=e=>{QUERY=e.target.value.trim().toLowerCase();const pos=e.target.selectionStart;renderDash();const q=$("#q");q.focus();q.setSelectionRange(pos,pos);};
+  $$(".ac [data-act]").forEach(b=>b.onclick=()=>act(b.dataset.act,b.closest(".ac").dataset.id));
+}
+function card(g,i){
+  const k=badgeKind(g),n=DATA.games.length;
+  const st=[g.soon?`<span class="tag soon">قريباً</span>`:"",k==="new"?`<span class="tag new">✨ جديدة</span>`:"",k==="upd"?`<span class="tag upd">🔄 تحديث</span>`:""].join("");
+  return `<article class="ac" data-id="${esc(g.id)}">
+    <div class="th">${thumb(g)}<div class="st">${st}</div>
+      <div class="tools">
+        <button class="ib" data-act="earlier" type="button" title="تقديم في الترتيب" aria-label="تقديم في الترتيب" ${i===0?"disabled":""}>→</button>
+        <button class="ib" data-act="later" type="button" title="تأخير في الترتيب" aria-label="تأخير في الترتيب" ${i===n-1?"disabled":""}>←</button>
+        <button class="ib danger" data-act="del" type="button" title="حذف اللعبة" aria-label="حذف اللعبة">🗑</button>
+      </div></div>
+    <div class="ab">
+      <h3>${esc(g.title)}</h3>
+      <p class="by">${g.by?esc(g.by):"—"}</p>
+      <div class="tg">${(g.tags||[]).map(t=>`<span>${esc(catName(t))}</span>`).join("")}</div>
+      <div class="ax">
+        <button class="btn ghost sm" data-act="edit" type="button">✏️ تعديل</button>
+        <button class="btn ghost sm" data-act="files" type="button">⬆️ تحديث الملفات</button>
+      </div>
+    </div></article>`;
+}
+async function act(a,id){
+  const g=DATA.games.find(x=>x.id===id);if(!g)return;
+  if(a==="edit")return openEditor("edit",g);
+  if(a==="files")return openEditor("edit",g,true);
+  if(a==="del")return confirmDelete(g);
+  if(a==="earlier"||a==="later"){
+    const dir=a==="earlier"?-1:1;
+    try{await publish(`ترتيب: ${g.title}`,data=>{const i=data.games.findIndex(x=>x.id===id),j=i+dir;if(i<0||j<0||j>=data.games.length)return;[data.games[i],data.games[j]]=[data.games[j],data.games[i]];},()=>{});}
+    catch(e){toast(errMsg(e));}
+  }
+}
+
+/* ---------- delete ---------- */
+function confirmDelete(g){
+  $("#cfT").textContent=`حذف «${g.title}»؟`;
+  $("#cfP").textContent="سيتم حذف البطاقة وكل ملفات اللعبة وصورة الغلاف من الموقع. لا يمكن التراجع من هذه اللوحة.";
+  const cf=$("#cf"),ok=$("#cfOk");cf.classList.add("open");ok.disabled=false;ok.textContent="حذف نهائي";
+  $("#cfNo").onclick=()=>cf.classList.remove("open");
+  ok.onclick=async()=>{ok.disabled=true;ok.textContent="جارٍ الحذف…";
+    try{
+      await publish(`حذف لعبة: ${g.title}`,data=>{
+        const i=data.games.findIndex(x=>x.id===g.id);if(i<0)throw new Error("اللعبة محذوفة مسبقاً.");
+        const cur=data.games[i];data.games.splice(i,1);
+        const plan={deletePaths:[],deletePrefixes:[]},dir=`games/${cur.id}/`,p=pathOfUrl(cur.url);
+        if(cur.id)plan.deletePrefixes.push(dir);
+        if(p&&p.startsWith("games/")&&!p.startsWith(dir))plan.deletePaths.push(p);
+        const im=pathOfUrl(cur.img);if(im&&im.startsWith("assets/"))plan.deletePaths.push(im);
+        return plan;
+      },()=>{});
+      cf.classList.remove("open");toast("تم حذف اللعبة");
+    }catch(e){toast(errMsg(e));ok.disabled=false;ok.textContent="حذف نهائي";}
+  };
+}
+
+/* ---------- editor ---------- */
+let E=null;
+const ed=$("#ed");
+function openEditor(mode,g,focusFiles){
+  E={mode,g:g||null,files:null,entry:"",cover:null,coverURL:"",tags:new Set(g?g.tags||[]:[]),newCats:[],busy:false};
+  $("#edT").textContent=mode==="add"?"إضافة لعبة جديدة":`تعديل: ${g.title}`;
+  $("#fTitle").value=g?g.title:"";$("#fBy").value=g?g.by||"":"";$("#fNote").value=g?g.note||"":"";
+  $("#oSoon").checked=g?!!g.soon:false;$("#oBadge").checked=true;
+  $("#oBadgeRow").hidden=mode==="add";
+  $("#filesHint").textContent=mode==="add"?"":"اتركيها فارغة إن لم تريدي تغيير ملفات اللعبة";
+  $("#fErr").textContent="";$("#edErr").textContent="";$("#prog").hidden=true;
+  $("#newCat").value="";
+  renderCats();renderFiles();renderCover();syncSoon();
+  $("#edS").disabled=false;$("#edS").textContent=mode==="add"?"حفظ ونشر":"حفظ التعديلات ونشرها";
+  ed.classList.add("open");document.body.style.overflow="hidden";
+  setTimeout(()=>{if(focusFiles){const s=$("#secFiles");s.scrollIntoView({block:"center"});s.animate([{background:"rgba(245,184,0,.35)"},{background:"transparent"}],{duration:1400});}else $("#fTitle").focus();},60);
+}
+function closeEditor(force){if(E&&E.busy&&!force)return;ed.classList.remove("open");document.body.style.overflow="";E=null;}
+function renderCats(){
+  const all=[...DATA.categories,...E.newCats];
+  $("#catSel").innerHTML=all.map(c=>`<button type="button" class="cc" data-k="${esc(c.k)}" aria-pressed="${E.tags.has(c.k)}">${esc(c.i||"")} ${esc(c.t)}</button>`).join("");
+  $$("#catSel .cc").forEach(b=>b.onclick=()=>{const k=b.dataset.k;E.tags.has(k)?E.tags.delete(k):E.tags.add(k);b.setAttribute("aria-pressed",String(E.tags.has(k)));});
+}
+$("#addCatBtn").onclick=()=>{
+  if(!E)return;const raw=$("#newCat").value.trim();if(!raw)return;
+  const all=[...DATA.categories,...E.newCats];
+  const ex=all.find(c=>c.t===raw);if(ex){E.tags.add(ex.k);renderCats();$("#newCat").value="";return;}
+  const m=raw.match(/^(\p{Extended_Pictographic}\uFE0F?)\s*(.*)$/u);
+  const c={k:"c-"+revId()+rnd(),t:(m?m[2]:raw).trim()||raw,i:m?m[1]:"🎮"};
+  E.newCats.push(c);E.tags.add(c.k);renderCats();$("#newCat").value="";
+};
+$("#newCat").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("#addCatBtn").click();}});
+function syncSoon(){$("#secFiles").classList.toggle("disabled-sec",$("#oSoon").checked);}
+$("#oSoon").onchange=syncSoon;
+
+function renderFiles(){
+  const box=$("#fSum");
+  if(!E.files){box.hidden=true;
+    if(E.mode==="edit"&&E.g&&E.g.url){$("#fSum").hidden=false;$("#fSum").style.borderColor="var(--line)";$("#fSum").style.background="var(--soft)";
+      $("#fSumT").innerHTML=`الملفات الحالية: <span dir="ltr">${esc(pathOfUrl(E.g.url))}</span><small>اختاري ملفاً أو مجلداً جديداً لاستبدالها</small>`;$("#fClr").hidden=true;}
+    return;}
+  const tot=E.files.reduce((a,f)=>a+f.size,0);
+  box.style.borderColor="";box.style.background="";box.hidden=false;$("#fClr").hidden=false;
+  $("#fSumT").innerHTML=`${E.files.length} ${E.files.length===1?"ملف":"ملفات"} · ${fmtSize(tot)}<small>الملف الرئيسي: <span dir="ltr">${esc(E.entry)}</span></small>`;
+}
+$("#fClr").onclick=()=>{E.files=null;E.entry="";$("#fErr").textContent="";renderFiles();};
+async function setFiles(items){
+  const err=$("#fErr");err.textContent="";
+  items=items.filter(i=>i.path&&!JUNK.test(i.path));
+  if(!items.length){err.textContent="لم أجد ملفات صالحة في اختيارك.";return;}
+  const root=items.filter(i=>!i.path.includes("/")),htmls=root.filter(i=>/\.html?$/i.test(i.path));
+  const entry=root.find(i=>/^index\.html?$/i.test(i.path))||(htmls.length===1?htmls[0]:null);
+  if(!entry){err.textContent="لم أجد ملف index.html في المجلد الرئيسي. سمّي الملف الرئيسي للعبة index.html ثم أعيدي المحاولة.";return;}
+  const tot=items.reduce((a,f)=>a+f.size,0);
+  if(tot>MAX_TOTAL){err.textContent=`الحجم الكلي (${fmtSize(tot)}) أكبر من الحد المسموح (${fmtSize(MAX_TOTAL)}).`;return;}
+  E.files=items;E.entry=entry.path;renderFiles();
+}
+const fromFile=(f,path)=>({path,size:f.size,read:async()=>new Uint8Array(await f.arrayBuffer())});
+$("#bHtml").onclick=()=>$("#inHtml").click();$("#bDir").onclick=()=>$("#inDir").click();$("#bZip").onclick=()=>$("#inZip").click();
+$("#inHtml").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(f)await setFiles([fromFile(f,"index.html")]);};
+$("#inDir").onchange=async e=>{const fs=[...e.target.files];e.target.value="";
+  await setFiles(fs.map(f=>fromFile(f,(f.webkitRelativePath||f.name).split("/").slice(1).join("/")||f.name)));};
+$("#inZip").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(f)await readZip(f);};
+async function readZip(f){
+  const err=$("#fErr");
+  if(!window.JSZip){err.textContent="تعذّر تحميل أداة ZIP. استخدمي «مجلد اللعبة» بدلاً منها.";return;}
+  err.textContent="جارٍ قراءة ملف ZIP…";
+  try{
+    const z=await JSZip.loadAsync(f),ents=[];z.forEach((p,en)=>{if(!en.dir)ents.push([p,en]);});
+    if(!ents.length){err.textContent="ملف ZIP فارغ.";return;}
+    let paths=ents.map(x=>x[0]);const first=paths[0].split("/")[0];
+    const strip=paths.every(p=>p.includes("/")&&p.split("/")[0]===first);
+    const items=[];
+    for(const [p,en] of ents){const bytes=await en.async("uint8array");items.push({path:strip?p.split("/").slice(1).join("/"):p,size:bytes.length,read:async()=>bytes});}
+    err.textContent="";await setFiles(items);
+  }catch(e){err.textContent="تعذّرت قراءة ملف ZIP. تأكدي أنه غير تالف.";}
+}
+const dz=$("#dz");
+["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("over");}));
+dz.addEventListener("drop",async e=>{
+  if(!E)return;const err=$("#fErr");
+  const its=[...(e.dataTransfer.items||[])];
+  if(its.some(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()&&i.webkitGetAsEntry().isDirectory)){err.textContent="لرفع مجلد استخدمي زر «📁 مجلد اللعبة».";return;}
+  const fs=[...e.dataTransfer.files];if(!fs.length)return;
+  if(fs.length===1&&/\.zip$/i.test(fs[0].name))return readZip(fs[0]);
+  if(fs.length===1&&/\.html?$/i.test(fs[0].name))return setFiles([fromFile(fs[0],"index.html")]);
+  await setFiles(fs.map(f=>fromFile(f,f.name)));
+});
+
+/* cover */
+function renderCover(){
+  const cvp=$("#cvp"),g=E.g;let src=E.coverURL;
+  if(!src&&g&&g.img)src=localPrev[pathOfUrl(g.img)]||g.img+(g.rev?"?v="+encodeURIComponent(g.rev):"");
+  cvp.innerHTML=src?`<img src="${esc(src)}" alt="">`:`<span>بدون غلاف</span>`;
+  $("#bCoverX").hidden=!E.cover;
+}
+$("#bCover").onclick=()=>$("#inCover").click();
+$("#bCoverX").onclick=()=>{if(E.coverURL)URL.revokeObjectURL(E.coverURL);E.cover=null;E.coverURL="";renderCover();};
+$("#inCover").onchange=async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  try{
+    const bmp=await createImageBitmap(f),W=1000,H=625,c=document.createElement("canvas");c.width=W;c.height=H;
+    const r=Math.max(W/bmp.width,H/bmp.height),w=bmp.width*r,h=bmp.height*r,x=c.getContext("2d");
+    x.fillStyle="#000";x.fillRect(0,0,W,H);x.drawImage(bmp,(W-w)/2,(H-h)/2,w,h);
+    const blob=await new Promise(res=>c.toBlob(res,"image/jpeg",.86));
+    if(E.coverURL)URL.revokeObjectURL(E.coverURL);
+    E.cover=new Uint8Array(await blob.arrayBuffer());E.coverURL=URL.createObjectURL(blob);renderCover();
+  }catch(err){toast("تعذّرت قراءة الصورة، جرّبي صورة أخرى.");}
+};
+
+/* save */
+const setProg=(t,f)=>{$("#prog").hidden=false;$("#progT").textContent=t;$("#progB").style.width=Math.round((f||0)*100)+"%";};
+$("#edX").onclick=()=>closeEditor();$("#edC").onclick=()=>closeEditor();
+ed.addEventListener("mousedown",e=>{if(e.target===ed)closeEditor();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("#cf").classList.contains("open"))$("#cf").classList.remove("open");else if(E)closeEditor();}});
+$("#edS").onclick=async()=>{
+  if(!E||E.busy)return;
+  const title=$("#fTitle").value.trim(),by=$("#fBy").value.trim(),note=$("#fNote").value.trim(),soon=$("#oSoon").checked,badge=$("#oBadge").checked;
+  const err=$("#edErr");err.textContent="";
+  if(!title){err.textContent="اكتبي اسم اللعبة.";$("#fTitle").focus();return;}
+  if(E.mode==="add"&&!soon&&!E.files){err.textContent="اختاري ملف اللعبة أو مجلدها، أو فعّلي «قريباً» لإضافة البطاقة بدونها.";$("#secFiles").scrollIntoView({block:"center"});return;}
+  const files=!soon?E.files:null,cover=E.cover,tags=[...E.tags],newCats=E.newCats.filter(c=>E.tags.has(c.k)),mode=E.mode,gid=E.g&&E.g.id,entry=E.entry;
+  E.busy=true;$("#edS").disabled=true;$("#edS").textContent="جارٍ الحفظ…";
+  try{
+    await publish(mode==="add"?`إضافة لعبة: ${title}`:`تحديث لعبة: ${title}`,async data=>{
+      newCats.forEach(c=>{if(!data.categories.some(x=>x.k===c.k))data.categories.push(c);});
+      const up=[],plan={upserts:up,deletePaths:[],deletePrefixes:[]};
+      const readAll=async(id)=>{for(const f of files)up.push({path:`games/${id}/${f.path}`,data:await f.read()});return `games/${id}/${encPath(entry)}`;};
+      const themeFor=()=>{for(const t of tags){if(THEME_OF[t])return THEME_OF[t];}return"space";};
+      if(mode==="add"){
+        const id=uniqueId(slugify(title),data.games),g={id,title,by,url:"",img:"",tags,theme:themeFor(),soon:!!soon,added:nowIso(),updated:"",rev:revId(),note};
+        if(files){g.url=await readAll(id);g.soon=false;}
+        if(cover){up.push({path:`assets/${id}.jpg`,data:cover});g.img=`assets/${id}.jpg`;localPrev[`assets/${id}.jpg`]=E.coverURL;}
+        data.games.push(g);return plan;
+      }
+      const g=data.games.find(x=>x.id===gid);if(!g)throw new Error("اللعبة لم تعد موجودة في القائمة.");
+      Object.assign(g,{title,by,tags,note,soon:!!soon});
+      if(!g.theme)g.theme=themeFor();
+      if(files){
+        const dir=`games/${g.id}/`,old=pathOfUrl(g.url);
+        g.url=await readAll(g.id);g.soon=false;g.rev=revId();
+        plan.deletePrefixes.push(dir);
+        if(old&&old.startsWith("games/")&&!old.startsWith(dir))plan.deletePaths.push(old);
+        if(badge)g.updated=nowIso();
+      }
+      if(cover){up.push({path:`assets/${g.id}.jpg`,data:cover});g.img=`assets/${g.id}.jpg`;g.rev=revId();localPrev[`assets/${g.id}.jpg`]=E.coverURL;}
+      return plan;
+    },setProg);
+    closeEditor(true);toast(mode==="add"?"تمت إضافة اللعبة ✔":"تم حفظ التعديلات ✔");
+  }catch(e){err.textContent=errMsg(e);if(E){E.busy=false;$("#edS").disabled=false;$("#edS").textContent=mode==="add"?"حفظ ونشر":"حفظ التعديلات ونشرها";}$("#prog").hidden=true;}
+};
+
+/* ---------- boot ---------- */
+(async()=>{
+  if(window.__AUTO_DEMO){await startDemo();return;}
+  const s=saved();
+  if(s&&s.token&&s.repo){
+    renderLogin();$("#lGo").disabled=true;$("#lGo").textContent="جارٍ الدخول…";
+    try{const gh=new GH(s.repo,s.branch||"main",s.token);await gh.verify();B=gh;CFG=s;await loadData();renderDash();return;}
+    catch(e){renderLogin(errMsg(e));return;}
+  }
+  renderLogin();
+})();
+})();
+</script>
+</body>
+</html>
