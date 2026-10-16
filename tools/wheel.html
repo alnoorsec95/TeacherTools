@@ -606,6 +606,32 @@ Eva</textarea>
       return;
     }
 
+    const maxLabelLen = Math.max(...names.map(s => s.length));
+    const fontFamily = fontsReady ? 'Fredoka, Cairo, Tahoma, Arial, sans-serif' : 'Inter, Cairo, Tahoma, Arial, sans-serif';
+    const hubR = 104;
+    const halfSlice = Math.min(slice/2, Math.PI/2 - 0.02);
+    // largest font size at which the label clears the hub, stays inside the rim,
+    // and stays inside its own slice (narrowest at the inner end of the text)
+    const fitFont = label => {
+      let fs = Math.min(84, 760/n);
+      if(maxLabelLen <= 3){ fs = Math.min(130, fs * 2); }
+      else if(maxLabelLen <= 6){ fs = Math.min(74, fs * 1.25); }
+      fs = Math.min(fs, r * 0.2);
+      const fits = f => {
+        ctx.font = '700 ' + f + 'px ' + fontFamily;
+        const w = ctx.measureText(label).width;
+        const lx = r - Math.max(20, f * 0.45);
+        if(w > lx - hubR) return false;
+        if(n < 2) return true;
+        const innerX = Math.max(lx - w, 1);
+        return f * 1.45 <= 2 * innerX * Math.tan(halfSlice) * 0.92;
+      };
+      while(!fits(fs) && fs > 10){ fs -= 1; }
+      return fs;
+    };
+    const hasArabic = names.some(s => /[\u0600-\u06FF]/.test(s));
+    const uniformFs = hasArabic ? Math.min(...names.map(s => fitFont(s.toUpperCase()))) : null;
+
     for(let i=0;i<n;i++){
       const start = rotation + i*slice;
       const end = start + slice;
@@ -637,22 +663,10 @@ Eva</textarea>
       ctx.textBaseline = 'middle';
 
       const label = names[i].toUpperCase();
-      const maxLabelLen = Math.max(...names.map(s => s.length));
-      const fontFamily = fontsReady ? 'Fredoka, Cairo, Tahoma, Arial, sans-serif' : 'Inter, Cairo, Tahoma, Arial, sans-serif';
-      const maxTextWidth = r - 34; // available radial space between hub and rim
-
-      let fontSize = Math.min(84, 760/n);
-      if(maxLabelLen <= 3){ fontSize = Math.min(130, fontSize * 2); }
-      else if(maxLabelLen <= 6){ fontSize = Math.min(74, fontSize * 1.25); }
-      fontSize = Math.max(22, fontSize);
-
+      // Arabic names share one font size (the smallest that fits every name);
+      // other scripts keep per-name sizing
+      let fontSize = uniformFs !== null ? uniformFs : fitFont(label);
       ctx.font = '700 ' + fontSize + 'px ' + fontFamily;
-      let textWidth = ctx.measureText(label).width;
-      while(textWidth > maxTextWidth && fontSize > 12){
-        fontSize -= 1;
-        ctx.font = '700 ' + fontSize + 'px ' + fontFamily;
-        textWidth = ctx.measureText(label).width;
-      }
 
       ctx.lineJoin = 'round';
       ctx.miterLimit = 2;
@@ -1184,19 +1198,6 @@ Eva</textarea>
   readNames();
   drawWheel();
 })();
-</script>
-<!-- credit-btn -->
-<style>
-#crBtn{position:fixed;top:10px;left:10px;z-index:70;width:26px;height:26px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.85);cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#a78bfa,#6d28d9 70%);color:#fff;font:italic 700 15px/1 Georgia,serif;box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.5);opacity:.75;transition:opacity .2s,transform .2s}
-#crBtn:hover,#crBtn:focus-visible{opacity:1;transform:scale(1.12);outline:none}
-#crTip{position:fixed;top:42px;left:10px;z-index:71;direction:ltr;background:#1e1b4b;color:#fff;border:1px solid #f0c23e;padding:7px 14px;border-radius:999px;font:600 13px/1.2 system-ui,sans-serif;white-space:nowrap;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .3s,transform .3s}
-#crTip.on{opacity:1;transform:none}
-</style>
-<button id="crBtn" type="button" aria-label="معلومات">i</button>
-<div id="crTip" role="status">Done by: Zahra Farhood</div>
-<script>
-(function(){var b=document.getElementById('crBtn'),t=document.getElementById('crTip'),h;
-b.addEventListener('click',function(){t.classList.add('on');clearTimeout(h);h=setTimeout(function(){t.classList.remove('on')},2500)});})();
 </script>
 </body>
 </html>
